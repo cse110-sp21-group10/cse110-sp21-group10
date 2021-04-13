@@ -3,7 +3,7 @@
 ## Location: Zoom
 ## Present: Ryan, Asya, Praneet, Akhil, Akar, Nathan
 ## Absent: Ivan, Brian, Huy
-## Discussion Points:
+## Discussion Points
 - Introductions
   - Each introduced ourselves with our name, year/major, and favorite TV shows
 - Assigned Praneet to be note-taker
@@ -28,3 +28,4 @@
 - Come up with a few values/rules that you think should go in the team contract
 - Think about possible ideas for branding items (colors, team name, logo, etc)
 - Next meeting will be tomorrow (Wednesday, April 14) at 2:00pm PST
+## Meeting End Time: 3:40pm PST
