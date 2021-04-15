@@ -19,7 +19,7 @@ Brian Tran | bgt002@ucsd.edu | (714) 230-9479 | bt002 |
 Ivan Ozerets | iozerets@ucsd.edu | (949) 945-3343 | ivanOzerets |  
 Nathan Rinker | nrinker@ucsd.edu | (661) 388-6042 | njrinker |  
 Praneet Bhoj | pnbhoj@ucsd.edu | (408) 664-8767 | praneetbhoj |  
-Ryan Shamoon | rshamoon@ucs.edu | (619) 402-2405 | rhamoon | rino1654#5988 (Discord)  
+Ryan Shamoon | rshamoon@ucsd.edu | (619) 402-2405 | rshamoon | rino1654#5988 (Discord)  
 Thanh Huy Le | th1005@ucsd.edu | (669) 288-1755 | thanhhuyle101 |  
 Sanat Bhandarkar (TA) | | | |  
 
