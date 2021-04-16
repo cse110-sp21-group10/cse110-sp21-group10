@@ -26,7 +26,7 @@ https://asya-balas.github.io/Lab1/
 
 ### Brian Tran
 
-Hello, my name is Brian Tran. I'm a second year ECE major from Marshall college. My hobbies consist of playing basketball, tennis, games, and cooking (but very little). I'm not really sure what I truly want to do yet since I am taking both EE and CS courses, but I hope I can figure that out soon.Hello, my name is Brian Tran. I'm a second year ECE major from Marshall college. My hobbies consist of playing basketball, tennis, games, and cooking (but very little). I'm not really sure what I truly want to do yet since I am taking both EE and CS courses, but I hope I can figure that out soon.
+Hello, my name is Brian Tran. I'm a second year ECE major from Marshall college. My hobbies consist of playing basketball, tennis, games, and cooking (but very little). I'm not really sure what I truly want to do yet since I am taking both EE and CS courses, but I hope I can figure that out soon.
 
 https://bgt002.github.io/CSE110/
 
