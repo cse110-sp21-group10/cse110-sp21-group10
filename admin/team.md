@@ -28,6 +28,8 @@ https://asya-balas.github.io/Lab1/
 
 Hello, my name is Brian Tran. I'm a second year ECE major from Marshall college. My hobbies consist of playing basketball, tennis, games, and cooking (but very little). I'm not really sure what I truly want to do yet since I am taking both EE and CS courses, but I hope I can figure that out soon.Hello, my name is Brian Tran. I'm a second year ECE major from Marshall college. My hobbies consist of playing basketball, tennis, games, and cooking (but very little). I'm not really sure what I truly want to do yet since I am taking both EE and CS courses, but I hope I can figure that out soon.
 
+https://bgt002.github.io/CSE110/
+
 ### Ivan Ozerets
 
 Hello, my name is Ivan Ozerets. I'm a third year CS major at Sixth. My academic interests include machine learning and AI. On my free time I enjoy playing tennis, practicing random skills, and reading fiction. I don't have a dream job at the moment, mainly because I'm not certain what my CS focal interest is yet, but I'm hoping it will be machine learning when I get around to it!
