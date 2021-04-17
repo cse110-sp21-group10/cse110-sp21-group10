@@ -10,18 +10,18 @@ Instructor:  Thomas A. Powell
 Team Name: PowellPuff Coders  
 Team Member Info:  
 
-Name | Email | Phone | Github | Other
---: | :-: | :-: | :-: | :-:
-Akar Singh | aks002@ucsd.edu | (909) 358-5167 | maniacalhamster | Marethyu86#0708 (Discord)  
-Akhilan Ganesh | aganesh@ucsd.edu | (408) 250-3866 | akhilanganesh | akcougar#9060 (Discord)  
-Asya Balas | akbalas@ucsd.edu | (310) 710-5883 | asya-balas | |  
-Brian Tran | bgt002@ucsd.edu | (714) 230-9479 | bt002 |  
-Ivan Ozerets | iozerets@ucsd.edu | (949) 945-3343 | ivanOzerets |  
-Nathan Rinker | nrinker@ucsd.edu | (661) 388-6042 | njrinker |  
-Praneet Bhoj | pnbhoj@ucsd.edu | (408) 664-8767 | praneetbhoj |  
-Ryan Shamoon | rshamoon@ucsd.edu | (619) 402-2405 | rshamoon | rino1654#5988 (Discord)  
-Thanh Huy Le | th1005@ucsd.edu | (669) 288-1755 | thanhhuyle101 |  
-Sanat Bhandarkar (TA) | | | |  
+Name                  | Email             | Phone          | Github          | Other
+--:                   | :-:               | :-:            | :-:             | :-:
+Akar Singh            | aks002@ucsd.edu   | (909) 358-5167 | maniacalhamster | Marethyu86#0708 (Discord)
+Akhilan Ganesh        | aganesh@ucsd.edu  | (408) 250-3866 | akhilanganesh   | akcougar#9060 (Discord)
+Asya Balas            | akbalas@ucsd.edu  | (310) 710-5883 | asya-balas      |
+Brian Tran            | bgt002@ucsd.edu   | (714) 230-9479 | bt002           |
+Ivan Ozerets          | iozerets@ucsd.edu | (949) 945-3343 | ivanOzerets     |
+Nathan Rinker         | nrinker@ucsd.edu  | (661) 388-6042 | njrinker        |
+Praneet Bhoj          | pnbhoj@ucsd.edu   | (408) 664-8767 | praneetbhoj     |
+Ryan Shamoon          | rshamoon@ucsd.edu | (619) 402-2405 | rshamoon        | rino1654#5988 (Discord)
+Thanh Huy Le          | th1005@ucsd.edu   | (669) 288-1755 | thanhhuyle101   |
+Sanat Bhandarkar (TA) |                   |                |                 |
 
 ## Primary Means of Communication and Expectations
 
