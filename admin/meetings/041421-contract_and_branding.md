@@ -1,5 +1,5 @@
 # Team 10 Contract and Branding Meeting
-## Date: Tuesday, April 14
+## Date: Wednesday, April 14
 ## Meeting Start Time: 2:00pm PST
 ## Location: Zoom
 ## Present: Ryan, Asya, Praneet, Akar, Ivan, Nathan, Huy, Akhil
