@@ -1,9 +1,9 @@
 # Team 10 Weekly Checkin
-## Date: Monday, April 26
-## Meeting Start Time: 1:05pm PST
-## Location: Zoom
-## Present: Sanat, Asya, Praneet, Ryan, Akhil, Brian
-## Absent: Akar, Ivan, Huy, Nathan
+### Date: Monday, April 26
+### Meeting Start Time: 1:05pm PST
+### Location: Zoom
+### Present: Sanat, Asya, Praneet, Ryan, Akhil, Brian
+### Absent: Akar, Ivan, Huy, Nathan
 ## Discussion Points
 - talked about our brainstorming sessions
   - brainstorming went well, and we were able to get all our ideas out on the [Miro board](https://miro.com/app/board/o9J_lI_Oubw=/)

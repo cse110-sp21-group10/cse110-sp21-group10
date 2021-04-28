@@ -1,8 +1,8 @@
 # Team 10 Kickoff Meeting
-## Date: Tuesday, April 13 @ 3:00pm PST
-## Location: Zoom
-## Present: Ryan, Asya, Praneet, Akhil, Akar, Nathan
-## Absent: Ivan, Brian, Huy
+### Date: Tuesday, April 13 @ 3:00pm PST
+### Location: Zoom
+### Present: Ryan, Asya, Praneet, Akhil, Akar, Nathan
+### Absent: Ivan, Brian, Huy
 ## Discussion Points
 - Introductions
   - Each introduced ourselves with our name, year/major, and favorite TV shows

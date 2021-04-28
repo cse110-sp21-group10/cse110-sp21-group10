@@ -1,8 +1,8 @@
 # Team 10 Pitch Meeting
-## Date: Tuesday, April 28 @ 2:02pm PST
-## Location: Zoom
-## Present: Ryan, Asya, Akhil, Ivan, Nathan, Huy, Akar
-## Absent: Brian, Praneet
+### Date: Tuesday, April 28 @ 2:02pm PST
+### Location: Zoom
+### Present: Ryan, Asya, Akhil, Ivan, Nathan, Huy, Akar
+### Absent: Brian, Praneet
 ## Discussion Points
 ### Github for task organization
 - I (akar) did a brief demo of translating agile terminology to github planning features

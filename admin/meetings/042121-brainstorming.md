@@ -1,9 +1,9 @@
 # Team 10 Brainstorming Session 1
-## Date: Wednesday, April 21
-## Meeting Start Time: 2:00pm PST
-## Location: Zoom
-## Present: Asya, Praneet, Akar, Nathan, Brian, Ryan, Ivan, Akhil
-## Absent: Huy
+### Date: Wednesday, April 21
+### Meeting Start Time: 2:00pm PST
+### Location: Zoom
+### Present: Asya, Praneet, Akar, Nathan, Brian, Ryan, Ivan, Akhil
+### Absent: Huy
 ## Discussion Points
 - purpose of bullet journals
   - want to be able to keep track of valuable info

@@ -1,9 +1,9 @@
 # Team 10 Brainstorming Session 2
-## Date: Saturday, April 24
-## Meeting Start Time: 3:00pm PST
-## Location: Zoom
-## Present: Asya, Praneet, Ryan, Akar, Nathan, Brian, Akhil, Huy
-## Absent: Ivan
+### Date: Saturday, April 24
+### Meeting Start Time: 3:00pm PST
+### Location: Zoom
+### Present: Asya, Praneet, Ryan, Akar, Nathan, Brian, Akhil, Huy
+### Absent: Ivan
 ## Discussion Points
 - first 10-15 minutes were spent on "brain dump" to get all our ideas out on sticky notes on the [Miro board](https://miro.com/app/board/o9J_lI_Oubw=/)
   - added features from [last meeting](/admin/meetings/042121-brainstorming.md) as well as new features we came up with in the past few days

@@ -1,9 +1,9 @@
 # Team 10 Contract and Branding Meeting
-## Date: Wednesday, April 14
-## Meeting Start Time: 2:00pm PST
-## Location: Zoom
-## Present: Ryan, Asya, Praneet, Akar, Ivan, Nathan, Huy, Akhil
-## Absent: Brian
+### Date: Wednesday, April 14
+### Meeting Start Time: 2:00pm PST
+### Location: Zoom
+### Present: Ryan, Asya, Praneet, Akar, Ivan, Nathan, Huy, Akhil
+### Absent: Brian
 ## Discussion Points
 - Team contract
   - used the team contract template from the link in the Canvas assignment

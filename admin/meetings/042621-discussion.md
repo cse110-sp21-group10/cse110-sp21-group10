@@ -1,9 +1,9 @@
 # Team 10
-## Date: Monday, April 26
-## Meeting Start Time: 4:15pm PST
-## Location: Zoom
-## Present: Sanat, Nathan, Akar
-## Absent: Asya, Praneet, Ryan, Akhil, Brian, Ivan, Huy
+### Date: Monday, April 26
+### Meeting Start Time: 4:15pm PST
+### Location: Zoom
+### Present: Sanat, Nathan, Akar
+### Absent: Asya, Praneet, Ryan, Akhil, Brian, Ivan, Huy
 ## Discussion Points
 - Note: I (Akar) Joined the meeting 15 minutes late, was using the wrong zoom link sorry!
 - Wowowow some groups have gotten whole wireframes flowcharts out already
