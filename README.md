@@ -4,3 +4,7 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 [Link to our group intro vid!](https://youtu.be/TEGurr5URH4)
 
 [Team Page](admin/team.md)
+
+## Quick Links
+
+[Team Page](admin/meetings)
