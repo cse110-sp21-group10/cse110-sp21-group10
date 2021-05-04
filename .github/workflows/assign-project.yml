@@ -1,36 +1,19 @@
-# This is a basic workflow to help you get started with Actions
+name: Auto assign project
 
-name: Assign project workflow
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
+  issues:
+    types: [opened]
   pull_request:
-    branches: [ main ]
+    types: [opened]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  assign-project:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: Assign project
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      - uses: srggrs/assign-one-project-github-action@1.2.1
+        with:
+          project: 'https://github.com/cse110-sp21-group10/cse110-sp21-group10/projects/1'
+#         column-name defaults to 'To Do' for issues and 'In Progress' for pull requests
