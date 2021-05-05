@@ -8,6 +8,8 @@ assignees: ''
 
 ---
 
+<Point estimate> pts
+
 User story description here, of the form: 
 User can <feature goes here described in a high level - in a way that the user can undetstand>
 
