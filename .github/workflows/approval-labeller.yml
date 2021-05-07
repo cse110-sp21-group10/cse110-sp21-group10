@@ -1,0 +1,13 @@
+name: Auto labeller for pull requests
+
+on: pull_request_review
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    name: Label when approved
+    steps:
+      - name: Prebuilt action for approval labelling
+        env: 
+          APPROVALS: "1"
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          ADD_LABEL: "Approved"
