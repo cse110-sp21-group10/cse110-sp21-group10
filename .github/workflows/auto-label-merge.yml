@@ -1,7 +1,11 @@
 name: Auto approver-merger
 
-on: pull_request_review
+on: 
+  # Run for any PR reviews, allow manual run 
+  pull_request_review:
+  workflow_dispatch:
 jobs:
+  # Label job uses an external action
   label:
     runs-on: ubuntu-latest
     name: Label when approved
@@ -12,6 +16,8 @@ jobs:
           APPROVALS: "1"
           GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           ADD_LABEL: "Approved"
+  
+  # Merge job runs the powershell script I made 
   merge:
     needs: label
     runs-on: windows-latest
@@ -19,7 +25,7 @@ jobs:
     steps:
       - name: GitHub API based script
         env:
-          APPROVALS: 3
+          APPROVALS: 1
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
           # Define the base url for the repo
