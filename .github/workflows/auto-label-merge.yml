@@ -1,0 +1,96 @@
+name: Auto approver-merger
+
+on: pull_request_review
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    name: Label when approved
+    steps:
+      - name: Prebuilt action for approval labelling
+        uses: pullreminders/label-when-approved-action@master
+        env: 
+          APPROVALS: "1"
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          ADD_LABEL: "Approved"
+  merge:
+    needs: label
+    runs-on: windows-latest
+    name: Merge after enough approvals
+    steps:
+      - name: GitHub API based script
+        env:
+          APPROVALS: 3
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        run: |
+          # Define the base url for the repo
+          $strOrgName     = 'cse110-sp21-group10';
+          $strRepoName    = $strOrgName;
+          $strBaseURL     = ('https://api.github.com/repos/{0}/{1}' -f $strOrgName, $strRepoName);
+          
+          # Generate credentials from token and create a header
+          $strCred        = ('{0}:{1}' -f 'maniacalhamster', $env:PERSONAL_TOKEN);
+          $strAuthEncrypt = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($strCred));
+          $strAuthBody    = ('Basic {0}' -f $strAuthEncrypt);
+          $objHeader      = @{'Authorization'=$strAuthBody};
+          
+          # Set the number of required approvals
+          $numReqApprovals = $env:APPROVALS;
+          
+          # Define helper function for making requests
+          function makeRequest($strURL) {
+            Write-Host "Making Call to: $strURL";
+            
+            Invoke-RestMethod -Headers $objHeader -Uri $strURL;
+          }
+          
+          # Define helper function to get open pull requests
+          function getPulls() {
+            Write-Host "`t - Retreiving pull requests"
+            $strPullsURL = "$strBaseURL/pulls";
+
+            return makeRequest $strPullsURL;
+          }
+
+          # Define a helper function to merge pull requests 
+          function mergePull($strPullReqURL $numPullReqNum) {
+            Write-Host "`t - Merging pull request #$numPullReqNum";
+            $strMergeURL = "$strPullReqURL/merge";
+
+            Invoke-RestMethod -Method PUT -Headers $objHeader -Uri $strMergeURL;
+          }
+
+          # For each open pull request:
+          #   - check if it has the approved label 
+          #       - if so, count the number of approvals
+          #       - check if it has enough approvals (refer to $numReqApprovals)
+          #           - if so, merge it
+          $arrPullRequests = getPulls;
+          $arrPullRequests | ForEach {
+            $strPullReqURL  = $_.url;
+            $numPullReqNum  = $_.number;
+            $boolApproved   = $False;
+            $numApprovals   = 0;
+
+            Write-Host "`t`t - Checking pull req for approval label";
+            $_.labels | ForEach {
+              if ($_.name -Match "Approved") {
+                $boolApproved = $True;
+              }
+            }
+
+            if ($boolApproved) {
+              Write-Host "`t`t - Counting number of approvals for labelled PR";
+              $arrReviews = makeRequest "$strPullReqURL/reviews";
+
+              $arrReviews.State | ForEach {
+                if ($_ -Match "Approved") {
+                    $numApprovals++;
+                }
+              }
+
+              if ($numApprovals -ge $numReqApprovals) {
+                Write-Host "`t`t`t - PR has enough approvals to merge";
+                mergePull $strPullReqURL $numPullReqNum;
+              }
+            }
+          }
