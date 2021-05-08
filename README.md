@@ -8,5 +8,3 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 ## Quick Links
 
 [Meetings](admin/meetings)
-
-fdhjkfdhakj
