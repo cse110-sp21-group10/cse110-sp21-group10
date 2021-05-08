@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: GitHub API based script
         env:
-          APPROVALS: 1
+          APPROVALS: 3
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
           # Define the base url for the repo
