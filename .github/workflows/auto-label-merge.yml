@@ -58,7 +58,7 @@ jobs:
           }
 
           # Define a helper function to merge pull requests 
-          function mergePull($strPullReqURL $numPullReqNum) {
+          function mergePull($strPullReqURL, $numPullReqNum) {
             Write-Host "`t - Merging pull request #$numPullReqNum";
             $strMergeURL = "$strPullReqURL/merge";
 
