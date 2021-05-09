@@ -19,10 +19,87 @@
                 <a href="menu.html"> Index </a>
             </nav>
             <hr />
-            </header>
-            <main>
-            </main>
-            <footer>
-            </footer>
+        </header>
+        <main>
+            <h2 id="year">2021</h2>
+            
+            <!-- Months Section
+                Each month is a button so that when we add functionality later we can click
+                on a month to go to the corresponding monthly log. Also, all the buttons are
+                part of the same "month-button" class so that the same style can easily be
+                applied to all of them.
+            -->
+            <section id="months">
+                <button class="month-button" id="Jan">
+                    Jan
+                </button>
+                <button class="month-button" id="Feb">
+                    Feb
+                </button>
+                <button class="month-button" id="Mar">
+                    Mar
+                </button>
+                <button class="month-button" id="Apr">
+                    Apr
+                </button>
+                <button class="month-button" id="May">
+                    May
+                </button>
+                <button class="month-button" id="Jun">
+                    Jun
+                </button>
+                <button class="month-button" id="Jul">
+                    Jul
+                </button>
+                <button class="month-button" id="Aug">
+                    Aug
+                </button>
+                <button class="month-button" id="Sep">
+                    Sep
+                </button>
+                <button class="month-button" id="Oct">
+                    Oct
+                </button>
+                <button class="month-button" id="Nov">
+                    Nov
+                </button>
+                <button class="month-button" id="Dec">
+                    Dec
+                </button>
+            </section>
+
+            <!-- Yearly Goals Section (Checklist Style)
+                Each item is a checkbox so that the user can check them off when they have
+                accomplished the goal. Items will be added to the list using JavaScript.
+            -->
+            <section id="yearly-goals">
+                <h3>Yearly Goals</h3>
+                <button class="add" id="add-note">Add goal</button>
+                <div>
+                    <input type="checkbox" id="item-1">
+                    <label for="item-1">Become fluent in French</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="item-2">
+                    <label for="item-2">Learn how to play guitar</label>
+                </div>
+            </section>
+
+            <!-- Notes Section (Logging Format)
+                Unordered list to hold yearly notes. Notes will be added to the list using
+                JavaScript.
+            -->
+            <section id="yearly-notes">
+                <h3>Notes</h3>
+                <button class="add" id="add-note">Add note</button>
+                <ul id="notes">
+                    <li>Turned 21</li>
+                    <li>Finished junior year</li>
+                </ul>
+            </section>
+
+        </main>
+        <footer>
+        </footer>
     </body> 
 </html>
