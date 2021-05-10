@@ -7,6 +7,7 @@
 ## Context and Problem Statement
 ​
 We want to have a solid reference to the design of our Bullet Journal.
+
 What should we look to if we have a question about the design?
 ​
 ## Decision Drivers
