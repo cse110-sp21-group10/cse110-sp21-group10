@@ -7,6 +7,7 @@
 ## Context and Problem Statement
 When creating the foundation for our BuJo pages, we want a fast and
 realiable way to create the pages.
+
 What should the process be by which we create the fundumantal HTML pages?
 ​
 ​
