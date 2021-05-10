@@ -1,35 +1,32 @@
-# Specific Guidelines for HTML skeletons' creation
+# Subteams Focus on Coding Their Own Designated HTML Page
 * Status: Accepted
-* Deciders: Asya, Akar, Akhil, Brian, Ivan, Nathan, Praneet, Ryan
-* Date: 2021-05-08
+* Deciders: Asya, Akar, Akhil, Brian, Huy, Ivan, Nathan, Praneet, Ryan
+* Date: 2021-04-05
+  
 ​
-
 ## Context and Problem Statement
-We needed to decide whether or not we wanted to create strict rules for the creation of the HTML skeleton or stick with the more general format that we all know. 
+When creating the foundation for our BuJo pages, we want a fast and
+realiable way to create the pages.
+What should the process be by which we create the fundumantal HTML pages?
 ​
-
+​
 ## Decision Drivers
-
-* We couldn't really find a very specific style guide for HTML as everything is pretty standarized already. 
-* We all knew that we should break everything up into sections and use divs
+* We would like the goundations for the HTML part of the pages to be done quickly.
+* We need everyone to know what parts the pages will consist of.
+* Need skeletons for the pages initially with the HTML so furure front end teams can add to them.
+  
 ​
-
 ## Considered Options
-
-* Considered using Google's guide, but it was mixed with CSS
-* Doing our own thing and having the Front End teams pick which style worked best and iterate off of that
-
-## Decision Outcome
-Chosen option: "our way (kinda)", because
+* All subgroups get their own page and have to code the basic HTML themselves.
+* We code each page as a group, so everyone is satisfied and happy with the basic layout/fundumental choices.
+* Have one HTML code template that all the pages are based off of and extend from.
+  
 ​
-* we couldn't find an external style guide for html
-* everyone already had the same general style for html
-* it wouldn't be too hard to change the skeletons as it's a very outline
-
-### Positive Consequences
-
-* It's easy to get all the skeletons up 
-
-### Negative Consequences
-
-* There could be vastly different skeletons, although it is doubtful. 
+## Decision Outcome
+Chosen option: Mix of "subteams on their own" and "standard template for all the pages", because
+​
+* A standard template would streamline the process of creating the basic HTML.
+* The subteam would have a basis to start the code from.
+* The basic HTML for all the pages would get done faster if we split up into teams.
+* Later front-end teams could work off f the HTML skeletons.
+* Each subteam can get familiar with their page so when the CSS and JS start, they already know where to begin.
