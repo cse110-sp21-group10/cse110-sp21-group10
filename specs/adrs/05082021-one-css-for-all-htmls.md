@@ -7,6 +7,7 @@
 ## Context and Problem Statement
 When styling the HTML with CSS, we want to style in the most effiecient and
 practical way possible.
+
 What should the process be by which we style all the HTMLs?
 ​
 ​
