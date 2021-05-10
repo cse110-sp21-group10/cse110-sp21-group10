@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Daily Log</title>
+        <script></script>
+        <style>
+        </style>
+         <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1 id = "heading1"> Daily Log </h1>
+            <hr />
+            <nav>
+                <a href="daily.html" style="padding-right: 10%;"> Daily Log </a>
+                <a href="monthly.html" style="padding-right: 10%;"> Monthly Log </a>
+                <a href="yearly.html" style="padding-right: 10%;"> Yearly Log </a>
+                <a href="menu.html"> Index </a>
+            </nav>
+            <hr />
+        </header>
+            <main>
+               
+                
+                <h2 id="daily">Sunday, May 2nd  </h2>  
+
+                <i class="fas fa-dragon"></i>
+
+                <button class="main-buttons" id="widgets">Widgets</button>
+
+                <button class="main-buttons" id="related-sections">Releated Sections</button>
+                
+                
+                <!-- Widget example:
+                    This would be what a reminders widget would look like. This would obviously 
+                    have to scaled and styled accordingly, mainly to half the page per widget.
+                -->
+
+                <section id="reminders">
+                    <h2>Reminders</h2>
+
+                    <ul class="reminders" id="daily-reminders">
+                        <li>Doctor's Appointment</li>
+                        <li>Get food for Max</li>
+                        <li>Pick up Jeff</li>
+                    </ul>
+
+                </section>
+
+                <!-- Another widget example:
+                    This would be what the trackers widget would look like. Also should be scaled
+                    and styled accordingly to half the page. 
+                    TODO: Add images for buttons
+                -->
+
+                <section id="trackers">
+                    <h2>Trackers</h2>
+                    <button class= "add" id="add-tracker">Add tracker</button>
+                    <button class= "minimize" id="minimize-tracker">Minimize Tracker</button> 
+                    <div id="mood-tracker"></div>
+                    <div id="sleep-tracker"></div>
+                    
+
+                </section>
+
+                <!-- Daily Log
+                    This would be where the daily log notes would start. As an example there
+                    are some basic notes in the form of bullet points. To add items to the log, 
+                    user should just be able to type in that section (like microsoft word)
+                -->
+
+                <section id="daily-log">
+                    <h2>Daily Log</h2>
+                    
+                    <ul id="daily-tasks">
+                        <li>Finish Lab 5</li>
+                        <li>Take out the trash</li>
+                        <li>Javascript is cool</li>
+                        <li>Played Tennis at 2PM
+                            <ul>
+                                <li>Need new strings</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </section>
+
+                <!-- Related sections
+                    This section is for the related sections when the user want to add a 
+                    'new realated section'. This will appear at the bottom of all the other
+                    related section in a similar form to the daily log at first, but can then
+                    be later customized.
+                -->
+
+                <section id="related-sections">
+                    <h2>Related Sections (eg. Shopping List)</h2>
+                    <button class= "minimize" id="minimize-section"> Minimize Section</button>
+                    
+                    <ol>
+                        <li>Milk</li>
+                        <li>Eggs</li>
+                        <li>Sugar
+                            <ul>
+                                <li>White Sugar</li>
+                                <li>Light Brown Sugar</li>
+                            </ul>
+                        </li>
+                        <li>Vanilla Extract</li>
+                        <li>All-Purpose Flour</li>
+                        <li>Butter</li>
+                        <li>Baking Powder</li>
+                        <li>Baking Sugar</li>
+                    </ol>
+                </section>
+            </main>
+            <footer>
+            </footer>
+    </body> 
+</html>
