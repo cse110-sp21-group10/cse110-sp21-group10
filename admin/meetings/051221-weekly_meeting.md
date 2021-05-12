@@ -14,10 +14,9 @@
   - we went through each of the user stories and, based on the planning poker results, labeled them as necessary or unecessary for the minimum viable product to be completed this week
   - minimum viable product should include core ability to add notes/goals to the daily, monthly, and yearly logs, and migrate notes across the various logs
 - local storage vs. database
-  - database would allow users to create logins and access journals from multiple devices
+  - centralized database would allow users to create logins and access journals from multiple devices
   - local storage data retrieval might be faster though?
-  - we decided to go with local storage for now
-    - user could value faster data storage/retrieval in the spirit of rapid logging
+  - we decided to go with local storage for now while creating the MVP
 - how user would log things
   - create an onclick listener for the notes region of each log, and when the region is clicked we add the new note to the list there
   - newly created notes will be assigned a default bullet
