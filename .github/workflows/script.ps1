@@ -76,8 +76,8 @@ $arrPullRequests | ForEach-Object {
     $numApprovals   = 0;
     $arrReviews     = makeRequest "$strPullReqURL/reviews";
 
-    $arrReviews.State | ForEach-Object {
-        if ($_ -Match "Approved") {
+    $arrReviews | ForEach-Object {
+        if ($_.State -Match "Approved") {
             $strLabel   = determineLabel $_.user.login;
             applyLabel -strIssueURL $strIssueURL -numPullReqNum $numPullReqNum -strLabel $strLabel;
             $numApprovals++;
@@ -85,6 +85,6 @@ $arrPullRequests | ForEach-Object {
     }
 
     if ($numApprovals -ge $numReqApprovals) {
-        mergePull $strPullsURL $numPullReqNum;
+        mergePull $strPullReqURL $numPullReqNum;
     }
 }
