@@ -33,7 +33,7 @@ function getPulls() {
 function determineLabel($strUsername) {
     if (!$objTeams) {
         Write-Information 'Reading team info from file...';
-        Set-Variable -Name objTeams -Scope Global -Value $(Get-Content 'teams.json' | ConvertFrom-Json);
+        Set-Variable -Name objTeams -Scope Global -Value $(Get-Content '.\.github\workflows\teams.json' | ConvertFrom-Json);
     }
 
     (Get-Member -InputObject $objTeams -MemberType NoteProperty).Name | ForEach-Object {
