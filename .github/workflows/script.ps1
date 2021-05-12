@@ -10,7 +10,7 @@ $strAuthBody    = ('Basic {0}' -f $strAuthEncrypt);
 $objHeader      = @{'Authorization'=$strAuthBody};
 
 # Set the number of required approvals
-$numReqApprovals = 3;
+$numReqApprovals = $env:APPROVALS;
 
 # Define helper function for making requests
 function makeRequest($strURL) {
