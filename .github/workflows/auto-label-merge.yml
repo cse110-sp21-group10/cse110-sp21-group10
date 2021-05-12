@@ -16,5 +16,5 @@ jobs:
           APPROVALS: 3
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         shell: pwsh
-        run: | 
+        run: |
           .\.github\workflows\script.ps1
