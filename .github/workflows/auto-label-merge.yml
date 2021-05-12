@@ -1,4 +1,7 @@
+# Document start, linter was complaining about not having a newline :/
+
 name: Auto approver-merger
+
 on:
   # Run for any PR reviews, allow manual run
   pull_request_review:
