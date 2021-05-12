@@ -1,5 +1,4 @@
 name: Auto approver-merger
-
 on:
   # Run for any PR reviews, allow manual run
   pull_request_review:
@@ -17,5 +16,5 @@ jobs:
           APPROVALS: 3
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         shell: pwsh
-        run: |
-            .\.github\workflows\script.ps1
+        run: | 
+          .\.github\workflows\script.ps1
