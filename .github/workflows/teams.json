@@ -1,0 +1,31 @@
+{
+  "team2": {
+    "label": "T2 approval",
+    "members": [
+      "asya-balas",
+      "ivanOzerets"
+    ]
+  },
+  "team3": {
+    "label": "T3 approval",
+    "members": [
+      "praneetbhoj",
+      "akhilanganesh"
+    ]
+  },
+  "team1": {
+    "label": "T1 approval",
+    "members": [
+      "njrinker",
+      "rshamoon"
+    ]
+  },
+  "team4": {
+    "label": "T4 approval",
+    "members": [
+      "maniacalhamster",
+      "ThanhHuyLe101",
+      "bgt002"
+    ]
+  }
+}
