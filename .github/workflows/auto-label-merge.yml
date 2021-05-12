@@ -1,5 +1,4 @@
 name: Auto approver-merger
-
 on:
   # Run for any PR reviews, allow manual run
   pull_request_review:
