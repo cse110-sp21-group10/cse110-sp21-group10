@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, swidth=33vw">
+        <title>Sidebar skeleton</title>
+        <!-- No scripts or styling yet, just a skeleton HTML-->
+        <style> 
+        div[id$='setting']:hover {
+            cursor: pointer;
+        }
+        div[id$='setting']:active,
+        button[id$='setting']:active {
+            background: grey;
+        }
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Div for internal content 
+            Note: our humblest apologies for butchering the styling 
+        -->
+        <div id="sidebar-internal-content" style="position: fixed; top: 0; width: swidth; height: 90vh; border: solid black; border-radius: 5%; padding: 5px 20px">
+            <!-- Buttons for Exit, Account, and Help -->
+            <input type="image" id="exit-button" alt="button" style="position: absolute; right: 1vw; top: 1vw; height: 5vh" src="https://cdn2.iconfinder.com/data/icons/minimal-4/100/close-512.png">
+            <input type="image" id="account-button" alt="button" style="position: absolute; left: 1vw; bottom: 1vw; height: 5vh" src="https://cdn2.iconfinder.com/data/icons/business-part-2/64/_Personal_Account_Button-512.png" >
+            <input type="image" id="help-button" alt="button" style="position: absolute; right: 1vw; bottom: 1vw; height: 5vh" src="https://cdn.iconscout.com/icon/premium/png-512-thumb/help-button-1-958555.png">
+
+            <!-- Searchbar (text input) -->
+            <form class="" action="" style="padding-top: 5vh;">
+                <input type="text"  placeholder="Enter search terms here " name="searchbar-input" style="position: relative; width: 25vw">
+                <input type="image" id="search-button" alt="button" src="https://cdn3.iconfinder.com/data/icons/buttons/512/Icon_15-512.png" style="position: relative; top:5px; width: 20px">
+            </form>
+
+            <!-- Menu items for Settings, Accesibility, and Customization 
+                Note: When we were setting up the skeleton we found 2 ways we could implement the menu items
+                so that both the text and the icon can be clicked on, here are the options we tried:
+            -->
+            <!--
+                Option 1
+                Uses background of button to be the icon, 
+                    then add padding to button to the right to have space for the icon
+                    then uses backgroud-position to position it in the right spot
+                Everything inside <button> element, but hard to position image.
+            -->
+            <div id="settings-menu">
+                <button id ="settings-setting" style="border: none; cursor:pointer; padding: 10px 36px 10px 10px; background: url(https://cdn4.iconfinder.com/data/icons/game-interface-outline/100/objects-10-512.png); background-position: 70px 8px; background-repeat: no-repeat; background-size: 20px 20px">
+                    Settings
+                </button>
+            </div>
+
+            <!--
+                Option 2
+                Uses CSS to select all divs ending in 'setting':    
+                    - hover: change cursor to click
+                    - active: grey out background (to indicate click)
+
+                JS can be setup with an on-click listener for those same divs ending in 'setting'
+            -->
+            <div id="accesibility-setting" style="width: 30vw;">
+                Accesibility
+                <input type="image" id="accesibility-button" alt="button" src="https://cdn0.iconfinder.com/data/icons/hand-gestures-vol-2/48/53-512.png" 
+                style="position: relative; right: 0; width: 20px">
+            </div>
+            <div id="customization-setting" style="width: 30vw;">
+                Customization
+                <input type="image" id="customization-button" alt="button" src="https://cdn3.iconfinder.com/data/icons/user-interface-2-7/34/128-512.png" 
+                style="position: relative; right: 0; width: 20px">
+            </div>
+        </div>
+    </body>
+</html>
+
+<!--
+    Search bar using form
+    <form class="example" action="action_page.php">
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+-->
+<!-- <button style ="
+    background: #f0f0f0 url([url or base 64 data]);
+    background-position: 8px 8px;
+    background-repeat: no-repeat;""
+
+-->
