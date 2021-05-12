@@ -1,5 +1,3 @@
-# Document start, linter was complaining about not having a newline :/
-
 name: Auto approver-merger
 
 on:
