@@ -7,6 +7,8 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 
 [Team Page](admin/team.md)
 
+[Rules](admin/misc/rules.md)
+
 [Meetings](admin/meetings)
 
 [Wiki](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki)
