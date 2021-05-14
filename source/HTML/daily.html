@@ -5,117 +5,314 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Daily Log</title>
         <script></script>
+
+        <!-- Main Stylesheet -->
+        <link rel="stylesheet" href="../style/style.css">
+        
         <style>
         </style>
          <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     </head>
     <body>
         <header>
-            <h1 id = "heading1"> Daily Log </h1>
-            <hr />
-            <nav>
-                <a href="daily.html" style="padding-right: 10%;"> Daily Log </a>
-                <a href="monthly.html" style="padding-right: 10%;"> Monthly Log </a>
-                <a href="yearly.html" style="padding-right: 10%;"> Yearly Log </a>
-                <a href="menu.html"> Index </a>
+            <nav class="navigation">
+                <a href="daily.html" style="padding-right: 10%;" data-link> Daily Log </a>
+                <a href="monthly.html" style="padding-right: 10%;" data-link> Monthly Log </a>
+                <a href="yearly.html" style="padding-right: 10%;" data-link> Yearly Log </a>
+                <a href="menu.html" data-link> Index </a>
             </nav>
-            <hr />
+            
         </header>
+        
             <main>
-               
-                
-                <h2 id="daily">Sunday, May 2nd  </h2>  
-
-                <i class="fas fa-dragon"></i>
-
-                <button class="main-buttons" id="widgets">Widgets</button>
-
-                <button class="main-buttons" id="related-sections">Releated Sections</button>
-                
-                
-                <!-- Widget example:
-                    This would be what a reminders widget would look like. This would obviously 
-                    have to scaled and styled accordingly, mainly to half the page per widget.
+                <!--
+                    This div element can be toggled on and off depending on what state 
+                    we are in. It contains the icons being used for daily and monthly pages.
+                    Buttons for Menu, Help, and Zoom-out 
+                    Note: placeholder images found online used for now, 
+                    preferably will replace with better icon imgs
                 -->
-
-                <section id="reminders">
-                    <h2>Reminders</h2>
-
-                    <ul class="reminders" id="daily-reminders">
-                        <li>Doctor's Appointment</li>
-                        <li>Get food for Max</li>
-                        <li>Pick up Jeff</li>
-                    </ul>
-
-                </section>
-
-                <!-- Another widget example:
-                    This would be what the trackers widget would look like. Also should be scaled
-                    and styled accordingly to half the page. 
-                    TODO: Add images for buttons
-                -->
-
-                <section id="trackers">
-                    <h2>Trackers</h2>
-                    <button class= "add" id="add-tracker">Add tracker</button>
-                    <button class= "minimize" id="minimize-tracker">Minimize Tracker</button> 
-                    <div id="mood-tracker"></div>
-                    <div id="sleep-tracker"></div>
+                <div class="icons-for-daily-and-monthly"> 
+                    <!-- Icons for menu and zoom out -->
+                    <i id="menu" class="fas fa-bars fa-3x"></i>
+                    <i id="zoom-out" class="fas fa-search-minus fa-3x"></i>
                     
-
-                </section>
-
-                <!-- Daily Log
-                    This would be where the daily log notes would start. As an example there
-                    are some basic notes in the form of bullet points. To add items to the log, 
-                    user should just be able to type in that section (like microsoft word)
-                -->
-
-                <section id="daily-log">
-                    <h2>Daily Log</h2>
+                    <!--
+                        TODO: Which icons did we want to use???????????
                     
-                    <ul id="daily-tasks">
-                        <li>Finish Lab 5</li>
-                        <li>Take out the trash</li>
-                        <li>Javascript is cool</li>
-                        <li>Played Tennis at 2PM
-                            <ul>
-                                <li>Need new strings</li>
+                    
+                    <input type="image" id="menu-button" alt="button" style="position: fixed; left: 5vh; top: 5vh; height: 5vh" src="https://static.thenounproject.com/png/356889-200.png">
+                    <input type="image" id="help-button" alt="button" style="position: fixed; left: 5vh; bottom: 5vh; height: 5vh" src="https://cdn4.iconfinder.com/data/icons/symbols-2-1/32/11_questionmark_ask_circle_round-512.png" >
+                    <input type="image" id="zoom-out-button" alt="button" style="position: fixed; right: 5vh; top: 5vh; height: 5vh" src="https://cdn3.iconfinder.com/data/icons/buttons/512/Icon_15-512.png">
+                    
+                    -->
+                </div>
+
+                <!--
+                    This div element can be toggled on and off depending on what state 
+                    we are in. It contains the icons being used for the yearly page. Yearly 
+                    log uses prev/next year buttons instead, which are positioned where the 
+                    Zoom-out button would be (disabled for now)
+                -->
+                <div class="icons-for-yearly">
+                    <input type="image" id="prev-year-button" alt="button" disabled style="position: fixed; right: 5vh; top: 5vh; height: 5vh" src="https://cdn0.iconfinder.com/data/icons/arrows-volume-5/48/262-512.png" >
+                    <input type="image" id="next-year-button" alt="button" disabled style="position: fixed; right: 12vh; top: 5vh; height: 5vh" src="https://cdn2.iconfinder.com/data/icons/symbols-signs-outline/19/40-512.png" >
+                </div>
+                
+                <div id="internal-content">
+                    <!-- SPA first try (no judge plz)! : 
+                    This div element encloses the daily html so we can hide/show it when we want in the css.
+                    The idea was that we load all the html at one time instead of having different html pages
+                    that load each time we want to switch to another page. This is know as the SPA 
+                    (Single-page applications). We joined the html from the daily, monthly, yearly, and menu
+                    into this one page and regulate which parts are shown through the css. This is done
+                    mainly through the style.css file.
+
+                    When we want to switch to another page, say through the 'zoom out' button, we would add
+                    a class the body of the html with js that will trigger the css class features of showing
+                    and hiding the other log pages, along with some styling perhaps. 
+                    -->
+                    <div class='daily'>
+                        <h1 id="date" >Sunday, May 2nd  </h1>  
+
+                        <i class="fas fa-dragon"></i>
+
+                        <button class="main-buttons" id="widgets">Widgets</button>
+
+                        <button class="main-buttons" id="related-sections">Releated Sections</button>
+                    
+                
+                        <!-- Widget example:
+                            This would be what a reminders widget would look like. This would obviously 
+                            have to scaled and styled accordingly, mainly to half the page per widget.
+                        -->
+
+                        <section id="reminders">
+                            <h2>Reminders</h2>
+
+                            <ul class="reminders" id="daily-reminders">
+                                <li>Doctor's Appointment</li>
+                                <li>Get food for Max</li>
+                                <li>Pick up Jeff</li>
+                                <li>Tell Ryan to move closer to the mic</li>
                             </ul>
-                        </li>
-                    </ul>
 
-                </section>
+                        </section>
 
-                <!-- Related sections
-                    This section is for the related sections when the user want to add a 
-                    'new realated section'. This will appear at the bottom of all the other
-                    related section in a similar form to the daily log at first, but can then
-                    be later customized.
-                -->
+                        <!-- Another widget example:
+                            This would be what the trackers widget would look like. Also should be scaled
+                            and styled accordingly to half the page. 
+                            TODO: Add images for buttons
+                        -->
 
-                <section id="related-sections">
-                    <h2>Related Sections (eg. Shopping List)</h2>
-                    <button class= "minimize" id="minimize-section"> Minimize Section</button>
+                        <section id="trackers">
+                            <h2>Trackers</h2>
+                            <button class= "add" id="add-tracker">Add tracker</button>
+                            <button class= "minimize" id="minimize-tracker">Minimize Tracker</button> 
+                            <div id="mood-tracker"></div>
+                            <div id="sleep-tracker"></div>
+                        </section>
+
+                        <!-- Daily Log
+                            This would be where the daily log notes would start. As an example there
+                            are some basic notes in the form of bullet points. To add items to the log, 
+                            user should just be able to type in that section (like microsoft word)
+                        -->
+
+                        <section id="daily-log">
+                            <h2>Daily Log</h2>
                     
-                    <ol>
-                        <li>Milk</li>
-                        <li>Eggs</li>
-                        <li>Sugar
-                            <ul>
-                                <li>White Sugar</li>
-                                <li>Light Brown Sugar</li>
+                            <ul id="daily-tasks">
+                                <li>Finish Lab 5</li>
+                                <li>Take out the trash</li>
+                                <li>Javascript is cool</li>
+                                <li>Played Tennis at 2PM
+                                    <ul>
+                                        <li>Need new strings</li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                        <li>Vanilla Extract</li>
-                        <li>All-Purpose Flour</li>
-                        <li>Butter</li>
-                        <li>Baking Powder</li>
-                        <li>Baking Sugar</li>
-                    </ol>
-                </section>
+
+                        </section>
+
+                        <!-- Related sections
+                            This section is for the related sections when the user want to add a 
+                            'new realated section'. This will appear at the bottom of all the other
+                            related section in a similar form to the daily log at first, but can then
+                            be later customized.
+                        -->
+
+                        <section id="related-sections">
+                            <h2>Related Sections (eg. Shopping List)</h2>
+                            <button class= "minimize" id="minimize-section"> Minimize Section</button>
+                    
+                            <ol>
+                                <li>Milk</li>
+                                <li>Eggs</li>
+                                <li>Sugar
+                                <ul>
+                                    <li>White Sugar</li>
+                                    <li>Light Brown Sugar</li>
+                                </ul>
+                            </ol>
+                        </section>
+
+                    </div>
+
+                    <!-- Monthly section
+                    This is the div that encloses the monthly html page. When the 'zoom out' button
+                    is clicked from the daily log the js adds a class that will trigger the css
+                    monthly class to show this class and remove the other pages.
+                    -->
+                    <div class="monthly">
+                        <h1>May 2021</h1>
+                        <i class="fas fa-plus fa-3x"></i>
+                        <!-- Section for calendar -->
+                        <section id="monthlyCalendar">
+                        
+                        </section>
+                        <!-- Add Notes for Month-->
+                        <section id="monthlyNotes">
+                            <ul>
+                                <li> Item 1</li>
+                                <li> Item 2</li>
+                                <li> Item 3</li>
+                            </ul>
+                        
+                        </section>
+                        <!-- Add Trackers for Month-->
+                        <section id="monthlyTrackers">
+                            <form>
+                                <fieldset>
+                                    <!-- Track Medidation for every day of the month-->
+                                    <legend>Meditation?</legend>
+                                    <input type="checkbox" id="Day1" name="Day1" value="Day1">
+                                    <input type="checkbox" id="Day2" name="Day2" value="Day2">
+                                    <input type="checkbox" id="Day3" name="Day3" value="Day3">
+                                    <input type="checkbox" id="Day4" name="Day4" value="Day4">
+                                    <input type="checkbox" id="Day5" name="Day5" value="Day5">
+                                    <input type="checkbox" id="Day6" name="Day6" value="Day6">
+                                    <input type="checkbox" id="Day7" name="Day7" value="Day7">
+                                    <input type="checkbox" id="Day8" name="Day8" value="Day8">
+                                    <input type="checkbox" id="Day9" name="Day9" value="Day9">
+                                    <input type="checkbox" id="Day10" name="Day10" value="Day10">
+                                    <input type="checkbox" id="Day11" name="Day11" value="Day11">
+                                    <input type="checkbox" id="Day12" name="Day12" value="Day12">
+                                    <input type="checkbox" id="Day13" name="Day13" value="Day13">
+                                    <input type="checkbox" id="Day14" name="Day14" value="Day14">
+                                    <input type="checkbox" id="Day15" name="Day15" value="Day15">
+                                    <input type="checkbox" id="Day16" name="Day16" value="Day16">
+                                    <input type="checkbox" id="Day17" name="Day17" value="Day17">
+                                    <input type="checkbox" id="Day18" name="Day18" value="Day18">
+                                    <input type="checkbox" id="Day19" name="Day19" value="Day19">
+                                    <input type="checkbox" id="Day20" name="Day20" value="Day20">
+                                    <input type="checkbox" id="Day21" name="Day21" value="Day21">
+                                    <input type="checkbox" id="Day22" name="Day22" value="Day22">
+                                    <input type="checkbox" id="Day23" name="Day23" value="Day23">
+                                    <input type="checkbox" id="Day24" name="Day24" value="Day24">
+                                    <input type="checkbox" id="Day25" name="Day25" value="Day25">
+                                    <input type="checkbox" id="Day26" name="Day26" value="Day26">
+                                    <input type="checkbox" id="Day27" name="Day27" value="Day27">
+                                    <input type="checkbox" id="Day28" name="Day28" value="Day28">
+                                    <input type="checkbox" id="Day29" name="Day29" value="Day29">
+                                    <input type="checkbox" id="Day30" name="Day30" value="Day30">
+                                    <input type="checkbox" id="Day31" name="Day31" value="Day31">
+                                </fieldset>
+                            </form>         
+                        </section>
+                    </div>
+                
+                    <!-- Yearly section
+                    This is the div that encloses the yearly html page. When the 'zoom out' button
+                    is clicked from the monthly log the js adds a class that will trigger the css 
+                    yearly class to show this class and remove the other pages.
+                    -->
+                    <div class='yearly'>
+                        <h2 id="year">2021</h2>
+            
+                        <!-- Months Section
+                            Each month is a button so that when we add functionality later we can click
+                            on a month to go to the corresponding monthly log. Also, all the buttons are
+                            part of the same "month-button" class so that the same style can easily be
+                            applied to all of them.
+                        -->
+                        <section id="months">
+                            <button class="month-button" id="Jan">
+                                Jan
+                            </button>
+                            <button class="month-button" id="Feb">
+                                Feb
+                            </button>
+                            <button class="month-button" id="Mar">
+                                Mar
+                            </button>
+                            <button class="month-button" id="Apr">
+                                Apr
+                            </button>
+                            <button class="month-button" id="May">
+                                May
+                            </button>
+                            <button class="month-button" id="Jun">
+                                Jun
+                            </button>
+                            <button class="month-button" id="Jul">
+                                Jul
+                            </button>
+                            <button class="month-button" id="Aug">
+                                Aug
+                            </button>
+                            <button class="month-button" id="Sep">
+                                Sep
+                            </button>
+                            <button class="month-button" id="Oct">
+                                Oct
+                            </button>
+                            <button class="month-button" id="Nov">
+                                Nov
+                            </button>
+                            <button class="month-button" id="Dec">
+                                Dec
+                            </button>
+                        </section>
+
+                        <!-- Yearly Goals Section (Checklist Style)
+                            Each item is a checkbox so that the user can check them off when they have
+                            accomplished the goal. Items will be added to the list using JavaScript.
+                        -->
+                        <section id="yearly-goals">
+                            <h3>Yearly Goals</h3>
+                            <button class="add" id="add-note">Add goal</button>
+                            <div>
+                                <input type="checkbox" id="item-1">
+                                <label for="item-1">Become fluent in French</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="item-2">
+                                <label for="item-2">Learn how to play guitar</label>
+                            </div>
+                        </section>
+
+                        <!-- Notes Section (Logging Format)
+                            Unordered list to hold yearly notes. Notes will be added to the list using
+                            JavaScript.
+                        -->
+                    
+                        <section id="yearly-notes">
+                            <h3>Notes</h3>
+                            <button class="add" id="add-note">Add note</button>
+                            <ul id="notes">
+                                <li>Turned 21</li>
+                                <li>Finished junior year</li>
+                            </ul>
+                        </section>
+                    
+                    </div>
+
+                </div>
+
+                <!--Help Icon-->
+                <i class="fas fa-question-circle fa-3x"></i>
             </main>
-            <footer>
-            </footer>
+        
     </body> 
 </html>
