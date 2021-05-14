@@ -1,42 +1,42 @@
 /* General Body/Default View CSS Start */
 
-/* 
+/*
     Ivan: "CSS styled for my screen only so far haha."
     Asya: "Need to make it not fixed sizes. :)"
 */
 
 h1 {
-    font-size: 70px;
-    position: relative;
-    left: 80px;
-    top: 5px;
+  font-size: 70px;
+  position: relative;
+  left: 80px;
+  top: 5px;
 }
 
 #internal-content {
-    height: 80vh;
-    width: 170vh;
-    border: 5px solid black;
-    border-radius: 100px;
-    margin: auto;
-    margin-top: 10vh;
+  height: 80vh;
+  width: 170vh;
+  border: 5px solid black;
+  border-radius: 100px;
+  margin: auto;
+  margin-top: 10vh;
 }
 
 #zoom-out {
-    position: fixed;
-    right: 5vh;
-    top: 5vh;
-    height: 5vh;
+  position: fixed;
+  right: 5vh;
+  top: 5vh;
+  height: 5vh;
 }
 
 #menu {
-    position: fixed;
-    left: 5vh;
-    top: 5vh;
-    height: 5vh;
+  position: fixed;
+  left: 5vh;
+  top: 5vh;
+  height: 5vh;
 }
 
 nav.navigation {
-    display: none;
+  display: none;
 }
 
 /* This will keep the daily screen open and viewable. 
@@ -44,29 +44,29 @@ This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
 div.daily {
-    display: block;
-    margin-left: 10vh;
+  display: block;
+  margin-left: 10vh;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
 
 div.monthly {
-    display: none;
+  display: none;
 }
 
 /* This hides the yearly screen, so only the daily log is seen */
 
 div.yearly {
-    display: none;
+  display: none;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
 
 div.icons-for-yearly {
-    display: none;
+  display: none;
 }
 
-/*General Body CSS End*/
+/* General Body CSS End*/
 
 
 
@@ -75,7 +75,6 @@ div.icons-for-yearly {
 /* Monthly Viewing CSS Start */
 
 /* Monthly Viewing CSS End */
-
 
 /* Yearly Viewing CSS Start */
 
