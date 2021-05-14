@@ -1,14 +1,4 @@
-/*General Body/Default View CSS Start*/
-/* div.internal-content {
-    height: 80vh; 
-    width: 170vh;
-    border: 4px solid black; 
-    border-radius: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10vh;
-    margin-bottom: auto;
-}*/
+/* General Body/Default View CSS Start */
 
 /* 
     Ivan: "CSS styled for my screen only so far haha."
@@ -17,15 +7,15 @@
 
 h1 {
     font-size: 70px;
-    position: relative; 
+    position: relative;
     left: 80px;
     top: 5px;
 }
 
 #internal-content {
-    height: 80vh; 
+    height: 80vh;
     width: 170vh;
-    border: 5px solid black; 
+    border: 5px solid black;
     border-radius: 100px;
     margin: auto;
     margin-top: 10vh;
@@ -33,62 +23,67 @@ h1 {
 
 #zoom-out {
     position: fixed;
-    right: 5vh; 
-    top: 5vh; 
+    right: 5vh;
+    top: 5vh;
     height: 5vh;
 }
 
 #menu {
-    position: fixed; 
-    left: 5vh; 
-    top: 5vh; 
-    height: 5vh
+    position: fixed;
+    left: 5vh;
+    top: 5vh;
+    height: 5vh;
 }
 
-nav.navigation { 
+nav.navigation {
     display: none;
 }
 
 /* This will keep the daily screen open and viewable. 
 This block may not be necessary as it's the default on the page 
 ¯\_(ツ)_/¯ */
-div.daily { 
+
+div.daily {
     display: block;
     margin-left: 10vh;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
+
 div.monthly {
     display: none;
 }
 
 /* This hides the yearly screen, so only the daily log is seen */
+
 div.yearly {
     display: none;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
+
 div.icons-for-yearly {
     display: none;
 }
+
 /*General Body CSS End*/
 
 
 
 
 
-/*Monthly Viewing CSS Start*/
+/* Monthly Viewing CSS Start */
 
-/*Monthly Viewing CSS End*/
+/* Monthly Viewing CSS End */
 
 
-/*Yearly Viewing CSS Start*/
+/* Yearly Viewing CSS Start */
 
-/*Yearly Viewing CSS End*/
+/* Yearly Viewing CSS End */
 
-/*Menu Viewing CSS Start*/
+/* Menu Viewing CSS Start */
 
-/*Menu Viewing CSS End*/
+/* Menu Viewing CSS End */
 
 
 
