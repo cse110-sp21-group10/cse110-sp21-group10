@@ -39,8 +39,8 @@ nav.navigation {
   display: none;
 }
 
-/* This will keep the daily screen open and viewable. 
-This block may not be necessary as it's the default on the page 
+/* This will keep the daily screen open and viewable.
+This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
 div.daily {
@@ -66,11 +66,7 @@ div.icons-for-yearly {
   display: none;
 }
 
-/* General Body CSS End*/
-
-
-
-
+/* General Body CSS End */
 
 /* Monthly Viewing CSS Start */
 
@@ -83,6 +79,3 @@ div.icons-for-yearly {
 /* Menu Viewing CSS Start */
 
 /* Menu Viewing CSS End */
-
-
-
