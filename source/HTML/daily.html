@@ -34,8 +34,8 @@
                 -->
                 <div class="icons-for-daily-and-monthly"> 
                     <!-- Icons for menu and zoom out -->
-                    <i id="menu" class="fas fa-bars fa-3x"></i>
-                    <i id="zoom-out" class="fas fa-search-minus fa-3x"></i>
+                    <button class="exterior-buttons" id="menu-button"><i class="button-left button-top fas fa-bars icon-size"></i></button>
+                    <button class="exterior-buttons" id="zoom-out-button"><i class="button-right button-top fas fa-search-minus icon-size"></i></button>
                     
                     <!--
                         TODO: Which icons did we want to use???????????
@@ -73,14 +73,12 @@
                     and hiding the other log pages, along with some styling perhaps. 
                     -->
                     <div class="daily">
-                        <h1 id="date" >Sunday, May 2nd  </h1>  
-
-                        <i class="fas fa-dragon"></i>
-
-                        <button class="main-buttons" id="widgets">Widgets</button>
-
-                        <button class="main-buttons" id="related-sections-button">Releated Sections</button>
-                    
+                        <section class="header" id="daily-header">
+                            <h1 id="date">Sunday, May 2nd</h1>
+                            <button class="main-buttons" id="weather-icon"><i class="fas fa-cloud-sun icon-size"></i></button>
+                            <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></i></button>
+                            <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
+                        </section>
                 
                         <!-- Widget example:
                             This would be what a reminders widget would look like. This would obviously 
@@ -166,8 +164,11 @@
                     monthly class to show this class and remove the other pages.
                     -->
                     <div class="monthly">
-                        <h1>May 2021</h1>
-                        <i class="fas fa-plus fa-3x"></i>
+                        
+                        <section class="header">
+                            <h1 class="monthly-header">May 2021</h1>
+                            <button class="plus-right"><i class="fas fa-plus icon-size"></i></button>
+                        </section>
                         <!-- Section for calendar -->
                         <section id="monthly-calendar">
                         
@@ -229,7 +230,10 @@
                     yearly class to show this class and remove the other pages.
                     -->
                     <div class="yearly">
-                        <h2 id="year">2021</h2>
+                        <section class="header">
+                            <h1 id="year">2021</h1>
+                            <button class="plus-right"><i class="fas fa-plus icon-size"></i></button>
+                        </section>
             
                         <!-- Months Section
                             Each month is a button so that when we add functionality later we can click
@@ -312,7 +316,7 @@
                 </div>
 
                 <!--Help Icon-->
-                <i class="fas fa-question-circle fa-3x"></i>
+                <button class="exterior-buttons" id="help-button"><i class="button-left button-bottom fas fa-question-circle icon-size"></i></button>
             </main>
         
     </body> 

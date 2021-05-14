@@ -6,33 +6,38 @@
 */
 
 h1 {
-  font-size: 70px;
+  font-size: 350%;
   position: relative;
-  left: 80px;
-  top: 5px;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 #internal-content {
-  height: 80vh;
-  width: 170vh;
   border: 5px solid black;
-  border-radius: 100px;
-  margin: auto;
-  margin-top: 10vh;
+  border-radius: 75px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
-#zoom-out {
-  position: fixed;
-  right: 5vh;
-  top: 5vh;
-  height: 5vh;
+/*Styling for exterior buttons (menu, zoom out, help)*/
+
+.button-top {
+  top: 1vh;
 }
 
-#menu {
-  position: fixed;
-  left: 5vh;
-  top: 5vh;
-  height: 5vh;
+.button-left {
+  left: 1vh;
+}
+
+.button-right {
+  position: absolute;
+  right: 1vh;
+}
+
+.button-bottom {
+  bottom: 1vh;
 }
 
 nav.navigation {
@@ -44,26 +49,79 @@ This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
 div.daily {
-  display: block;
-  margin-left: 10vh;
+  display: none;
+  margin-left: 7.5%;
+  margin-top: 2%;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
 
 div.monthly {
   display: none;
+  margin-left: 7.5%;
+  margin-top: 2%;
 }
 
+fieldset {
+  border: 0;
+}
 /* This hides the yearly screen, so only the daily log is seen */
 
 div.yearly {
-  display: none;
+  display: block;
+  margin-left: 7.5%;
+  margin-top: 2%;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
 
 div.icons-for-yearly {
   display: none;
+}
+
+/* This is the formatting for the div header for the daily log screen. 
+Primarily keeps the header and buttons in the same line.*/
+
+section.header {
+  display: flex;
+}
+
+section.header h1 {
+  position: inherit;
+  margin-right: 4%;
+}
+
+section.header button {
+  position: relative;
+  right: 0;
+  margin-right: 4%;
+  border: 0px;
+  background: none;
+}
+
+/* Styling for the exterior buttons. Gets rid of the border and background on them.*/
+
+.exterior-buttons {
+  border: 0px;
+  background: none;
+}
+
+/*Styling for the font size of the icons. Can be overriden with a media query to change size of the icons.*/
+.icon-size {
+  font-size: 350%;
+}
+
+@media only screen and (max-width: 550px) {
+  section.header {
+    display: block;
+  }
+  .icon-size {
+    font-size: 250%;
+  }
+
+  .plus-right {
+    margin-left: 40%;
+  }
 }
 
 /* General Body CSS End */
