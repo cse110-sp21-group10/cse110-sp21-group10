@@ -21,7 +21,7 @@ h1 {
   margin-right: 5%;
 }
 
-/*Styling for exterior buttons (menu, zoom out, help)*/
+/* Styling for exterior buttons (menu, zoom out, help) */
 
 .button-top {
   top: 1vh;
@@ -65,6 +65,7 @@ div.monthly {
 fieldset {
   border: 0;
 }
+
 /* This hides the yearly screen, so only the daily log is seen */
 
 div.yearly {
@@ -80,7 +81,7 @@ div.icons-for-yearly {
 }
 
 /* This is the formatting for the div header for the daily log screen. 
-Primarily keeps the header and buttons in the same line.*/
+Primarily keeps the header and buttons in the same line */
 
 section.header {
   display: flex;
@@ -99,14 +100,14 @@ section.header button {
   background: none;
 }
 
-/* Styling for the exterior buttons. Gets rid of the border and background on them.*/
+/* Styling for the exterior buttons. Gets rid of the border and background on them */
 
 .exterior-buttons {
   border: 0;
   background: none;
 }
 
-/*Styling for the font size of the icons. Can be overriden with a media query to change size of the icons.*/
+/* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
 .icon-size {
   font-size: 350%;
 }
@@ -115,6 +116,7 @@ section.header button {
   section.header {
     display: block;
   }
+  
   .icon-size {
     font-size: 250%;
   }
