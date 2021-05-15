@@ -49,7 +49,7 @@ This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
 div.daily {
-  display: none;
+  display: block;
   margin-left: 7.5%;
   margin-top: 2%;
 }
@@ -68,7 +68,7 @@ fieldset {
 /* This hides the yearly screen, so only the daily log is seen */
 
 div.yearly {
-  display: block;
+  display: none;
   margin-left: 7.5%;
   margin-top: 2%;
 }
@@ -95,14 +95,14 @@ section.header button {
   position: relative;
   right: 0;
   margin-right: 4%;
-  border: 0px;
+  border: 0;
   background: none;
 }
 
 /* Styling for the exterior buttons. Gets rid of the border and background on them.*/
 
 .exterior-buttons {
-  border: 0px;
+  border: 0;
   background: none;
 }
 
