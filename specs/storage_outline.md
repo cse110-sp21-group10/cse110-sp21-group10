@@ -1,5 +1,5 @@
-# Flow
-
+# Local Storage Flow Outline
+## Flow
 1. User opens the log
 2. Retrieve existing notes from storage
 3. Convert notes to HTML elements and display them
@@ -28,56 +28,56 @@
    1. User clicks on some button to migrate a specific note
    2. Get note ID from the HTML element that is being migrated
    3. Update the note's date in localStorage
-# Structure
 
-1. localStorage is a collection of string key-value pairs (everything gets stringified when it gets stored in localStorage so we have to make sure to convert it to the appropriate format when using it), so the storage would look like: 
-```
+## Structure
+1. localStorage is a collection of string key-value pairs (everything gets stringified when it gets stored in localStorage so we have to make sure to convert it to the appropriate format when using it), so the storage would look like:
+```javascript
 // each item is a key/value pair on the outermost level
 { 
-    'daily': '[1, 2, 6, 12, 34, ...]',
+    'daily': [1, 2, 6, 12, 34, ...],
     'monthly': '[3, 7, 13, 14, 15, 16, 20, ...]',
     'yearly': '[4, 5, 8, 9, 10, 11, 17, 18, 19, ...]',
-    '1': '{
+    '1': {
         date: {day: 0, month: 5, date: 16, year: 2021}
         section: 'Daily Notes',
         note: 'note text',
         children: [2,12]
-    }',
-    '2': '{
+    },
+    '2': {
         date: {day: 0, month: 5, date: 16, year: 2021}
         section: 'Daily Notes',
         note: 'sub note text',
         children: [34]
         parent: 1
-    }',
-    '3': '{
+    },
+    '3': {
         date: {month: 5, year: 2021}
         section: 'Monthly Notes',
         note: 'note text',
         children: [14,15]
-    }',
-    '4': '{
+    },
+    '4': {
         date: {year: 2021}
         section: 'Yearly Notes',
         note: 'note text',
         children: [11,19]
-    }',
-    '5': '{
+    },
+    '5': {
         date: {year: 2021}
         section: 'Yearly Goals',
         note: 'note text',
-    }',
-    '6': '{
+    },
+    '6': {
         date: {day: 4, month: 5, date: 20, year: 2021}
         section: 'Daily Shopping List',
         note: 'list item text',
-    }',
+    },
     ...
 }
 ```
 2. Possible sections would include, for example, 'Daily Notes', 'Daily Shopping List' (these would go in the Daily Log), 'Yearly Goals', 'Yearly Notes' (these would go in the Yearly Log), 'Monthly Notes' (this would go in the Monthly Log)
 3. Primary methods for reading/writing notes to localStorage are:
-```
+```javascript
 localStorage.setItem(noteID, noteObject);
 let note = localStorage.getItem(noteID);
 localStorage.removeItem(noteID);
