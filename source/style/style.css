@@ -80,7 +80,7 @@ div.icons-for-yearly {
   display: none;
 }
 
-/* This is the formatting for the div header for the daily log screen. 
+/* This is the formatting for the div header for the daily log screen.
 Primarily keeps the header and buttons in the same line */
 
 section.header {
@@ -108,6 +108,7 @@ section.header button {
 }
 
 /* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
+
 .icon-size {
   font-size: 350%;
 }
@@ -116,7 +117,7 @@ section.header button {
   section.header {
     display: block;
   }
-  
+
   .icon-size {
     font-size: 250%;
   }
