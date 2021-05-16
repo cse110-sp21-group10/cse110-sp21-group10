@@ -1,0 +1,132 @@
+{
+  "20210515": {
+    "widgets": [
+      {
+        "type": "reminder",
+        "bullets": [
+          {
+            "labels": [
+              {
+                "color": "#4DA6FF",
+                "name": "Fitness"
+              },
+              {
+                "color": "D46AFF",
+                "name": "Finance"
+              }
+            ],
+            "text": "Walk the dog"
+          },
+          {
+            "labels": [],
+            "text": "Eat hot dogs"
+          }
+          
+        ]
+      },
+      {
+        "type": "weather"
+      }
+    ],
+    "trackers": [
+      {
+        "type": "slider",
+        "name": "mood",
+        "value": 3,
+        "comment": "Slider values range from 0 to 10"
+      },
+      {
+        "type": "checkbox",
+        "name": "water",
+        "value": 0,
+        "comment": "Checkbox just has 0 or 1 values"
+      },
+      {
+        "type": "checkbox",
+        "name": "workout",
+        "value": 1,
+        "comment": "Checkbox just has 0 or 1 values"
+      }
+    ],
+    "sections": [
+      {
+        "name": "Notes",
+        "type": "log",
+        "bullets": [
+          {
+            "labels": [],
+            "text": "Eat more hot dogs"
+          },
+          {
+            "labels": [],
+            "text": "Tell Ryan to move closer to the mic"
+          }
+        ]
+      },
+      {
+        "name": "Shopping list",
+        "type": "checklist",
+        "checkBoxes": [
+          {
+            "item": "Onions",
+            "value": 0
+          },
+          {
+            "item": "More onions",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "Goals",
+        "type": "checklist",
+        "checkBoxes": [
+          {
+            "item": "Eat onions",
+            "value": 0
+          },
+          {
+            "item": "Eat more onions",
+            "value": 0
+          }
+        ]
+      }
+    ]
+  },
+  "20210516": {},
+  "20210517": {},
+}
+
+{
+  "202105": {
+    "sections": [
+      {
+        "name": "Notes",
+        "type": "log",
+        "bullets": [
+          {
+            "labels": [],
+            "text": "Eat even more hot dogs"
+          },
+          {
+            "labels": [],
+            "text": "Tell Ryan to move even closer to the mic"
+          }
+        ]
+      }
+    ]
+  },
+  "202106": {},
+  "202107": {}
+}
+
+/**
+alert(dateObj) gives Wed Dec 30 2009 00:00:00 GMT+0800
+
+var dateObj = new Date();
+var month = dateObj.getUTCMonth() + 1; //months from 1-12
+var day = dateObj.getUTCDate();
+var year = dateObj.getUTCFullYear();
+
+newdate = year + "/" + month + "/" + day;
+*/
