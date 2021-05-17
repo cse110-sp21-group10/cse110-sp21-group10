@@ -26,7 +26,7 @@
   - met with team 4 to figure out how objects are going to be structured for storage and when they will be stored
     - created sample json files (`days.json`, `months.json`, `labels.json`, etc on the `basic-funct` branch) in the repo showing the object structure
   - created some basic functions for getting/setting daily/monthly/yearly log objects in storage
-- Team 4
+- Team 4 (Akar, Huy, and Brian)
   - planned out the global variables and structure of the logs that they are working with
   - worked on basic functionality of adding notes to a log and switching between logs
   - met with team 3 to figure out the object structure for storage (as mentioned above)
