@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - src/**.js
+      - source/**.js
 
 jobs:
   generate-docs:
@@ -15,27 +15,27 @@ jobs:
       - name: Checkout source code repo
         uses: actions/checkout@v2
         with:
-          path: source
+          path: source-repo
 
       - name: Checkout documentation repo
         uses: actions/checkout@v2
         with:
           repository: cse110-sp21-group10/cse110-sp21-group10.github.io
-          path: documentation
+          path: documentation-repo
           token: ${{ secrets.PUSH_TOKEN }}
 
       - name: Generate documentation
         uses: andstor/jsdoc-action@v1
         with:
-          source_dir: source/src
+          source_dir: source-repo/source
           recurse: true
-          output_dir: documentation/docs
+          output_dir: documentation-repo/docs
           template: minami
-          front_page: documentation/README.md
+          front_page: documentation-repo/README.md
 
       - name: Commit and push documentation
         run: |
-          cd documentation
+          cd documentation-repo
           git add -A
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
