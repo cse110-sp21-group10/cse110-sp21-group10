@@ -24,6 +24,7 @@
       - storeYear, getYear
     - for label objects
       - storeLabel, getLabel, deleteLabel
+  - functions use IDs generated on the frontend to store/retrieve objects
 - bullet object
   - need the template for this object as soon as possible
   - should include constructing a bullet html element and functions to update the attributes of the bullet element
