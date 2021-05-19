@@ -191,28 +191,30 @@ function finalizeInputs () {
 }
 
 /**
- *
- * @param {*} input 
- * @param {*} target 
+ * Replaces input textbox with it's value in the list item
+ * @param {HTMLElement} input - input textbox
+ * @param {HTMLElement} target - list item that's parent of input
  */
 function inputToBullet (input, target) {
   // console.log('You pressed submit');
-  const result = document.createElement('li');
-  result.innerHTML = input.value + '\n';
+  // const result = document.createElement('li');
+  // result.innerHTML = input.value + '\n';
 
-  const cloneTarget = target.cloneNode(true);
+  // const cloneTarget = target.cloneNode(true);
 
-  result.addEventListener('click', editBullet);
-  target.parentElement.replaceChild(result, target);
+  // result.addEventListener('click', editBullet);
+  // target.parentElement.replaceChild(result, target);
   // console.log('Target after replace is ' + target.innerHTML);
 
-  const children = cloneTarget.children;
-  for (let i = 1; i < children.length; i++) {
+  // const children = cloneTarget.children;
+  // for (let i = 1; i < children.length; i++) {
     // console.log("adding eventlistener to " + cloneTarget.children[i].innerHTML);
-    children[i].querySelectorAll('li').forEach((listItem) => {
-      listItem.addEventListener('click', editBullet);
-    });
-    result.append(children[i]);
+    // children[i].querySelectorAll('li').forEach((listItem) => {
+      // listItem.addEventListener('click', editBullet);
+    // });
+    // result.append(children[i]);
+
+    target.innerHTML = target.innerHTML.replace(target.innerText, input.value);
   }
 
   editable = true;
