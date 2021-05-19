@@ -1,0 +1,64 @@
+{
+  "20210515": {
+    "widgets": [
+      {
+        "type": "reminder",
+        "bulletIDs": [
+          "B 210515 00 00",
+          "B 210515 00 01"
+        ]
+      },
+      {
+        "type": "weather"
+      }
+    ],
+    "trackers": [
+      {
+        "type": "slider",
+        "name": "mood",
+        "value": 3,
+        "comment": "Slider values range from 0 to 10"
+      },
+      {
+        "type": "checkbox",
+        "name": "water",
+        "value": 0,
+        "comment": "Checkbox just has 0 or 1 values"
+      },
+      {
+        "type": "checkbox",
+        "name": "workout",
+        "value": 1,
+        "comment": "Checkbox just has 0 or 1 values"
+      }
+    ],
+    "sections": [
+      {
+        "name": "Notes",
+        "type": "log",
+        "bulletIDs": [
+          "B 210515 01 00",
+          "B 210515 01 01"
+        ]
+      },
+      {
+        "name": "Shopping list",
+        "type": "checklist",
+        "bulletIDs": [
+          "B 210515 02 00",
+          "B 210515 02 01"
+        ]
+      },
+      {
+        "name": "Goals",
+        "type": "checklist",
+        "bulletIDs": [
+          "B 210515 03 00",
+          "B 210515 03 01"
+        ]
+      }
+    ]
+  },
+  "20210516": {},
+  "20210517": {}
+}
