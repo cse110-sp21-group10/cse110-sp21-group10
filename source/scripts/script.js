@@ -1,5 +1,5 @@
 // Load jQuery for cool effects :D
-let script = document.createElement('script');
+const script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-latest.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
@@ -7,193 +7,215 @@ document.getElementsByTagName('head')[0].appendChild(script);
 // Define variables used throughout all code here
 // ----------------------------------------------
 
-// Elements on all pages 
-var body, btnMenu, btnZoomOut, btnHelp, btnPrevYear, btnNextYear, btnAddSection, currPage;
-var editable = true;
+// Boolean to toggle editability
+let editable = true;
+
+// Elements and buttons found on all pages
+let btnZoomOut, btnAddSection;
 
 // Elements for the daily logs page
-var divDaily, sctReminders, sctDTrackers, sctLogs, sctSections;
+let divDaily;
 
 // Elements for the monthly logs page
-var divMonthly, sctCalendar, sctMNotes, sctMTrackers;
+let divMonthly;
 
 // Elements for the yearly logs page
-var divYearlyIcons, divYearly, sctMonths, sctGoals, sctYNotes;
+let divYearlyIcons, divYearly;
 
-var noteScts;
+// Array to store all sections that will have bullet points
+let noteScts;
 // -----------------------------------------------
 // End of variable definition
 
-// Wait for document to load before loading up vars
-document.addEventListener('DOMContentLoaded', loadVars);
+/**
+ * Wait for DOM to load before running script
+ * @param {script.setupScript} cb - Callback that uses DOM content to setup script
+ */
+document.addEventListener('DOMContentLoaded', setupScript);
 
-// Handle history changes
-window.onpopstate = function(event) {
-    finalizeInputs();
-    console.log('Current state.log: '+event.state.view);
-    switch(event.state.view){
-        case 'day':
-            transitionDaily();
-            break;
-        case 'month':
-            transitionMonthly();
-            break;
-        case 'year':
-            transitionYearly();
-            break;
-    }
+/**
+ * Handles url navigation via the back/forward buttons
+ * @param {PopStateEvent} event - info on target page contained in state
+ * - Will finalize any user input
+ * - Will log target view
+ * - Will transition to target day
+ */
+window.onpopstate = function (event) {
+  finalizeInputs();
+  console.log('Current state.log: ' + event.state.view);
+  switch (event.state.view) {
+    case 'day':
+      transitionDaily();
+      break;
+    case 'month':
+      transitionMonthly();
+      break;
+    case 'year':
+      transitionYearly();
+      break;
+  }
 };
 
-function loadVars() {
-    body        = document.querySelector('body');
-    btnMenu     = document.getElementById('menu-button');
-    btnZoomOut  = document.getElementById('zoom-out-button');
-    btnHelp     = document.getElementById('help-button');
-    btnPrevYear = document.getElementById('prev-year-button');
-    btnNextYear = document.getElementById('next-year-button');
-    currPage    = 'daily';
-
-    divDaily        = document.getElementsByClassName('daily')[0];
-    divMonthly      = document.getElementsByClassName('monthly')[0];
-    divYearly       = document.getElementsByClassName('yearly')[0];
-    divYearlyIcons  = document.getElementsByClassName('icons-for-yearly')[0];
-    
-    btnAddSection   = document.getElementById('related-sections-button');
-    sctLogs     = document.getElementById('daily-log');
-
-    noteScts = document.getElementsByClassName('notes');
-    window.history.pushState({view:'day'}, 'Daily Log', '#daily');
-    loadDaily();
-
-    // Let user edit existing bullets by adding an onClick to each <li> item
-    document.querySelectorAll('li').forEach((listItem) => {
-        listItem.addEventListener('click', (event) => {editBullet(event)});
-    })
-
-    // set any element that needs notes to "note" class (added to HTML)
-    // select all of those, and add click listeners that trigger a helper function
-    for(let i = 0; i<noteScts.length; i++){
-        let btnAdd = document.createElement('button');
-        btnAdd.innerText = "+";
-        btnAdd.addEventListener('click', (event) => {addBullet(event)});
-        noteScts[i].appendChild(btnAdd);
-    }
-    /*
-    noteScts.forEach((sect) => {
-        sect.addEventListener('click', (event) => {addBullet(event)});
-    })
-    */
-    btnZoomOut.addEventListener('click', zoomOut);
-    btnAddSection.addEventListener('click', createSection);
-}
-
-/**  Helper function to create new Bullet
- *    when section is clicked on (but not cliked on a bullet), appendChild(input box) 
- *    when input box is changed, create new list element, add eventListener(click, edit) to it,
- *    replace input box with new list element.  
+/**
+ * Helper called once DOM has loaded
+ * @callback script.setupScript
+ * - Will load values into all declared variables
+ * - Will update page to Daily Log view
+ * - Will set up buttons
  */
+function setupScript () {
+  window.history.pushState({ view: 'day' }, 'Daily Log', '#daily');
 
-
-function addBullet(event){
-    if (editable == true){
-        let target = event.target.parentElement;
-        console.log(target.innerHTML);
-        let newBullet = document.createElement('li');
-        let input = document.createElement('input');
-        input.id = "newBullet";
-
-        newBullet.appendChild(input);
-        target.replaceChild(newBullet, event.target);
-        input.focus();
-        input.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter'){
-                let result = document.createElement('li');
-                result.innerHTML = input.value + '\n';
-
-                result.addEventListener('click', editBullet);
-                target.replaceChild(result, newBullet);
-                editable = true;
-            }
-        });
-        target.appendChild(event.target);
-        editable = false;
-    }
+  loadVars();
+  loadDaily();
+  setupButtons();
 }
 
+/** Values assigned to variables defined earlier - either default or loaded from DOM */
+function loadVars () {
+  divDaily = document.getElementsByClassName('daily')[0];
+  divMonthly = document.getElementsByClassName('monthly')[0];
+  divYearly = document.getElementsByClassName('yearly')[0];
+  divYearlyIcons = document.getElementsByClassName('icons-for-yearly')[0];
 
+  btnZoomOut = document.getElementById('zoom-out-button');
+  btnAddSection = document.getElementById('related-sections-button');
 
+  noteScts = document.getElementsByClassName('notes');
+}
 
-/** Helper function to allow user to edit existing bullets
- * 
- * 1. Check that callingTarget = currentTarget (avoid doing all this logic twice for nested <li>s)
- * 2. Log the current target so we know what we're dealing with
- * 3. Create an <input> HTML Element and set it's value equal to whatever's in target rn
- *      a. When the user is done (changed and press Enter) editing:
- *          1. Log to console (debug purposes)
- *          2. create a new element and set innerHTML equal to input's value with newline (to account for children)
- *          3. clone the target (we'll use its children later)
- *          4. Add an eventListener to the newly created 'result' so IT can also be editted
- *          5. Go to parent element and replace 'target' with 'result'
- *          3. Iterate through all children other than first (original text)
- *              a. append each child in cloned target to current 'result' <li> element
- *              b. add an eventlistener to each child THAT IS A LIST ELEMENT
- *          7. Set `editable` back to true so user can edit other bullets
+/**
+ * Functionality applied to the following buttons:
+ * - ZoomOut Button (magnifying glass)
+ * - Bullet item (represented by li elements for now)
+ * - Section body (button created to add a new note/bullet)
+ * - Add Section Button
  */
-function editBullet(event) {
-    if (event.target.innerText == event.currentTarget.innerText && editable) {
-        let target = event.target;
-        // console.log(JSON.stringify(target.innerHTML));
-        let input = document.createElement('input');
-        input.value = target.innerText.split('\n')[0];
-        input.id = "newBullet";
+function setupButtons () {
+  btnZoomOut.addEventListener('click', zoomOut);
 
-        input.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter'){
-                inputToBullet(input, target);
-            }
-        });
+  document.querySelectorAll('li').forEach((listItem) => {
+    listItem.addEventListener('click', (event) => { editBullet(event); });
+  });
 
-        target.innerHTML = '<input>' + target.innerHTML.split('\n').slice(1).join('\n');
-        console.log(JSON.stringify(target.innerHTML));
-        target.replaceChild(input, target.children[0]);
-        input.focus();
+  for (let i = 0; i < noteScts.length; i++) {
+    const btnAdd = document.createElement('button');
+    btnAdd.innerText = '+';
+    btnAdd.addEventListener('click', (event) => { addBullet(event); });
+    noteScts[i].appendChild(btnAdd);
+  }
 
-        editable = false;
-    } else {
-        console.log('event.target is ' + event.target.innerHTML);
-        console.log('event.currentTarget is ' + event.currentTarget.innerHTML);
-        console.log('editable is ' + editable);
-    }
+  btnAddSection.addEventListener('click', createSection);
 }
 
-function finalizeInputs(){
-    let input = document.getElementById('newBullet');
-    if (input){
-        inputToBullet(input, input.parentElement);
-    }
+/**
+ * Creates a new bullet under target's parent (button's section) that triggered event
+ * @param {OnClickEvent} event
+ * - Function only run if editting is enable
+ * - New list item with input textbox appended to parent section (user directed to inside input)
+ * - Editing is disabled
+ * - Input box triggers action upon reading 'Enter':
+ *  - Textbox value used to create new list item
+ *  - New list item replaces the 'input' list item
+ *  - Editing is enabled
+ */
+function addBullet (event) {
+  if (editable === true) {
+    const parent = event.target.parentElement;
+    // console.log(target.innerHTML);
+
+    const newBullet = document.createElement('li');
+    const input = document.createElement('input');
+    input.id = 'newBullet';
+
+    newBullet.appendChild(input);
+    parent.replaceChild(newBullet, event.target);
+    input.focus();
+
+    input.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        const result = document.createElement('li');
+        result.innerHTML = input.value + '\n';
+
+        result.addEventListener('click', editBullet);
+        parent.replaceChild(result, newBullet);
+        editable = true;
+      }
+    });
+
+    parent.appendChild(event.target);
+    editable = false;
+  }
 }
 
-function inputToBullet(input, target){
-    //console.log('You pressed submit');
-    let result = document.createElement('li');
-    result.innerHTML = input.value + '\n';
+/**
+ * Edits existing bullet when clicked on
+ * @param {OnClickEvent} event
+ * - Function only runs if editting is enabled AND only for the list item clicked (for nested list items)
+ * - Input textbox created with value of first line of list item (in case list item has children)
+ *  - Texbox replaces first child of list item (again in case list item has children) and user is directed inside textbox
+ * - Editing is disabled
+ * - Input box triggers helper funciton upon reading 'Enter':
+ *  - Editing will be enabled within
+ */
+function editBullet (event) {
+  if (editable && event.target.innerText === event.currentTarget.innerText) {
+    const target = event.target;
+    // console.log(JSON.stringify(target.innerHTML));
 
-    let cloneTarget = target.cloneNode(true);
-    
-    result.addEventListener('click', editBullet);
-    target.parentElement.replaceChild(result, target);
-    //console.log('Target after replace is ' + target.innerHTML);
+    const input = document.createElement('input');
+    input.value = target.innerText.split('\n')[0];
+    input.id = 'newBullet';
 
-    let children = cloneTarget.children;
-    for (let i = 1; i < children.length; i++) {
-        //console.log("adding eventlistener to " + cloneTarget.children[i].innerHTML);
-        children[i].querySelectorAll('li').forEach((listItem) => {
-            listItem.addEventListener('click', editBullet);
-        });
-        result.append(children[i]);
-    }
+    target.innerHTML = '<input>' + target.innerHTML.split('\n').slice(1).join('\n');
+    // console.log(JSON.stringify(target.innerHTML));
+    target.replaceChild(input, target.children[0]);
+    input.focus();
 
-    editable = true;
+    input.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        inputToBullet(input, target);
+      }
+    });
+
+    editable = false;
+  }
+}
+
+/** Finds any open inputs and finalizes the process of transforming inputs to bullets */
+function finalizeInputs () {
+  const input = document.getElementById('newBullet');
+  if (input) {
+    inputToBullet(input, input.parentElement);
+  }
+}
+
+/**
+ *
+ * @param {*} input 
+ * @param {*} target 
+ */
+function inputToBullet (input, target) {
+  // console.log('You pressed submit');
+  const result = document.createElement('li');
+  result.innerHTML = input.value + '\n';
+
+  const cloneTarget = target.cloneNode(true);
+
+  result.addEventListener('click', editBullet);
+  target.parentElement.replaceChild(result, target);
+  // console.log('Target after replace is ' + target.innerHTML);
+
+  const children = cloneTarget.children;
+  for (let i = 1; i < children.length; i++) {
+    // console.log("adding eventlistener to " + cloneTarget.children[i].innerHTML);
+    children[i].querySelectorAll('li').forEach((listItem) => {
+      listItem.addEventListener('click', editBullet);
+    });
+    result.append(children[i]);
+  }
+
+  editable = true;
 }
 
 /** Working with Local Storage
@@ -206,72 +228,64 @@ function inputToBullet(input, target){
 
 // Adding functionality to zoom-out button
 // -------------------------------------------------------
-function zoomOut() {
-    finalizeInputs();
-    console.log("You clicked on the zoom out button");
-    switch (currPage) {
-        case 'daily':
-            window.history.pushState({view:'month'}, 'Monthly Log', '#month');
-            transitionMonthly();
-            break;
-        case 'monthly':
-            window.history.pushState({view:'year'}, 'Yearly Log', '#year');
-            transitionYearly();
-            break;
-    }
+function zoomOut () {
+  finalizeInputs();
+  console.log('You clicked on the zoom out button');
+  switch (history.state.view) {
+    case 'day':
+      window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
+      transitionMonthly();
+      break;
+    case 'month':
+      window.history.pushState({ view: 'year' }, 'Yearly Log', '#year');
+      transitionYearly();
+      break;
+  }
 }
 
-function transitionDaily() {
-    divDaily.style.display = 'block';
-    divMonthly.style.display = 'none';
-
-    currPage = 'daily';
+function transitionDaily () {
+  divDaily.style.display = 'block';
+  divMonthly.style.display = 'none';
 }
 
-function transitionMonthly() {
-    divDaily.style.display = 'none';
-    divMonthly.style.display = 'block';
-    divYearly.style.display = 'none';
+function transitionMonthly () {
+  divDaily.style.display = 'none';
+  divMonthly.style.display = 'block';
+  divYearly.style.display = 'none';
 
-    divYearlyIcons.style.display = 'none';
-    btnZoomOut.style.display = 'block';
-
-    currPage = 'monthly';
+  divYearlyIcons.style.display = 'none';
+  btnZoomOut.style.display = 'block';
 }
 
-function transitionYearly() {
-    divMonthly.style.display = 'none';
-    divYearly.style.display = 'block';
+function transitionYearly () {
+  divMonthly.style.display = 'none';
+  divYearly.style.display = 'block';
 
-    divYearlyIcons.style.display = 'block';
-    btnZoomOut.style.display = 'none';
-
-    currPage = 'yearly';
+  divYearlyIcons.style.display = 'block';
+  btnZoomOut.style.display = 'none';
 }
 // -------------------------------------------------------
 // Finished adding functionality to zoom-out button
 
 // Loading buttons for different views
-function loadDaily() {
-    document.getElementById('minimize-section').addEventListener('click', () => {
-        $('ol').slideToggle();
-    });
+function loadDaily () {
+  document.getElementById('minimize-section').addEventListener('click', () => {
+    $('ol').slideToggle();
+  });
 }
 
-function loadMonthly() {
+function loadMonthly () {
 }
 
-function loadYearly() {
+function loadYearly () {
 
 }
-    
-function createSection(){
-    console.log("You clicked on the create section button");
-    let newSection = document.createElement('daily');
-    // Element.appendChild((create ))
-    
+
+function createSection () {
+  console.log('You clicked on the create section button');
 }
-//Notes 
+
+// Notes
 /*
 
 $(document).click(function(event) {
@@ -302,8 +316,8 @@ document.querySelectorAll('li').forEach((listItem)=>{
 })
 */
 
-    // sctLogs.addEventListener('click', ()=> {
-    //     let inputBox = document.createElement('input');
-    //     inputBox.type = 'text';
-    //     document.getElementById('daily-log').appendChild(inputBox);
-    // });
+// sctLogs.addEventListener('click', ()=> {
+//     let inputBox = document.createElement('input');
+//     inputBox.type = 'text';
+//     document.getElementById('daily-log').appendChild(inputBox);
+// });
