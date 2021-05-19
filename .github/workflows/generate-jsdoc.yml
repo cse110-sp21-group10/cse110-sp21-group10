@@ -16,14 +16,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: source
-          
+
       - name: Checkout documentation repo
         uses: actions/checkout@v2
         with:
           repository: cse110-sp21-group10/cse110-sp21-group10.github.io
           path: documentation
           token: ${{ secrets.PUSH_TOKEN }}
-        
+
       - name: Generate documentation
         uses: andstor/jsdoc-action@v1
         with:
