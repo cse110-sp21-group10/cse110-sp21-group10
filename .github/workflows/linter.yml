@@ -42,3 +42,5 @@ jobs:
           LINTER_RULES_PATH: /
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.yml
           VALIDATEJAVASCRIPT_ES: true
+          VALIDATEJAVASCRIPT_STANDARD: false
+          VALIDATEJAVASCRIPT_JSCPD: false
