@@ -68,6 +68,10 @@ Internal Variables of each bullet:
 Notes:
 - Need global variables to represent options when creating (trackers, widgets, sections)  
 - Need global mapping of (Array of Element)s to (label)s - enables toggling of labels
+  - Clarification: Label.json has access to an array of bulletIDs, which allows for quickly toggling on/off certain labels (a feature we could implement later)
+- MultiMedia:
+  - Copy stored in DB separately (similar to labels) and listed by IDs
+  - Need to look into storage capacity and imposing a filesize limit
 
 ---
 
@@ -180,6 +184,17 @@ Note:
 
  When moving to the past
  - EVERYTHING IS DISABLED
+ - If BuJu extends past midnight do we lock the user out?
+  - No, we shouldn't but how?
+    - Option: +1 day in the past modifiable
+    - Option: User can set cut-off hour (e.g. 2am)
+    - **Option**: First time modified past midnight, user is notified that this entry will lock
+      - Up to 3 hours afterwards
+      - "Is your day over yet? (Note: this day will no longer be modifiable)"
+        - Yes: lock the entry
+        - No: lock the entry after user exits or after long enough inactivity hour 
+          - 1/2hour -1hour ish
+      - Maybe prompt only if they have unfinished tasks
 
  functions to implement:
   - Constructor(s) for each object type (bullet, label, dailyLog, monthlyLog, yearlyLog, widget, section), 
@@ -189,3 +204,9 @@ Note:
       - spits out an HTML element (using its own template)
       - Displayed by appending to main html 
 
+## Migration
+- Button/Tab
+  - number indicator within circle (notif pts)
+  - expands onClick
+    - migrate mode perhaps?
+    - User can mass check off, migrate to today, or cross off
