@@ -14,7 +14,7 @@ let editable = true;
 let btnZoomOut, btnAddSection;
 
 // Elements for the daily logs page
-let divDaily;
+let divDaily, btnMinimizeSection;
 
 // Elements for the monthly logs page
 let divMonthly;
@@ -67,7 +67,6 @@ function setupScript () {
   window.history.pushState({ view: 'day' }, 'Daily Log', '#daily');
 
   loadVars();
-  loadDaily();
   setupButtons();
 }
 
@@ -80,6 +79,7 @@ function loadVars () {
 
   btnZoomOut = document.getElementById('zoom-out-button');
   btnAddSection = document.getElementById('related-sections-button');
+  btnMinimizeSection = document.getElementById('minimize-section');
 
   noteScts = document.getElementsByClassName('notes');
 }
@@ -90,6 +90,7 @@ function loadVars () {
  * - Bullet item (represented by li elements for now)
  * - Section body (button created to add a new note/bullet)
  * - Add Section Button
+ * - Minimize Section Button
  */
 function setupButtons () {
   btnZoomOut.addEventListener('click', zoomOut);
@@ -106,6 +107,11 @@ function setupButtons () {
   }
 
   btnAddSection.addEventListener('click', createSection);
+
+  btnMinimizeSection.addEventListener('click', () => {
+    // eslint-disable-next-line no-undef
+    $('ol').slideToggle();
+  });
 }
 
 /**
@@ -194,45 +200,41 @@ function finalizeInputs () {
  * Replaces input textbox with it's value in the list item
  * @param {HTMLElement} input - input textbox
  * @param {HTMLElement} target - list item that's parent of input
+ * - Creates a new list item
+ *  - Value of input text appended
+ * - Iterates through all children of original list item
+ *  - Adds a clickListener to each list item within to allow modifying afterwards
+ * - New list item itself is given a clickListener to allow edits
+ * - Old list item replaced with new list item
+ * - Editing re-enabled
  */
 function inputToBullet (input, target) {
-  // console.log('You pressed submit');
-  // const result = document.createElement('li');
-  // result.innerHTML = input.value + '\n';
+  const result = document.createElement('li');
+  result.innerHTML = input.value + '\n';
 
-  // const cloneTarget = target.cloneNode(true);
-
-  // result.addEventListener('click', editBullet);
-  // target.parentElement.replaceChild(result, target);
-  // console.log('Target after replace is ' + target.innerHTML);
-
-  // const children = cloneTarget.children;
-  // for (let i = 1; i < children.length; i++) {
-    // console.log("adding eventlistener to " + cloneTarget.children[i].innerHTML);
-    // children[i].querySelectorAll('li').forEach((listItem) => {
-      // listItem.addEventListener('click', editBullet);
-    // });
-    // result.append(children[i]);
-
-    target.innerHTML = target.innerHTML.replace(target.innerText, input.value);
+  const children = target.children;
+  for (let i = 1; i < children.length; i++) {
+    children[i].querySelectorAll('li').forEach((listItem) => {
+      listItem.addEventListener('click', editBullet);
+    });
+    result.append(children[i]);
   }
+
+  result.addEventListener('click', editBullet);
+  target.parentElement.replaceChild(result, target);
 
   editable = true;
 }
 
-/** Working with Local Storage
- * ----------------------------
- * 1. Check localstorage
- * 2. load global variables
- * 3. onChange, update global variables
- * 4. when exiting, write to localstorage
+/**
+ * Zooms out to appropriate day based off history state
+ * - finalizes any inputs first
+ * - logic: day -> month -> year
+ *  - pushes state and transitions for appropriate view
  */
-
-// Adding functionality to zoom-out button
-// -------------------------------------------------------
 function zoomOut () {
   finalizeInputs();
-  console.log('You clicked on the zoom out button');
+  // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
       window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
@@ -245,11 +247,13 @@ function zoomOut () {
   }
 }
 
+/** Handles transitioning from Monthly view to Daily view */
 function transitionDaily () {
   divDaily.style.display = 'block';
   divMonthly.style.display = 'none';
 }
 
+/** Handles transitioning from either Daily or Yearly view to Monthly view */
 function transitionMonthly () {
   divDaily.style.display = 'none';
   divMonthly.style.display = 'block';
@@ -259,6 +263,7 @@ function transitionMonthly () {
   btnZoomOut.style.display = 'block';
 }
 
+/** Handles transitioning from Monthly view to Yearly view */
 function transitionYearly () {
   divMonthly.style.display = 'none';
   divYearly.style.display = 'block';
@@ -266,30 +271,14 @@ function transitionYearly () {
   divYearlyIcons.style.display = 'block';
   btnZoomOut.style.display = 'none';
 }
-// -------------------------------------------------------
-// Finished adding functionality to zoom-out button
 
-// Loading buttons for different views
-function loadDaily () {
-  document.getElementById('minimize-section').addEventListener('click', () => {
-    $('ol').slideToggle();
-  });
-}
-
-function loadMonthly () {
-}
-
-function loadYearly () {
-
-}
-
+/** TODO */
 function createSection () {
   console.log('You clicked on the create section button');
 }
 
 // Notes
 /*
-
 $(document).click(function(event) {
   var $target = $(event.target);
   if(!$target.closest('#menucontainer').length &&
@@ -297,9 +286,9 @@ $(document).click(function(event) {
     $('#menucontainer').hide();
   }
 });
-
 */
 /*
+
 // Old code for adding evenListeners to all 'li' items
 document.querySelectorAll('li').forEach((listItem)=>{
     listItem.addEventListener('click', (event) => {
@@ -323,3 +312,11 @@ document.querySelectorAll('li').forEach((listItem)=>{
 //     inputBox.type = 'text';
 //     document.getElementById('daily-log').appendChild(inputBox);
 // });
+
+/** Working with Local Storage
+ * ----------------------------
+ * 1. Check localstorage
+ * 2. load global variables
+ * 3. onChange, update global variables
+ * 4. when exiting, write to localstorage
+ */
