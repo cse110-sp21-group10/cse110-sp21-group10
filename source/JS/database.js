@@ -8,14 +8,24 @@
  * // this would create a new Database object, open the IndexedDB database, and store a 
  * // daily object once the database is open
  * let database = new Database();
- * database.open(function() {
- *     database.storeDay('20210519', {'test': 'test database storage'}, function() {
- *         console.log('finished storing daily object');    
- *     });
+ * database.open(function(opened) {
+ *     if(opened == true) {
+ *         database.storeDay('20210519', {'test': 'test database storage'}, function(stored) {
+ *             if(stored == true) {
+ *                 console.log('finished storing daily object');
+ *             }
+ *             else {
+ *                 console.log('could not store daily object');
+ *             }
+ *         });
+ *     }
+ *     else {
+ *         console.log('could not open database');
+ *     }
  * });
  * @property {string} DATABASE_NAME - The name ('BulletJournal') of the IndexedDB database used by our app
  */
-class Database {
+export class Database {
     /**
      * Constructs the database with the appropriate database name for the application.
      * 
@@ -128,7 +138,7 @@ class Database {
      * @param {?deleteCallback} [callback=null] - Callback function that is run after the database delete
      * operation completes (if no callback is provided, nothing is run after the transaction is complete)
      */
-    deleteDatabase() {
+    deleteDatabase(callback = null) {
 
         // start request to delete database
         let dbDeleteRequest = indexedDB.deleteDatabase(DATABASE_NAME);
