@@ -59,6 +59,9 @@ Internal Variables of each bullet:
       - `B 21 1 02` : the 3rd bullet in the Goals section (2nd section) of year 2021
 - `labelIDs`: Array of label IDs applied to this bullet
     - Refer to [Labels.json](#Labels.json) for details
+- `bulletIDs`: Array of bullet IDs that are subChildren of this bullet
+    - When creating the HTML Element, also create children and link children to HTML Element
+    - ^ This cuts out any need for a 'parentID' (extra work to lookup and retrieve)
 - `text`: (string) the inner text of the bullet
 - `value`: (int) determines the state of the checkbox
     - -1: Not a checkbox (don't display)
@@ -72,7 +75,9 @@ Notes:
 - MultiMedia:
   - Copy stored in DB separately (similar to labels) and listed by IDs
   - Need to look into storage capacity and imposing a filesize limit
-
+- `updateData()` function for Bullet HTML Element
+- static `sectionNumber` counter for each view (Daily, Monthly, Yearly)
+- static `bulletNumber` counter for each Section HTML Element
 ---
 
 ## Labels.json
