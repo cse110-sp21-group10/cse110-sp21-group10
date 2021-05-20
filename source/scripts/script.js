@@ -8,7 +8,8 @@ document.getElementsByTagName('head')[0].appendChild(script);
 // ----------------------------------------------
 
 // Boolean to toggle editability
-let editable = true;
+window.editable = true;
+let editable = window.editable
 
 // Elements and buttons found on all pages
 let btnZoomOut, btnAddSection;
