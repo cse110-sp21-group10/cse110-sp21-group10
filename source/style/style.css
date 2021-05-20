@@ -21,27 +21,56 @@ h1 {
   margin-right: 5%;
 }
 
-/* Styling for exterior buttons (menu, zoom out, help) */
+/* Styling for exterior buttons (menu, zoom out, help) 
+   Gets rid of the border and background on them.
+   Adding gey out hover feature. */
 
-.button-top {
+#menu-button {
+  position: absolute;
   top: 1vh;
 }
 
-.button-left {
-  left: 1vh;
-}
-
-.button-right {
+#zoom-out-button {
   position: absolute;
   right: 1vh;
 }
 
-.button-bottom {
-  bottom: 1vh;
+#help-button {
+  position: absolute;
+  left: 1vh;
+}
+
+#prev-year-button {
+  height:5vh;
+  position: absolute;
+  right: 1vh;
+}
+
+#next-year-button {
+  height:5vh;
+  position: absolute;
+  right: 6vh;
 }
 
 nav.navigation {
   display: none;
+}
+
+.exterior-buttons {
+  border: 0;
+  background: none;
+}
+
+.exterior-buttons:hover {
+  background: lightgray;
+}
+
+.icons-for-yearly:hover {
+  background: lightgray;
+}
+
+[type="image"]:hover {
+  background: lightgray;
 }
 
 /* This will keep the daily screen open and viewable.
@@ -100,13 +129,6 @@ section.header button {
   background: none;
 }
 
-/* Styling for the exterior buttons. Gets rid of the border and background on them */
-
-.exterior-buttons {
-  border: 0;
-  background: none;
-}
-
 /* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
 
 .icon-size {
@@ -127,16 +149,35 @@ section.header button {
   }
 }
 
-/* General Body CSS End */
+.bullet-button {
+  font-size:10px;
+  border: none;
+  background: none;
+}
 
-/* Monthly Viewing CSS Start */
+.bullet-button:hover {
+  font-size: 12px;
+  position: relative;
+  right:1px;
+  top:1px;
+}
 
-/* Monthly Viewing CSS End */
+.inner-bullet {
+  border: blue;
+  border-style: dashed;
+  /*display: flex;
+  flex-flow: row wrap;*/
+}
 
-/* Yearly Viewing CSS Start */
+.attempt {
+  display: inline;
+}
 
-/* Yearly Viewing CSS End */
+/* .inner-bullet p {
+  display: inline-block;
+} */
 
-/* Menu Viewing CSS Start */
-
-/* Menu Viewing CSS End */
+.bullet-entry {
+  word-wrap: break-word;
+  max-width: 80%;
+}
