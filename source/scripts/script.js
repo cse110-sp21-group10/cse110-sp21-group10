@@ -7,9 +7,19 @@ document.getElementsByTagName('head')[0].appendChild(script);
 // Define variables used throughout all code here
 // ----------------------------------------------
 
+/**
+ * Workflow (to be implemented):
+ *    When DOC loads, get id of current day and load in current day's dailyObj from database
+ *        or create new blank dailyObj
+ *    Make HTML element from dailyObj and displays it
+ *    forward backward buttons:
+ *    backward loads the latest available dailyObj entry;
+ *    forward creates a blank entry with the correct date, or reads in if it already exists:
+ */
+
 // Boolean to toggle editability
 window.editable = true;
-let editable = window.editable
+let editable = window.editable;
 
 // Elements and buttons found on all pages
 let btnZoomOut, btnAddSection;
