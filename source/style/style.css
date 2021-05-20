@@ -153,6 +153,7 @@ section.header button {
   font-size:10px;
   border: none;
   background: none;
+  align-content: top;
 }
 
 .bullet-button:hover {
@@ -162,22 +163,23 @@ section.header button {
   top:1px;
 }
 
-.inner-bullet {
-  border: blue;
-  border-style: dashed;
-  /*display: flex;
-  flex-flow: row wrap;*/
-}
-
-.attempt {
-  display: inline;
-}
-
-/* .inner-bullet p {
-  display: inline-block;
+/* #test1:hover + #test2 {
+  position: relative;
+  left:10px;
 } */
 
+.layer-2 {
+  /* border: blue;
+  border-style: dashed; */
+  display: inline-grid;
+  grid-template-columns: auto 40cm;
+} 
+
 .bullet-entry {
-  word-wrap: break-word;
   max-width: 80%;
+  font-size: larger;
+}
+
+[contenteditable] {
+  outline: 0px solid transparent;
 }
