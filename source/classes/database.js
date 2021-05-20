@@ -16,7 +16,7 @@
  * }, id);
  *
  * @property {string} DATABASE_NAME - The name ('BulletJournal') of the IndexedDB database used by our app
- * @property {Object} Stores - The names of the object stores in the database in constant key-value pairs
+ * @property {Object.<string, string>} Stores - The names of the object stores in the database in constant key-value pairs
  */
 export class Database {
   /**
@@ -29,7 +29,7 @@ export class Database {
 
   /**
    * @static
-   * @property {Object} Stores - The names of the object stores in the database in constant key-value pairs
+   * @property {Object.<string, string>} Stores - The names of the object stores in the database in constant key-value pairs
    */
   static get Stores () {
     return {
