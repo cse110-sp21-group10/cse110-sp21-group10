@@ -33,13 +33,14 @@ class bulletElement extends HTMLElement {
             [contenteditable] {
               outline: 0px solid transparent;
             }
+          </style>
           
-            <div class="layer-1">
-              <div class="layer-2">
-                <button class="bullet-button"><i class="fas fa-circle"></i></button>
-                <p class="bullet-entry" contenteditable="true">holdonmmmmmm </p>
-              </div>
+          <div class="layer-1">
+            <div class="layer-2">
+              <button class="bullet-button"><i class="fas fa-circle"></i></button>
+              <p class="bullet-entry" contenteditable="true">holdonmmmmmm </p>
             </div>
+          </div>
           `;
   
       this.attachShadow({ mode: 'open' })
