@@ -41,53 +41,60 @@ export class Database {
     };
   }
 
-  // ---------------------- Start Documentation For Callback Functions --------------------------
+  // ------------------------- Start Documentation For Callback Functions -------------------------
 
   /**
    * Callback function that is run after the database is opened and ready for transactions.
    *
    * @callback openCallback
-   * @param {Object} transactionResult - The database object if the operation succeeded; null if it failed
+   * @param {Object} databaseObject - The database object if the operation succeeded; null if it failed
+   */
+
+  /**
+   * Callback for data retrieval. This callback must be specified to have access to the data retrieved from
+   * the database request. If the transaction succeeded, the retrieved object will be passed as the parameter
+   * to this function. Otherwise, null will be passed as the parameter to this function. If additional
+   * arguments (varArgs) are given to the function that uses this callback, those arguments will be passed
+   * to this callback function in order after the fetchedData parameter.
+   *
+   * @callback fetchCallback
+   * @param {Object} fetchedData - The data that is retrieved from the object store if the get transaction
+   * succeeded; null if it failed
    */
 
   /**
    * Callback for success/failure functionality after a storage transaction. Only needed if success and failure
    * conditions must be treated appropriately. If the transaction succeeded, true will be passed as the parameter
-   * to this function. Otherwise, false will be passed as the parameter to this function.
+   * to this function. Otherwise, false will be passed as the parameter to this function. If additional
+   * arguments (varArgs) are given to the function that uses this callback, those arguments will be passed
+   * to this callback function in order after the transactionResult parameter.
    *
    * @callback storeCallback
    * @param {boolean} transactionResult - True if the storage transaction succeeded; false if it failed
    */
 
   /**
-   * Callback for data retrieval. This callback must be specified to have access to the data retrieved from
-   * the database request. If the transaction succeeded, the retrieved object will be passed as the parameter
-   * to this function. Otherwise, null will be passed as the parameter to this function.
-   *
-   * @callback fetchCallback
-   * @param {Object} data - The data that is retrieved from the object store if the get transaction succeeded;
-   * null if it failed
-   */
-
-  /**
    * Callback for success/failure functionality after a deletion transaction. Only needed if success and failure
    * conditions must be treated appropriately. If the transaction succeeded, true will be passed as the parameter
-   * to this function. Otherwise, false will be passed as the parameter to this function.
+   * to this function. Otherwise, false will be passed as the parameter to this function. If additional
+   * arguments (varArgs) are given to the function that uses this callback, those arguments will be passed
+   * to this callback function in order after the transactionResult parameter.
    *
    * @callback deleteCallback
    * @param {boolean} transactionResult - True if the delete transaction succeeded; false if it failed
    */
 
-  // ---------------------- End Documentation For Callback Functions ----------------------------
+  // -------------------------- End Documentation For Callback Functions --------------------------
 
-  // ----------------------------- Start General DB Functions -----------------------------------
+  // ----------------------------------- Start Helper Functions -----------------------------------
 
   /**
    * This function opens the IndexedDB database in order to allow for transactions to be run on the
    * database. It makes an asynchronous call to IndexedDB's open function with the constant database
    * name 'BulletJournal' and creates the appropriate object stores if the database doesn't yet exist.
    * It then runs the given callback function with the resulting database object if the operation
-   * succeeds, or null if the operation fails.
+   * succeeds, or null if the operation fails. This function is automatically called as a helper function
+   * when the fetch, store, and delete functions are called.
    *
    * @static
    * @param {?openCallback} [callback=null] - Callback function that is run after the database open
@@ -155,13 +162,11 @@ export class Database {
       }
     };
   }
-  // ------------------------------- End General DB Functions -------------------------------------
-
-  // -------------------------------- Start Helper Functions --------------------------------------
 
   /**
    * This function parses a given ID and determines what type of object (ex. bullet, daily, monthly, yearly,
-   * etc) the ID represents. It returns the object store that stores that type of object.
+   * etc) the ID represents. It returns the object store that stores that type of object. This function is
+   * automatically called as a helper function when the fetch, store, and delete functions are called.
    *
    * @static
    * @param {string} id - The unique string ID that was used as the object's key in the database
@@ -196,9 +201,9 @@ export class Database {
     // will need to add checks for section IDs, widget IDs, etc. when we implement those objects
   }
 
-  // --------------------------------- End Helper Functions ---------------------------------------
+  // ------------------------------------ End Helper Functions ------------------------------------
 
-  // -------------------------------- Start Read/Write Functions --------------------------------------
+  // --------------------------------- Start Read/Write Functions ---------------------------------
 
   /**
    * This function retrieves a single JSON object with the given ID in the database. It first uses the format of
@@ -342,5 +347,5 @@ export class Database {
     });
   }
 
-  // -------------------------------- End Read/Write Functions --------------------------------------
+  // ---------------------------------- End Read/Write Functions ----------------------------------
 } // end class Database
