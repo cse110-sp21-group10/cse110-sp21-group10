@@ -191,7 +191,7 @@ export class Database {
         return this.Stores.LABELS; // ID starting with 'L' signifies label object
     }
 
-    // will need to add checks for section IDs, widget IDs, etc. when we implement those objects
+    // will need to add cases for section IDs, widget IDs, etc. when we implement those objects
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------
