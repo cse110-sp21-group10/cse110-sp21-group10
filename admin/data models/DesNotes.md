@@ -3,7 +3,7 @@
 ## Days.json
 File contains data for all logged days so far.  
 Each day is represented as a JSON object with the following:
-- `ID`: just the YYMMDD Date of the Day
+- `ID`: 'D YYMMDD' - D character to signify data is for Day, followed by date
 - `Widgets`: A section of the log that's always near the top
   - Type examples: reminder, weather, etc.
   - Content relies on type and will be developed / implemented by assignee
@@ -21,7 +21,7 @@ Each day is represented as a JSON object with the following:
 ## Months.json
 File contains data for all logged months so far.  
 Each month is represented as a JSON object with the following:
-- `ID`: just the YYMM Date of the Month
+- `ID`: 'M YYMMDD' - M character to signify data is for Month, followed by date
 - `Sections`: A single-object Array of sections
   - `Notes`: The name of the solitary section saved under months
   - `Type`: Log (indicates non-checkboxed bullets)
@@ -31,7 +31,7 @@ Each month is represented as a JSON object with the following:
 ## Years.json
 File contains data for all logged years so far.  
 Each year is represented as a JSON object with the following:
-- `ID`: just the YY representation of the year
+- `ID`: 'Y YYMMDD' - Y character to signify data is for Year, followed by date
 - `Type`: one `log` and one `checklist`
 - `Name`: one `Notes` and one `Goals`
 - `bulletIDs`: Array of bullet IDs under their respective sections
