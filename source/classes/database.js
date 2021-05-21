@@ -174,31 +174,24 @@ export class Database {
    * yearly, etc) that the given ID represents
    */
   static getStoreFromID (id) {
-    // ID starting with 'B' signifies bullet object
-    if (id.charAt(0) === 'B') {
-      return this.Stores.BULLETS;
+    // get the first character of the ID string
+    const firstChar = id.charAt(0);
 
-    // ID starting with 'L' signifies label object
-    } else if (id.charAt(0) === 'L') {
-      return this.Stores.LABELS;
-
-    // ID that doesn't start with any special letter (ex. 'B' or 'L') and has
-    // length of 8 (ex. '20210519') signifies daily object
-    } else if (id.length === 8) {
-      return this.Stores.DAILY;
-
-    // ID that doesn't start with any special letter (ex. 'B' or 'L') and has
-    // length of 6 (ex. '202105') signifies monthly object
-    } else if (id.length === 6) {
-      return this.Stores.MONTHLY;
-
-    // ID that doesn't start with any special letter (ex. 'B' or 'L') and has
-    // length of 4 (ex. '2021') signifies yearly object
-    } else {
-      return this.Stores.YEARLY;
+    // use first character to identify the kind of object
+    switch (firstChar) {
+      case 'D':
+        return this.Stores.DAILY; // ID starting with 'D' signifies daily object
+      case 'M':
+        return this.Stores.MONTHLY; // ID starting with 'M' signifies monthly object
+      case 'Y':
+        return this.Stores.YEARLY; // ID starting with 'Y' signifies yearly object
+      case 'B':
+        return this.Stores.BULLETS; // ID starting with 'B' signifies bullet object
+      case 'L':
+        return this.Stores.LABELS; // ID starting with 'L' signifies label object
     }
 
-    // will need to add checks for section IDs, widget IDs, etc. when we implement those objects
+    // will need to add cases for section IDs, widget IDs, etc. when we implement those objects
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------
