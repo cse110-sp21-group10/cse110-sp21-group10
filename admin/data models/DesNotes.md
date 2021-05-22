@@ -220,3 +220,18 @@ Note:
   - expands onClick
     - migrate mode perhaps?
     - User can mass check off, migrate to today, or cross off
+
+## Back and Forward buttons
+- 2 types of buttons: unit (day, month, year) vs entry (day only)
+- Unit
+  - Have access to global variable for dayCount (1-365), monthCount (0-11), year (00-99)
+  - Increment/decrement the unit (day, month, year).
+  - Call respective load methods
+    - (Checks if there's a saved entry in database to show, else it'll show a blank/template page)
+- Entries (only for day view)
+  - Have access to an arraylist of dayIDs []
+  - Have access to global variable for index in that arraylist
+  - Check that there is a 'prev/next entry' and grey out button accordingly
+    - array count and index (-1 too far left, 'size' too far right)
+  - Just increment/decrease index and set dayCount, monthCount and year accordingly
+  - Then load the day from database
