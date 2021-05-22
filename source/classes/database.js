@@ -246,7 +246,7 @@ export class Database {
   }
 
   /**
-   * This function stores a single JSON object with the given ID in the database. It first uses the format of
+   * This function retrieves a single JSON object with the given ID in the database. It first uses the format of
    * the given object ID to determine what type of object (ex. bullet, daily, monthly, yearly, etc) is being
    * stored. It then makes an asynchronous call to IndexedDB's put function on the appropriate object store
    * to store the desired object, and then passes a boolean (true if the operation succeeds or false if the operation
