@@ -1,3 +1,5 @@
+import { Database } from '../classes/database.js';
+
 /**
  * This class contains a constructor, edit, and remove functions for the bullet custom HTML class
  * @classdesc
@@ -61,7 +63,7 @@ class BulletEntry extends HTMLElement {
       </style>
       <link href="../css/all.css" rel="stylesheet"> <!--load all styles -->
       <div class="bullet">
-        <button class="bullet-point"></button>
+        <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <p class="bullet-text" contenteditable="true">holdonmmmmmm </p>
       </div>
     `;
@@ -95,11 +97,6 @@ class BulletEntry extends HTMLElement {
     console.log('Setter called');
     const root = this.shadowRoot.querySelector('.bullet');
     const text = root.querySelector('.bullet-text');
-    const point = root.querySelector('.bullet-point');
-
-    const icon = document.createElement('i');
-    icon.className = 'fas fa-circle';
-    point.appendChild(icon);
     // const remove = root.querySelector('.remove');
 
     root.id = id;
@@ -121,6 +118,7 @@ class BulletEntry extends HTMLElement {
     }
 
     this.setAttribute('data', JSON.stringify(jsonData));
+    Database.store(id, jsonData, ()=> {console.log(`Stored new bullet ${id} to database`)});
   }
 
   /**
