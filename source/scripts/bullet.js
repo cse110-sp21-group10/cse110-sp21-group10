@@ -107,7 +107,6 @@ class BulletEntry extends HTMLElement {
     text.addEventListener('click', (event) => { this.editBullet(event); });
     // remove.addEventListener('click', (event) => { this.deleteBullet(event); });
 
-
     /** Checklist toggle based off value
      * - Implemented using display: none
      */
