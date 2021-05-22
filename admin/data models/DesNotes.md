@@ -57,6 +57,11 @@ Internal Variables of each bullet:
       - `B 210517 01 15` : the 16th bullet in the 2nd section of date 2021-05-17.  
       - `B 2105 03` : the 4th bullet in the Notes section (the only section) of month 2021-05 
       - `B 21 1 02` : the 3rd bullet in the Goals section (2nd section) of year 2021
+    - Note: 
+      - date counts from 1, so '20' in date means the 20th day of the current month
+      - month counts from 0 to 11, so '0' is January, '2' is March, etc.
+      - year counts for the 21st century so '21' in year means 2021
+      - This is for consistency with the dayjs library we're using.
 - `labelIDs`: Array of label IDs applied to this bullet
     - Refer to [Labels.json](#Labels.json) for details
 - `bulletIDs`: Array of bullet IDs that are subChildren of this bullet
