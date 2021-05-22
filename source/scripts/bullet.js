@@ -194,6 +194,7 @@ class BulletEntry extends HTMLElement {
 /** Define a custom element for the BulletEntry web component */
 customElements.define('bullet-entry', BulletEntry);
 
+/** Example data
   const exampleBulletDay = [
     'B 210525 00 00',
     {
@@ -222,24 +223,4 @@ customElements.define('bullet-entry', BulletEntry);
       value: -1
     }
   ];
-/** Example data
- * --------------
- *  "B 210515 00 00": {
-        "labelIDs": [],
-        "text": "Walk the dog",
-        "value": -1,
-        "childrenIDs": []
-    },
-    "B 2105 00": {
-        "labelIDs": [],
-        "text": "Ate even more hot dogs",
-        "value": -1,
-        "childrenIDs": []
-    },
-    "B 21 1 00": {
-        "labelIDs": [],
-        "text": "Learn French",
-        "value": 0,
-        "childrenIDs": []
-    },
  */
