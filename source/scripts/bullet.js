@@ -30,10 +30,41 @@ class BulletEntry extends HTMLElement {
     const template = document.createElement('template');
 
     template.innerHTML = `
-    <div class="bullet">
-      <button class="remove"> X </button>
-      <span class="text"> </span>
-    </div>`;
+      <style>
+        .bullet-point {
+          font-size:10px;
+          border: none;
+          background: none;
+          float: left;
+          padding-top: 7px;
+        }
+
+        .bullet-point:hover {
+          font-size: 12px;
+          position: relative;
+          right: 1px;
+          bottom: 1px;
+          width: 22px;
+        }
+
+        .bullet-entry {
+          display: inline-block;
+          width: 80%;
+          font-size: larger;
+          margin: 0;
+          padding-left: 0.5em;
+        }
+
+        [contenteditable] {
+          outline: 0px solid transparent;
+        }
+      </style>
+      <link href="../css/all.css" rel="stylesheet"> <!--load all styles -->
+      <div class="bullet">
+        <button class="bullet-point"></button>
+        <p class="bullet-text" contenteditable="true">holdonmmmmmm </p>
+      </div>
+    `;
 
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
@@ -63,14 +94,19 @@ class BulletEntry extends HTMLElement {
   set data ([id, jsonData]) {
     console.log('Setter called');
     const root = this.shadowRoot.querySelector('.bullet');
-    const text = root.querySelector('.text');
-    const remove = root.querySelector('.remove');
+    const text = root.querySelector('.bullet-text');
+    const point = root.querySelector('.bullet-point');
+
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-circle';
+    point.appendChild(icon);
+    // const remove = root.querySelector('.remove');
 
     root.id = id;
     text.innerText = jsonData.text;
 
     text.addEventListener('click', (event) => { this.editBullet(event); });
-    remove.addEventListener('click', (event) => { this.deleteBullet(event); });
+    // remove.addEventListener('click', (event) => { this.deleteBullet(event); });
 
     /** Checklist toggle based off value
      * - Implemented using display: none
