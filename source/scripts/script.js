@@ -1,4 +1,5 @@
-import { Database } from "../classes/database.js";
+import { Database } from '../classes/database.js';
+import { dayjs } from '../scripts/dayjs.min.js';
 
 // Load jQuery for cool effects :D
 const script = document.createElement('script');
@@ -7,7 +8,7 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 // Load the dayOfYear plugin
-dayjs.extend(dayjs_plugin_dayOfYear);
+dayjs.extend(window.dayjs_plugin_dayOfYear);
 
 /**
  * Workflow (to be implemented):
@@ -30,8 +31,8 @@ let editable = window.editable;
 let btnZoomOut, btnAddSection;
 
 // bulletNum counter and currentDate (based on entry, the actual currentDate will be generated whenever needed)
-var bulNum = 0;
-var currDate;
+const bulNum = 0;
+let currDate;
 
 // Elements for the daily logs page
 let divDaily, btnMinimizeSection;
@@ -70,26 +71,23 @@ window.onpopstate = function (event) {
       if (event.state.currDate) {
         currDate = event.state.currDate;
         loadDay();
-      }
-      else {
+      } else {
         transitionDaily();
       }
       break;
-  case 'month':
+    case 'month':
       if (event.state.currDate) {
         currDate = event.state.currDate;
         // loadMonth();
-      }
-      else {
+      } else {
         transitionMonthly();
       }
       break;
     case 'year':
-      if (event.state.currDate){
+      if (event.state.currDate) {
         currDate = event.state.currDate;
         // loadYear();
-      } 
-      else {
+      } else {
         transitionYearly();
       }
       break;
@@ -156,6 +154,10 @@ function setupButtons () {
 }
 
 /**
+ * ------------ DEPRECATED METHOD ----------
+ * Will be replaced by @function createBullet
+ * -----------------------------------------
+ *
  * Creates a new bullet under target's parent (button's section) that triggered event
  * @param {OnClickEvent} event
  * - Function only run if editting is enable
@@ -229,7 +231,9 @@ function editBullet (event) {
   }
 }
 
-/** Finds any open inputs and finalizes the process of transforming inputs to bullets */
+/**
+ * Finds any open inputs and finalizes the process of transforming inputs to bullets
+ */
 function finalizeInputs () {
   const input = document.getElementById('newBullet');
   if (input) {
@@ -289,79 +293,16 @@ function zoomOut () {
 }
 
 /**
- * let state = {};
- * State {
- *  view: 'day', 'month', 'year'
- *  dayCount: 1 - 365;
- *  monthCount: 1-12;
- *  year: 00-99;
- *  index: 0-size;
- * }
+ * Handles transitioning from Monthly view to Daily view
  */
-
-// day[]
-
-/**
- * Set the state to record current values of the global variables, 
- * then navigate to the next/prev day/month/year
- */
-function onForward() {
-  finalizeInputs();
-  switch (history.state.view){
-    case 'day':
-      window.history.pushState({ view: 'day', currDate}, 'Daily Log', '#day');
-      currDate = currDate.dayOfYear(currDate.dayOfYear()+1);
-      loadDay();
-      break;
-    case 'month':
-      window.history.pushState({ view: 'month', currDate}, 'Monthly Log', '#month');
-      currDate = currDate.month(currDate.month()+1);
-      loadDay()
-      break;
-    case 'year':
-      window.history.pushState({ view: 'year,', currDate}, 'Yearly Log', '#year');
-      currDate = currDate.year(currDate.year()+1);
-      break; 
-  }
-}
-
-// function moveUnit(forward) {
-// }
-
-function onBackward() {
-  finalizeInputs();
-  switch (history.state.view){
-    case 'day':
-      window.history.pushState({ view: 'day', currDate}, 'Daily Log', '#day');
-      currDate = currDate.dayOfYear(currDate.dayOfYear()-1);
-      loadDay();
-      break;
-    case 'month':
-      window.history.pushState({ view: 'month', currDate}, 'Monthly Log', '#month');
-      currDate = currDate.month(currDate.month()-1);
-      loadDay()
-      break;
-    case 'year':
-      window.history.pushState({ view: 'year,', currDate}, 'Yearly Log', '#year');
-      currDate = currDate.year(currDate.year()-1);
-      break; 
-  }
-}
-
-function zoomIn () {
-  // When user click on a button in yearly or monthly
-  // zoom into the correct month or date
-  // sets day, month, year to correct date.
-}
-
-
-/** Handles transitioning from Monthly view to Daily view */
 function transitionDaily () {
   divDaily.style.display = 'block';
   divMonthly.style.display = 'none';
 }
 
-/** Handles transitioning from either Daily or Yearly view to Monthly view */
+/**
+ * Handles transitioning from either Daily or Yearly view to Monthly view
+ */
 function transitionMonthly () {
   divDaily.style.display = 'none';
   divMonthly.style.display = 'block';
@@ -380,98 +321,207 @@ function transitionYearly () {
   btnZoomOut.style.display = 'none';
 }
 
-/** TODO */
+/**
+ * TODO
+ *
+ * Will be implemented later once we create a custom html element for sections
+ * - Triggered by the (+) section button near top of daily log
+ *
+ * In case of linter complaints, breka asterisk --> */
 function createSection () {
   console.log('You clicked on the create section button');
 }
+/* For quick commenting out of code */
 
-function createBullet() {
+// New & unprocessed code -----------------------------------------------------------------------
+
+/**
+ * Creates and appends a new bullet entry based on target of clickEvent
+ * @param {OnClickEvent} event
+ * - Function only run if editting is enable
+ * - New bullet item with input textbox appended to parent section (user directed to inside input)
+ * - Editing is disabled
+ * - Input box triggers action upon reading 'Enter':
+ *  - Textbox value used to update bullet item
+ *  - Editing is enabled
+ *
+ * In case of linter complaints, break asterisk --> /
+function createBullet () {
   const bulletElem = document.createElement('bullet-entry');
-  let bulletObj = [];
+  const bulletObj = [];
 }
-function navigate(direction){
-  // direction: forward, backward
-  // When back, forward or a (specific date on month, to be implemented later)
-  // if the date is current or future 
-  //    sets day, month, year to the correct date to display
-  // if date is past
-  //    sets day, month, year to the latest available entry
-}
+/* For quick commenting out of code */
 
 /**
  * Loads the current day into display
  * - Generates ID and checks database for the day
- * - If not database returns null, creates a new object and display it
- */
-function loadDay(){
+ * - If ID is registered, sets data with data from database
+ * - If not, creates a blank teplate
+ *
+ * In case of linter complaints, break asterisk --> */
+function loadDay () {
   const ID = generateID('day');
   const dayElem = document.createElement('day');
   Database.fetch(ID, (data) => {
     if (data) {
       dayElem.data = [ID, data];
-    } 
-    else {
+    } else {
       console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new Day ._.");
       dayElem.data = [ID, {
-        "widgets": [],
-        "trackers": [],
-        "sections": [
+        widgets: [],
+        trackers: [],
+        sections: [
           {
-            "name": "Notes",
-            "type": "log",
-            "bulletIDs": []
-          },
+            name: 'Notes',
+            type: 'log',
+            bulletIDs: []
+          }
         ]
       }];
     }
   });
-  // Call generateID('day')
-  // if (ID in database)
-  //    get data (dailyObj (json)), make HTML element, append
-  // else
-  //    Make data (empty dailyObj (json)), make HTML, append
-  //    
-  // LoadDay() should not save emptry dailyObj, edit() should save instead        
 }
 
 /**
  * Uses global variables to generate the correct ID for the given object type
- * 
+ *
  * @param {string} type - Type of data object to generate ID for
  * @returns {string} The objects ID
- */
+ *
+ * In case of linter complaints, break asterisk --> */
 function generateID (type) {
   let ID = '';
   let day = currDate.date();
   day = (day < 10 ? '0' : '') + day;
   let month = currDate.month();
   month = (month < 10 ? '0' : '') + month;
-  let year = currDate.year() % 100;
+  const year = currDate.year() % 100;
 
   switch (type) {
     case 'day':
-      return `D ${year}${month}${day}`
-      break;
+      return `D ${year}${month}${day}`;
     case 'bullet':
       switch (window.history.state.view) {
-        case 'day' : 
+        case 'day' :
           ID = `B ${year}${month}${day} 00 ${bulNum}`;
           return ID;
-          break;
-        case 'month' : 
+        case 'month' :
           ID = `B ${year}${month} ${bulNum}`;
           return ID;
-          break;
-        case 'year' : 
+        case 'year' :
           ID = `B ${year} 0 ${bulNum}`;
           return ID;
-          break;
       }
+      break;
+    default:
+      console.log(`No implementation yet for generating ${type} IDs`);
+  }
+}
+/* For quick commenting out of code */
+
+/**
+ * Adds functionality to 'Next Unit' button
+ * - Record currentDate in history state
+ * - Navigate to the next unit (day/month/year)
+ *
+ * In case of linter complaints, break asterisk --> /
+function onNextUnit () {
+  finalizeInputs();
+  switch (history.state.view) {
+    case 'day':
+      window.history.pushState({ view: 'day', currDate }, 'Daily Log', '#day');
+      currDate = currDate.dayOfYear(currDate.dayOfYear() + 1);
+      loadDay();
+      break;
+    case 'month':
+      window.history.pushState({ view: 'month', currDate }, 'Monthly Log', '#month');
+      currDate = currDate.month(currDate.month() + 1);
+      loadDay();
+      break;
+    case 'year':
+      window.history.pushState({ view: 'year,', currDate }, 'Yearly Log', '#year');
+      currDate = currDate.year(currDate.year() + 1);
       break;
   }
 }
+/* For quick commenting out of code */
 
-// Notes
+/**
+ * Adds functionality to 'Prev Unit' button
+ * - Record currentDate in history state
+ * - Navigate to the previous unit (day/month/year)
+ *
+ * In case of linter complaints, break asterisk --> /
+function onPrevUnit () {
+  finalizeInputs();
+  switch (history.state.view) {
+    case 'day':
+      window.history.pushState({ view: 'day', currDate }, 'Daily Log', '#day');
+      currDate = currDate.dayOfYear(currDate.dayOfYear() - 1);
+      loadDay();
+      break;
+    case 'month':
+      window.history.pushState({ view: 'month', currDate }, 'Monthly Log', '#month');
+      currDate = currDate.month(currDate.month() - 1);
+      loadDay();
+      break;
+    case 'year':
+      window.history.pushState({ view: 'year,', currDate }, 'Yearly Log', '#year');
+      currDate = currDate.year(currDate.year() - 1);
+      break;
+  }
+}
+/* For quick commenting out of code */
+
+/**
+ * TODO
+ *
+ * Provides functionality to the 'Next Entry' button
+ * - Records currentDate in history's state
+ * - Navigates to next Entry (daily view only)
+ *
+ * In case of linter complaints, break asterisk --> /
+function onNextEntry(forward) {
+}
+/* For quick commenting out of code */
+
+/**
+ * TODO
+ *
+ * Provides functionality to the 'Prev Entry' button
+ * - Records currentDate in history's state
+ * - Navigates to previous Entry (daily view only)
+ *
+ * In case of linter complaints, break asterisk --> /
+function onPrevEntry(forward) {
+}
+/* For quick commenting out of code */
+
+/**
+ * TODO
+ *
+ * Provides functionality to calendar view in yearly/monthly logs
+ * - Zooms into the correct month or date
+ * - Sets currDate accordingly
+ *
+ * In case of linter complaints, break asterisk --> /
+function zoomIn () {
+  // When user click on a button in yearly or monthly
+  // zoom into the correct month or date
+  // sets day, month, year to correct date.
+}
+/* For quick commenting out of code */
+
+// Notes and old code -------------------------------------------------------------------------------
+
+/** Working with Local Storage
+ * ----------------------------
+ * 1. Check localstorage
+ * 2. load global variables
+ * 3. onChange, update global variables
+ * 4. when exiting, write to localstorage
+ */
+
 /*
 $(document).click(function(event) {
   var $target = $(event.target);
@@ -481,9 +531,9 @@ $(document).click(function(event) {
   }
 });
 */
-/*
 
 // Old code for adding evenListeners to all 'li' items
+/*
 document.querySelectorAll('li').forEach((listItem)=>{
     listItem.addEventListener('click', (event) => {
         let target = event.target;
@@ -506,11 +556,3 @@ document.querySelectorAll('li').forEach((listItem)=>{
 //     inputBox.type = 'text';
 //     document.getElementById('daily-log').appendChild(inputBox);
 // });
-
-/** Working with Local Storage
- * ----------------------------
- * 1. Check localstorage
- * 2. load global variables
- * 3. onChange, update global variables
- * 4. when exiting, write to localstorage
- */
