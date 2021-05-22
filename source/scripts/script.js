@@ -50,21 +50,21 @@ let noteScts;
 
 /**
  * Wait for DOM to load before running script
- * @param {script.setupScript} cb - Callback that uses DOM content to setup script
+ * @param {setupScript} cb - Callback that uses DOM content to setup script
  */
 document.addEventListener('DOMContentLoaded', setupScript);
 
 /**
- * Handles url navigation via the back/forward buttons
- * <p>
- * Will finalize any user input through the use of a @function finalizeInputs,
+ * Handles url navigation via the back/forward buttons <p>
+ *
+ * Will finalize any user input through the use of a finalizeInputs,
  * determines which log to load into view based off current view and calls the appropriate transition function
- * (@function transitionDaily, @function transitionMonthly, @function transitionYearly.)
- * <p>
- * Edit: Will also check if history state stored a date, indicating movement to another Unit/Entry occurred.
- * <p>
- * If this is the case, the old date is loaded into @property {dayjs} currDate and the appropriate load function is called
- * (@function loadDay, @function loadMonth, @function loadYear)
+ * (transitionDaily, transitionMonthly, transitionYearly.) <p>
+ *
+ * Edit: Will also check if history state stored a date, indicating movement to another Unit/Entry occurred. <p>
+ *
+ * If this is the case, the old date is loaded into currDate and the appropriate load function is called
+ * (loadDay, loadMonth, loadYear)
  * @param {PopStateEvent} event - info on target page contained in state
  */
 window.onpopstate = function (event) {
@@ -99,14 +99,14 @@ window.onpopstate = function (event) {
 };
 
 /**
- * Helper called once DOM has loaded.
- * <p>
- * Will immediately push a state indicating current view is set to daily log to window history,
- * <p>
- * calls @function loadVars to load values into declared variables,
- * <p>
- * calls @function setupButtons to add onClickListeners to buttns
- * @callback script.setupScript
+ * Helper called once DOM has loaded. <p>
+ *
+ * Will immediately push a state indicating current view is set to daily log to window history, <p>
+ *
+ * calls loadVars to load values into declared variables, <p>
+ *
+ * calls setupButtons to add onClickListeners to buttns
+ * @callback setupScript
  */
 function setupScript () {
   window.history.pushState({ view: 'day' }, 'Daily Log', '#daily');
@@ -116,13 +116,13 @@ function setupScript () {
 }
 
 /**
- * Values assigned to variables defined earlier
- * <p>
- * @property {datejs} currDate set to a new dayjs object
- * <p>
+ * Values assigned to variables defined earlier <p>
+ *
+ * currDate set to a new dayjs object <p>
+ *
  * Classnames used to load divs for the 3 views, the associated icon group, and all bullet elements
- * (currently sections holding list elements but will be replaced once custom bullet element is defined)
- * <p>
+ * (currently sections holding list elements but will be replaced once custom bullet element is defined) <p>
+ *
  * IDs used to load button elements
  */
 function loadVars () {
@@ -130,7 +130,6 @@ function loadVars () {
   divDaily = document.getElementsByClassName('daily')[0];
   divMonthly = document.getElementsByClassName('monthly')[0];
   divYearly = document.getElementsByClassName('yearly')[0];
-  divYearlyIcons = document.getElementsByClassName('icons-for-yearly')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
   btnAddSection = document.getElementById('related-sections-button');
@@ -140,16 +139,16 @@ function loadVars () {
 }
 
 /**
- * Functionality applied via onClickListeners to the following buttons:
- * <p>
- * Zoom Out button - using @callback zoomOut
- * <p>
- * Bullet items - using @callback editBullet
- * <p>
- * Add bullet buttons (that are dynamically added to each section) - using @callback addBullet
- * <p>
- * Create section button - using @callback createSection
- * <p>
+ * Functionality applied via onClickListeners to the following buttons: <p>
+ *
+ * Zoom Out button - using zoomOut <p>
+ *
+ * Bullet items - using editBullet <p>
+ *
+ * Add bullet buttons (that are dynamically added to each section) - using addBullet <p>
+ *
+ * Create section button - using createSection <p>
+ *
  * Minimize section button - using jQuery's slideToggle function
  */
 function setupButtons () {
@@ -175,10 +174,11 @@ function setupButtons () {
 }
 
 /**
- * ------------ DEPRECATED METHOD ----------
- * Will be replaced by @function createBullet
- * -----------------------------------------
- *
+ * ------------ OUTDATED METHOD ---------- <p>
+ * Will be replaced by createBullet <p>
+ * ----------------------------------------- <p>
+ */
+/*
  * Creates a new bullet under target's parent (button's section) that triggered event
  * - Function only run if editting is enable
  * - New list item with input textbox appended to parent section (user directed to inside input)
@@ -219,9 +219,11 @@ function addBullet (event) {
 }
 
 /**
- * ------------ DEPRECATED METHOD ----------
- * Will be replaced by a function that is yet to be defined and implemented
- * -----------------------------------------
+ * ------------ OUTDATED METHOD ---------- <p>
+ * Will be replaced by a function that is yet to be defined and implemented <p>
+ * ----------------------------------------- <p>
+ */
+/*
  * Edits existing bullet when clicked on
  * - Function only runs if editting is enabled AND only for the list item clicked (for nested list items)
  * - Input textbox created with value of first line of list item (in case list item has children)
@@ -256,9 +258,11 @@ function editBullet (event) {
 }
 
 /**
- * ------------ OUTDATED METHOD ----------
- * Needs to be redefined once the custom bullet element is finished
- * -----------------------------------------
+ * ------------ OUTDATED METHOD ---------- <p>
+ * Needs to be redefined once the custom bullet element is finished <p>
+ * ----------------------------------------- <p>
+ */
+/*
  * Finds any open inputs and finalizes the process of transforming inputs to bullets
  */
 function finalizeInputs () {
@@ -269,9 +273,11 @@ function finalizeInputs () {
 }
 
 /**
- * ------------ OUTDATED METHOD ----------
- * Needs to be redefined once the custom bullet element is finished
- * -----------------------------------------
+ * ------------ OUTDATED METHOD ---------- <p>
+ * Needs to be redefined once the custom bullet element is finished <p>
+ * ----------------------------------------- <p>
+ */
+/*
  * Replaces input textbox with it's value in the list item
  * - Creates a new list item
  *  - Value of input text appended
@@ -302,14 +308,14 @@ function inputToBullet (input, target) {
 }
 
 /**
- * Zooms out to appropriate view based off history state
- * <p>
- * Calls @function finalizeInputs to finish any bullets that are being editted
- * <p>
- * Checks the current history state's view to determine which transition to make
- * <p>
+ * Zooms out to appropriate view based off history state <p>
+ *
+ * Calls finalizeInputs to finish any bullets that are being editted <p>
+ *
+ * Checks the current history state's view to determine which transition to make <p>
+ *
  * Pushes the current view to history state and calls appropriate transition function
- * (@function transitionMonthly, @function transitionDaily)
+ * (transitionMonthly, transitionDaily)
  */
 function zoomOut () {
   finalizeInputs();
@@ -327,10 +333,10 @@ function zoomOut () {
 }
 
 /**
- * Handles transitioning from Monthly view to Daily view
- * <p>
- * Daily div is set to visible, Monthly div is set to invisible
- * <p>
+ * Handles transitioning from Monthly view to Daily view <p>
+ *
+ * Daily div is set to visible, Monthly div is set to invisible <p>
+ *
  * Icon groups for entry jumping are made available to Daily view
  */
 function transitionDaily () {
@@ -340,12 +346,12 @@ function transitionDaily () {
 }
 
 /**
- * Handles transitioning from either Daily or Yearly view to Monthly view
- * <p>
- * Daily and Yearly div is set to invisible, Monthly div is set to visible
- * <p>
- * Icon groups for entry jumping are made unavailable to Monthly and Yearly view
- * <p>
+ * Handles transitioning from either Daily or Yearly view to Monthly view <p>
+ *
+ * Daily and Yearly div is set to invisible, Monthly div is set to visible <p>
+ *
+ * Icon groups for entry jumping are made unavailable to Monthly and Yearly view <p>
+ *
  * Zoom out icon is enabled in Monthly and Daily view
  */
 function transitionMonthly () {
@@ -358,10 +364,10 @@ function transitionMonthly () {
 }
 
 /**
- * Handles transitioning from Monthly view to Yearly view
- * <p>
- * Yearly div is set to visible, Monthly div is set to invisible
- * <p>
+ * Handles transitioning from Monthly view to Yearly view <p>
+ *
+ * Yearly div is set to visible, Monthly div is set to invisible <p>
+ *
  * Zoom out icon is disabled in Yearly View
  */
 function transitionYearly () {
@@ -372,13 +378,13 @@ function transitionYearly () {
 }
 
 /**
- * TODO
- * <p>
- * Will be implemented later once we create a custom html element for sections
- * <p>
- * Triggered by the (+) section button near top of daily log
- * <p>
- * In case of linter complaints, break asterisk --> */
+ * TODO <p>
+ *
+ * Will be implemented later once we create a custom html element for sections <p>
+ *
+ * Triggered by the (+) section button near top of daily log <p>
+ *
+ */
 function createSection () {
   console.log('You clicked on the create section button');
 }
@@ -387,19 +393,19 @@ function createSection () {
 // New & unprocessed code -----------------------------------------------------------------------
 
 /**
- * Creates and appends a new bullet entry based on target of clickEvent
- * <p>
- * Will only run if editting is enabled
- * <p>
- * New bullet item with input textbox appended to parent section (user directed to inside input textbox)
- * <p>
- * Editing is disabled
- * <p>
+ * Creates and appends a new bullet entry based on target of clickEvent <p>
+ *
+ * Will only run if editting is enabled <p>
+ *
+ * New bullet item with input textbox appended to parent section (user directed to inside input textbox) <p>
+ *
+ * Editing is disabled <p>
+ *
  * Input box triggers action upon reading 'Enter' keystroke. This will use value of input textbox to update bullet
  * element and re-enable Editing
  * @param {OnClickEvent} event
  *
- * In case of linter complaints, break asterisk --> /
+ *
 function createBullet () {
   const bulletElem = document.createElement('bullet-entry');
   const bulletObj = [];
@@ -407,18 +413,18 @@ function createBullet () {
 /* For quick commenting out of code */
 
 /**
- * Loads the current day into display
- * <p>
- * Calls @function generateID attempts to use ID to retrieve data for the current day
- * <p>
- * If data is returned, calls on day custom element's setter for data
- * <p>
+ * Loads the current day into display <p>
+ *
+ * Calls generateID attempts to use ID to retrieve data for the current day <p>
+ *
+ * If data is returned, calls on day custom element's setter for data <p>
+ *
  * Otherwise, either an error occurred or ID isn't registered - regardless, an empty template
- * is passed into day custom element's setter for data
- * <p>
+ * is passed into day custom element's setter for data <p>
+ *
  * In both cases, the day element is appended to appropriate location in document (TODO)
  *
- * In case of linter complaints, break asterisk --> */
+ */
 function loadDay () {
   const ID = generateID('day');
   const dayElem = document.createElement('day');
@@ -443,17 +449,17 @@ function loadDay () {
 }
 
 /**
- * Uses @property {dayjs} currDate to generate the correct ID for the given object type
- * <p>
- * Creates 2-digit YY, MM, and DD from @property {dayjs} currDate variables to use in ID generation
- * <p>
+ * Uses currDate to generate the correct ID for the given object type <p>
+ *
+ * Creates 2-digit YY, MM, and DD from currDate variables to use in ID generation <p>
+ *
  * Figures out which ID format to generate based off type and generates correct ID
  * (refer to Design Notes and data models for examples of ID formats)
  *
  * @param {string} type - Type of data object to generate ID for
  * @returns {string} The objects ID
  *
- * In case of linter complaints, break asterisk --> */
+ */
 function generateID (type) {
   let ID = '';
   let day = currDate.date();
@@ -485,14 +491,14 @@ function generateID (type) {
 /* For quick commenting out of code */
 
 /**
- * Adds functionality to 'Next Unit' button
- * <p>
- * Calls @function finalizeInputs to ensure no bullets are currently being modified
- * <p>
- * Records currentDate in history state, then navigates to the next unit with appropriate load function
- * (@function loadDay, @function loadMonth, @function loadYear)
+ * Adds functionality to 'Next Unit' button <p>
  *
- * In case of linter complaints, break asterisk --> /
+ * Calls finalizeInputs to ensure no bullets are currently being modified <p>
+ *
+ * Records currentDate in history state, then navigates to the next unit with appropriate load function
+ * (loadDay, loadMonth, loadYear)
+ *
+ *
 function onNextUnit () {
   finalizeInputs();
   switch (history.state.view) {
@@ -516,14 +522,14 @@ function onNextUnit () {
 /* For quick commenting out of code */
 
 /**
- * Adds functionality to 'Prev Unit' button
- * <p>
- * Calls @function finalizeInputs to ensure no bullets are currently being modified
- * <p>
- * Records currentDate in history state, then navigates to the previous unit with appropriate load function
- * (@function loadDay, @function loadMonth, @function loadYear)
+ * Adds functionality to 'Prev Unit' button <p>
  *
- * In case of linter complaints, break asterisk --> /
+ * Calls finalizeInputs to ensure no bullets are currently being modified <p>
+ *
+ * Records currentDate in history state, then navigates to the previous unit with appropriate load function
+ * (loadDay, loadMonth, loadYear)
+ *
+ *
 function onPrevUnit () {
   finalizeInputs();
   switch (history.state.view) {
@@ -548,15 +554,15 @@ function onPrevUnit () {
 /**
  * TODO
  *
- * Provides functionality to the 'Next Entry' button
- * <p>
- * Function only runs in daily view
- * <p>
- * Calls @function finalizeInputs to ensure no bullets are currently being modified
- * <p>
+ * Provides functionality to the 'Next Entry' button <p>
+ *
+ * Function only runs in daily view <p>
+ *
+ * Calls finalizeInputs to ensure no bullets are currently being modified <p>
+ *
  * Records currentDate in history state, then navigates to the next Entry
  *
- * In case of linter complaints, break asterisk --> /
+ *
 function onNextEntry(forward) {
   if (window.history.state.view === 'day') {
     finalizeInputs();
@@ -567,15 +573,14 @@ function onNextEntry(forward) {
 /**
  * TODO
  *
- * Provides functionality to the 'Prev Entry' button
- * <p>
- * Function only runs in daily view
- * <p>
- * Calls @function finalizeInputs to ensure no bullets are currently being modified
- * <p>
+ * Provides functionality to the 'Prev Entry' button <p>
+ *
+ * Function only runs in daily view <p>
+ *
+ * Calls finalizeInputs to ensure no bullets are currently being modified <p>
+ *
  * Records currentDate in history state, then navigates to the previous Entry
  *
- * In case of linter complaints, break asterisk --> /
 function onPrevEntry(forward) {
   if (window.history.state.view === 'day') {
     finalizeInputs();
@@ -586,18 +591,17 @@ function onPrevEntry(forward) {
 /**
  * TODO
  *
- * Provides functionality to calendar view in yearly/monthly logs
- * <p>
- * Access to contents (and therefor target date) in the element that was triggered through event param
- * <p>
- * Set's @property {dayjs} currDate accordingly
- * <p>
+ * Provides functionality to calendar view in yearly/monthly logs <p>
+ *
+ * Access to contents (and therefor target date) in the element that was triggered through event param <p>
+ *
+ * Set's currDate accordingly <p>
+ *
  * Reads history state's current view to decide whether to transition to Monthly or Daily view,
- * then calls appropriate load function (@function loadDay, @function loadMonth)
+ * then calls appropriate load function (loadDay, loadMonth)
  *
  * @param {OnClickEvent} event
  *
- * In case of linter complaints, break asterisk --> /
 function zoomIn (event) {
   // When user click on a button in yearly or monthly
   // zoom into the correct month or date
