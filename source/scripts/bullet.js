@@ -118,7 +118,13 @@ class BulletEntry extends HTMLElement {
     }
 
     this.setAttribute('data', JSON.stringify(jsonData));
-    Database.store(id, jsonData, ()=> {console.log(`Stored new bullet ${id} to database`)});
+    Database.store(id, jsonData, (success) => {
+      if (success) {
+        console.log(`Stored ${id} to database`);
+      } else {
+        console.log(`Failed to store ${id} to database`);
+      }
+    });
   }
 
   /**
@@ -186,34 +192,34 @@ class BulletEntry extends HTMLElement {
 /** Define a custom element for the BulletEntry web component */
 customElements.define('bullet-entry', BulletEntry);
 
-const exampleBulletDay = [
-  'B 210525 00 00',
-  {
-    labelIDs: [],
-    text: 'Walk the dog',
-    value: -1,
-    childrenIDs: []
-  }
-];
+  const exampleBulletDay = [
+    'B 210525 00 00',
+    {
+      labelIDs: [],
+      text: 'Walk the dog',
+      value: -1,
+      childrenIDs: []
+    }
+  ];
 
-const exampleBulletMonth = [
-  'B 2105 00',
-  {
-    labelIDs: [],
-    text: 'Walk the dog',
-    value: -1,
-    childrenIDs: []
-  }
-];
+  const exampleBulletMonth = [
+    'B 2105 00',
+    {
+      labelIDs: [],
+      text: 'Walk the dog',
+      value: -1,
+      childrenIDs: []
+    }
+  ];
 
-const exampleBulletYear = [
-  'B 21 1 00',
-  {
-    labelIDs: [],
-    text: 'Walk the dog',
-    value: -1
-  }
-];
+  const exampleBulletYear = [
+    'B 21 1 00',
+    {
+      labelIDs: [],
+      text: 'Walk the dog',
+      value: -1
+    }
+  ];
 /** Example data
  * --------------
  *  "B 210515 00 00": {
