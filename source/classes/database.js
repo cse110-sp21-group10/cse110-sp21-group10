@@ -16,7 +16,7 @@
  * }, id);
  *
  * @property {string} DATABASE_NAME - The name ('BulletJournal') of the IndexedDB database used by our app
- * @property {Object.<string, string>} Stores - The names of the object stores in the database in constant key-value pairs
+ * @property {Object.<string, string>} Stores - Object containing the constant names of the object stores in the database
  */
 export class Database {
   /**
@@ -29,7 +29,7 @@ export class Database {
 
   /**
    * @static
-   * @property {Object.<string, string>} Stores - The names of the object stores in the database in constant key-value pairs
+   * @property {Object.<string, string>} Stores - Object containing the constant names of the object stores in the database
    */
   static get Stores () {
     return {
@@ -204,8 +204,8 @@ export class Database {
    * retrieved. It then makes an asynchronous call to IndexedDB's get function on the appropriate object store
    * to retrieve the desired object, and then passes the retrieved object to the given callback function if the
    * retrieval operation succeeded, or passes null to the given callback if the retrieval operation failed. In
-   * addition to the retrieved object, other parameters (specified by varArgs) are also passed to the callback
-   * function.
+   * addition to the retrieved object, any other given parameters (specified by varArgs) are also passed to the
+   * callback function.
    *
    * @static
    * @param {string} id - The unique string ID that was used as the object's key in the database
@@ -218,7 +218,7 @@ export class Database {
     this.openDatabase(function (db) {
       if (db != null) {
         // call helper function to identify what type of object we are looking for, which determines what object
-        // store the object comes from
+        // store the object should be in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a get request for the object with the given ID
@@ -246,16 +246,16 @@ export class Database {
   }
 
   /**
-   * This function retrieves a single JSON object with the given ID in the database. It first uses the format of
+   * This function stores a single JSON object in the database using the given ID. It first uses the format of
    * the given object ID to determine what type of object (ex. bullet, daily, monthly, yearly, etc) is being
    * stored. It then makes an asynchronous call to IndexedDB's put function on the appropriate object store
-   * to store the desired object, and then passes a boolean (true if the operation succeeds or false if the operation
-   * fails) to the given callback function. In addition to the retrieved object, other parameters (specified by varArgs)
-   * are also passed to the callback function.
+   * to store the given object, and then passes a boolean (true if the operation succeeds or false if the operation
+   * fails) to the given callback function. In addition to the boolean value, any other given parameters (specified by
+   * varArgs) are also passed to the callback function.
    *
    * @static
-   * @param {string} id - The unique string ID that was used as the object's key in the database
-   * @param {Object} dataObject - The object (JSON format) to be stored
+   * @param {string} id - The unique string ID that will be used as the object's key in the database
+   * @param {Object} dataObject - The JSON object to be stored
    * @param {?storeCallback} [callback=null] - Callback function that is run after the database transaction
    * completes (if no callback is provided, nothing is run after the transaction is complete)
    * @param {...*} varArgs - Additional arguments that are passed into callback function (in order) along with
@@ -265,8 +265,8 @@ export class Database {
   static store (id, dataObject, callback = null, ...varArgs) {
     this.openDatabase(function (db) {
       if (db != null) {
-        // call helper function to identify what type of object we are looking for, which determines what object store
-        // the object comes from
+        // call helper function to identify what type of object we are storing, which determines what object store
+        // the object should be stored in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a put request for the object
@@ -298,7 +298,7 @@ export class Database {
    * the given object ID to determine what type of object (ex. bullet, daily, monthly, yearly, etc) is being
    * deleted. It then makes an asynchronous call to IndexedDB's delete function on the appropriate object store
    * to delete the desired object, and then passes a boolean (true if the operation succeeds or false if the operation
-   * fails) to the given callback function. In addition to the retrieved object, other parameters (specified by
+   * fails) to the given callback function. In addition to the boolean value, any other given parameters (specified by
    * varArgs) are also passed to the callback function.
    *
    * @static
@@ -312,8 +312,8 @@ export class Database {
   static delete (id, callback = null, ...varArgs) {
     this.openDatabase(function (db) {
       if (db != null) {
-        // call helper function to identify what type of object we are looking for, which determines what object store
-        // the object comes from
+        // call helper function to identify what type of object we are deleting, which determines what object store
+        // the object should be in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a get request for the object with the given ID
