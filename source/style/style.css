@@ -38,88 +38,88 @@ h1 {
 
 /* Define properties for gridbox layout */
 
-#dailyLayout {
+#daily-layout {
   display: grid;
   grid-template-areas:
-  'top top top top'
-  'left left right right'
-  'middle middle middle middle'
-  'bottom bottom bottom bottom';
+      'top top top top'
+      'left left right right'
+      'middle middle middle middle'
+      'bottom bottom bottom bottom';
 }
 
-#monthlyLayout {
+#monthly-layout {
   display: grid;
   grid-template-areas:
-  'monthTop monthTop monthTop monthTop'
-  'monthLeft monthLeft monthRight monthRight'
-  'monthBotLeft monthBotLeft monthBotRight monthBotRight';
+      'monthTop monthTop monthTop monthTop'
+      'monthLeft monthLeft monthRight monthRight'
+      'monthBotLeft monthBotLeft monthBotRight monthBotRight';
 }
 
-#yearlyLayout {
+#yearly-layout {
   display: grid;
   grid-template-areas:
-  'yearTop yearTop yearTop yearTop'
-  'yearLeft yearLeft yearRight yearRight'
-  'yearBotLeft yearBotLeft yearBotRight yearBotRight';
+      'yearTop yearTop yearTop yearTop'
+      'yearLeft yearLeft yearRight yearRight'
+      'yearBotLeft yearBotLeft yearBotRight yearBotRight';
 }
 
-.topGrid{
+.top-grid {
   grid-area: top;
 }
 
-.leftGrid{
+.left-grid {
   grid-area: left;
 }
 
-.rightGrid{
+.right-grid {
   grid-area: right;
 }
 
-.middleGrid{
+.middle-grid {
   grid-area: middle;
 }
 
-.bottomGrid{
+.bottom-grid {
   grid-area: bottom;
 }
 
-.monthTopGrid{
+.month-top-grid {
   grid-area: monthTop;
 }
 
-.monthLeftGrid{
+.month-left-grid {
   grid-area: monthLeft;
 }
 
-.monthRightGrid{
+.month-right-grid {
   grid-area: monthRight;
 }
 
-.monthBottomLeftGrid{
+.month-bottom-left-grid {
   grid-area: monthBotLeft;
 }
 
-.monthBottomRightGrid{
+.month-bottom-right-grid {
   grid-area: monthBotRight;
 }
 
-.yearTopGrid{
+.year-top-grid {
   grid-area: yearTop;
 }
 
-.yearLeftGrid{
+.year-left-grid {
   grid-area: yearLeft;
 }
 
-.yearRightGrid{
+.year-right-grid {
   grid-area: yearRight;
 }
 
-.yearBottomLeftGrid{
+.year-bottom-left-grid {
   grid-area: yearBotLeft;
 }
 
-.yearBottomRightGrid{
+.year-bottom-right-grid {
   grid-area: yearBotRight;
 }
 

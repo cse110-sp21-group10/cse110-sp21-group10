@@ -269,7 +269,7 @@ function transitionYearly () {
   divYearly.style.display = 'block';
 
   divYearlyIcons.style.display = 'block';
-  //btnZoomOut.style.display = 'none';
+  // btnZoomOut.style.display = 'none';
 }
 
 /** TODO */
