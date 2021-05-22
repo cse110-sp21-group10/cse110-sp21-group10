@@ -68,7 +68,6 @@ class BulletEntry extends HTMLElement {
       </div>
     `;
 
-
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -99,7 +98,6 @@ class BulletEntry extends HTMLElement {
     const root = this.shadowRoot.querySelector('.bullet');
     const text = root.querySelector('.bullet-text');
     // const remove = root.querySelector('.remove');
-
 
     root.id = id;
     text.innerText = jsonData.text;
