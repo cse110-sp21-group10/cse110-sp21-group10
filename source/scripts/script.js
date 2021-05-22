@@ -1,11 +1,13 @@
+import { Database } from "../classes/database.js";
+
 // Load jQuery for cool effects :D
 const script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-latest.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-// Define variables used throughout all code here
-// ----------------------------------------------
+// Load the dayOfYear plugin
+dayjs.extend(dayjs_plugin_dayOfYear);
 
 /**
  * Workflow (to be implemented):
@@ -17,12 +19,19 @@ document.getElementsByTagName('head')[0].appendChild(script);
  *    forward creates a blank entry with the correct date, or reads in if it already exists:
  */
 
+// Define variables used throughout all code here
+// ----------------------------------------------
+
 // Boolean to toggle editability
 window.editable = true;
 let editable = window.editable;
 
 // Elements and buttons found on all pages
 let btnZoomOut, btnAddSection;
+
+// bulletNum counter and currentDate (based on entry, the actual currentDate will be generated whenever needed)
+var bulNum = 0;
+var currDate;
 
 // Elements for the daily logs page
 let divDaily, btnMinimizeSection;
@@ -49,20 +58,40 @@ document.addEventListener('DOMContentLoaded', setupScript);
  * @param {PopStateEvent} event - info on target page contained in state
  * - Will finalize any user input
  * - Will log target view
- * - Will transition to target day
+ * - Will transition to target day/month/year
+ * - If date is stored in state:
+ *   - load the stored date, then load the day/month/year (will generate ID based off currDate)
  */
 window.onpopstate = function (event) {
   finalizeInputs();
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
-      transitionDaily();
+      if (event.state.currDate) {
+        currDate = event.state.currDate;
+        loadDay();
+      }
+      else {
+        transitionDaily();
+      }
       break;
-    case 'month':
-      transitionMonthly();
+  case 'month':
+      if (event.state.currDate) {
+        currDate = event.state.currDate;
+        // loadMonth();
+      }
+      else {
+        transitionMonthly();
+      }
       break;
     case 'year':
-      transitionYearly();
+      if (event.state.currDate){
+        currDate = event.state.currDate;
+        // loadYear();
+      } 
+      else {
+        transitionYearly();
+      }
       break;
   }
 };
@@ -83,6 +112,7 @@ function setupScript () {
 
 /** Values assigned to variables defined earlier - either default or loaded from DOM */
 function loadVars () {
+  currDate = dayjs();
   divDaily = document.getElementsByClassName('daily')[0];
   divMonthly = document.getElementsByClassName('monthly')[0];
   divYearly = document.getElementsByClassName('yearly')[0];
@@ -258,6 +288,73 @@ function zoomOut () {
   }
 }
 
+/**
+ * let state = {};
+ * State {
+ *  view: 'day', 'month', 'year'
+ *  dayCount: 1 - 365;
+ *  monthCount: 1-12;
+ *  year: 00-99;
+ *  index: 0-size;
+ * }
+ */
+
+// day[]
+
+/**
+ * Set the state to record current values of the global variables, 
+ * then navigate to the next/prev day/month/year
+ */
+function onForward() {
+  finalizeInputs();
+  switch (history.state.view){
+    case 'day':
+      window.history.pushState({ view: 'day', currDate}, 'Daily Log', '#day');
+      currDate = currDate.dayOfYear(currDate.dayOfYear()+1);
+      loadDay();
+      break;
+    case 'month':
+      window.history.pushState({ view: 'month', currDate}, 'Monthly Log', '#month');
+      currDate = currDate.month(currDate.month()+1);
+      loadDay()
+      break;
+    case 'year':
+      window.history.pushState({ view: 'year,', currDate}, 'Yearly Log', '#year');
+      currDate = currDate.year(currDate.year()+1);
+      break; 
+  }
+}
+
+// function moveUnit(forward) {
+// }
+
+function onBackward() {
+  finalizeInputs();
+  switch (history.state.view){
+    case 'day':
+      window.history.pushState({ view: 'day', currDate}, 'Daily Log', '#day');
+      currDate = currDate.dayOfYear(currDate.dayOfYear()-1);
+      loadDay();
+      break;
+    case 'month':
+      window.history.pushState({ view: 'month', currDate}, 'Monthly Log', '#month');
+      currDate = currDate.month(currDate.month()-1);
+      loadDay()
+      break;
+    case 'year':
+      window.history.pushState({ view: 'year,', currDate}, 'Yearly Log', '#year');
+      currDate = currDate.year(currDate.year()-1);
+      break; 
+  }
+}
+
+function zoomIn () {
+  // When user click on a button in yearly or monthly
+  // zoom into the correct month or date
+  // sets day, month, year to correct date.
+}
+
+
 /** Handles transitioning from Monthly view to Daily view */
 function transitionDaily () {
   divDaily.style.display = 'block';
@@ -286,6 +383,92 @@ function transitionYearly () {
 /** TODO */
 function createSection () {
   console.log('You clicked on the create section button');
+}
+
+function createBullet() {
+  const bulletElem = document.createElement('bullet-entry');
+  let bulletObj = [];
+}
+function navigate(direction){
+  // direction: forward, backward
+  // When back, forward or a (specific date on month, to be implemented later)
+  // if the date is current or future 
+  //    sets day, month, year to the correct date to display
+  // if date is past
+  //    sets day, month, year to the latest available entry
+}
+
+/**
+ * Loads the current day into display
+ * - Generates ID and checks database for the day
+ * - If not database returns null, creates a new object and display it
+ */
+function loadDay(){
+  const ID = generateID('day');
+  const dayElem = document.createElement('day');
+  Database.fetch(ID, (data) => {
+    if (data) {
+      dayElem.data = [ID, data];
+    } 
+    else {
+      console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new Day ._.");
+      dayElem.data = [ID, {
+        "widgets": [],
+        "trackers": [],
+        "sections": [
+          {
+            "name": "Notes",
+            "type": "log",
+            "bulletIDs": []
+          },
+        ]
+      }];
+    }
+  });
+  // Call generateID('day')
+  // if (ID in database)
+  //    get data (dailyObj (json)), make HTML element, append
+  // else
+  //    Make data (empty dailyObj (json)), make HTML, append
+  //    
+  // LoadDay() should not save emptry dailyObj, edit() should save instead        
+}
+
+/**
+ * Uses global variables to generate the correct ID for the given object type
+ * 
+ * @param {string} type - Type of data object to generate ID for
+ * @returns {string} The objects ID
+ */
+function generateID (type) {
+  let ID = '';
+  let day = currDate.date();
+  day = (day < 10 ? '0' : '') + day;
+  let month = currDate.month();
+  month = (month < 10 ? '0' : '') + month;
+  let year = currDate.year() % 100;
+
+  switch (type) {
+    case 'day':
+      return `D ${year}${month}${day}`
+      break;
+    case 'bullet':
+      switch (window.history.state.view) {
+        case 'day' : 
+          ID = `B ${year}${month}${day} 00 ${bulNum}`;
+          return ID;
+          break;
+        case 'month' : 
+          ID = `B ${year}${month} ${bulNum}`;
+          return ID;
+          break;
+        case 'year' : 
+          ID = `B ${year} 0 ${bulNum}`;
+          return ID;
+          break;
+      }
+      break;
+  }
 }
 
 // Notes
