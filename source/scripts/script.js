@@ -1,11 +1,7 @@
 import { Database } from '../classes/database.js';
-import { dayjs } from '../scripts/dayjs.min.js';
 
-// Load jQuery for cool effects :D
-const script = document.createElement('script');
-script.src = 'http://code.jquery.com/jquery-latest.min.js';
-script.type = 'text/javascript';
-document.getElementsByTagName('head')[0].appendChild(script);
+// Tell eslint that dayjs is imported in html
+/* global dayjs */
 
 // Load the dayOfYear plugin
 dayjs.extend(window.dayjs_plugin_dayOfYear);
@@ -178,7 +174,6 @@ function setupButtons () {
   btnAddSection.addEventListener('click', createSection);
 
   btnMinimizeSection.addEventListener('click', () => {
-    // eslint-disable-next-line no-undef
     $('ol').slideToggle();
   });
 }
@@ -451,7 +446,7 @@ function loadDay () {
             name: 'Notes',
             type: 'log',
             bulletIDs: []
-          }
+      }
         ]
       }];
     }
