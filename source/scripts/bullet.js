@@ -1,4 +1,4 @@
-import { Database } from '../classes/database.js';
+import { Database } from '../classes/database.js'
 
 /**
  * This class contains a constructor, edit, and remove functions for the bullet custom HTML class
@@ -80,26 +80,38 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Process for setting up data (mostly using shadowRoot)
-   * 1. Sets root to top level element (by classname 'bullet')
-   * 2. Sets text to element containing text (by classname 'text')
-   *   a. Edit bullet text with a click eventListener, delegating to @method editBullet
-   * 3. Sets remove to element closing bullet (by classname 'remove')
-   *   a. Remove bullet with a click eventListener, delegating to @method deleteBullet
-   * 4. Saves data used to setup bullet in an attribute named data
-   *
-   * To be implemented:
+   * Process for setting up data (mostly using shadowRoot) <p>
+   * 0. Checks if empty data is passed in, replaces data with an empty template instead <p>
+   * 1. Sets root to top level element (by classname 'bullet') <p>
+   * 2. Sets text to element containing text (by classname 'text') <p>
+   *   a. Edit bullet text with a click eventListener, delegating to editBullet <p>
+   * 3. Sets remove to element closing bullet (by classname 'remove') <p>
+   *   a. Remove bullet with a click eventListener, delegating to deleteBullet <p>
+   * 4. Saves data used to setup bullet in an attribute named data <p>
+   * 5. Calls a function to  <p>
+   * 
+   * To be implemented: <p>
    * - Update the type of bullet point based off value
    *
    * @param {[string, jsonObject]} - [bulletID, data for generating this bullet element]
    */
   set data ([id, jsonData]) {
     console.log('Setter called');
-    const root = this.shadowRoot.querySelector('.bullet');
-    const text = root.querySelector('.bullet-text');
+
+    if (Object.entries(jsonData).length === 0) {
+      jsonData = {
+          labelIDs: [],
+          text: '',
+          value: -1,
+        childrenIDs: []
+      };
+      console.log(jsonData);
+    }
+
+    const text = this.shadowRoot.querySelector('.bullet-text');
     // const remove = root.querySelector('.remove');
 
-    root.id = id;
+    this.id = id;
     text.innerText = jsonData.text;
 
     text.addEventListener('click', (event) => { this.editBullet(event); });
@@ -118,31 +130,26 @@ class BulletEntry extends HTMLElement {
     }
 
     this.setAttribute('data', JSON.stringify(jsonData));
-    Database.store(id, jsonData, (success) => {
-      if (success) {
-        console.log(`Stored ${id} to database`);
-      } else {
-        console.log(`Failed to store ${id} to database`);
-      }
-    });
+    this.storeToDatabase(id, jsonData, true);
   }
 
   /**
-   * Process for editing an existing bullet-entry element.
-   * Triggers onClick for element containing bullet-entry text.
-   * Process consists of:
-   * 1. Checking that editting is enabled
-   * 2. Creating and prepending an input textbox with value set to current text in bullet-entry element
-   * 3. Hiding the current text of the bullet-element
-   * 4. Disabling editting (until user finishes modifying bullet)
-   * 5. Focusing user's input to the new input textbox
-   * 6. Listening to input textbox for the 'Enter' key
-   *   a. Triggers the replacement of the input textbox with the bullet-element's text (updated with input values)
-   *   b. Re-enabling editting
-   *
-   * To be implemented:
-   * - Update the database with modified bullet data
-   *
+   * Process for editing an existing bullet-entry element. <p>
+   * Triggers onClick for element containing bullet-entry text. <p>
+   * Process consists of: <p> 
+   * 1. Checking that editting is enabled <p>
+   * 2. Creating and prepending an input textbox with value set to current text in bullet-entry element <p>
+   * 3. Hiding the current text of the bullet-element <p>
+   * 4. Disabling editting (until user finishes modifying bullet) <p>
+   * 5. Focusing user's input to the new input textbox <p>
+   * 6. Listening to input textbox for the 'Enter' key <p>
+   *   a. Triggers the replacement of the input textbox with the bullet-element's text (updated with input values) <p>
+   *   b. Re-enabling editting <p>
+   * 7. Update the database with modified bullet data <p>
+   *   a. Parses this bullet's data into JSON format <p>
+   *   b. Updates the text with new value <p>
+   *   c. Sets the data to the stringified version of the updated JSON <p>
+   *   d. Calls the DB function to store this updated data to ID <p>
    * @param {OnClickEvent} event - provides context for editting the bullet-entry element
    */
   editBullet (event) {
@@ -167,25 +174,29 @@ class BulletEntry extends HTMLElement {
 
           input.remove();
           window.editable = true;
+
+          let jsonData = JSON.parse(this.data);
+          jsonData.text = target.innerText;
+          this.setAttribute('data', JSON.stringify(jsonData));
+          this.storeToDatabase(this.id, jsonData, true);
         }
-        // TODO: update the data on DB
       });
     }
   }
 
   /**
-   * Deletes the bullet entry.
-   *
-   * To be implemented:
-   * - Removes the bulletID from anything using it
-   * - Update the database with this bullet removal
-   *
-   * @param {OnClickEvent} event - provides context for deleting the bullet-entry element
+   * Stores Obj using id to database, loggin if success or fail 
    */
-  deleteBullet (event) {
-    this.remove();
-    // TODO: remove this bulletID from anything that uses it
-    // TODO: update the data on DB
+  storeToDatabase (id, jsonData, log = false) {
+    Database.store(id, jsonData, (success) => {
+      if (log){
+        if (success) {
+          console.log(`Stored ${id} to database`);
+        } else {
+          console.log(`Failed to store ${id} to database`);
+        }
+      }
+    });
   }
 }
 
