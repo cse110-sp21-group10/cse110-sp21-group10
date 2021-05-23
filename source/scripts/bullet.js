@@ -49,7 +49,7 @@ class BulletEntry extends HTMLElement {
           width: 22px;
         }
 
-        .bullet-entry {
+        .bullet-text {
           display: inline-block;
           width: 80%;
           font-size: larger;
@@ -61,10 +61,11 @@ class BulletEntry extends HTMLElement {
           outline: 0px solid transparent;
         }
       </style>
-      <link href="../css/all.css" rel="stylesheet"> <!--load all styles -->
+      <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
       <div class="bullet">
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <p class="bullet-text" contenteditable="true">holdonmmmmmm </p>
+        <input type="text" class="bullet-input" style="display: none;"> </input>
       </div>
     `;
 
@@ -97,6 +98,7 @@ class BulletEntry extends HTMLElement {
    */
   set data ([id, jsonData]) {
     console.log('Setter called');
+    this.shadowRoot.querySelector('.bullet').setAttribute('id', id);
 
     if (Object.entries(jsonData).length === 0) {
       jsonData = {
@@ -138,10 +140,10 @@ class BulletEntry extends HTMLElement {
    * Triggers onClick for element containing bullet-entry text. <p>
    * Process consists of: <p> 
    * 1. Checking that editting is enabled <p>
-   * 2. Creating and prepending an input textbox with value set to current text in bullet-entry element <p>
+   * 2. Showing the hidden input textbox with value set to whatever's inside the current text <p>
    * 3. Hiding the current text of the bullet-element <p>
    * 4. Disabling editting (until user finishes modifying bullet) <p>
-   * 5. Focusing user's input to the new input textbox <p>
+   * 5. Focusing user's input to the input textbox <p>
    * 6. Listening to input textbox for the 'Enter' key <p>
    *   a. Triggers the replacement of the input textbox with the bullet-element's text (updated with input values) <p>
    *   b. Re-enabling editting <p>
@@ -154,14 +156,16 @@ class BulletEntry extends HTMLElement {
    */
   editBullet (event) {
     console.log('Editing bullet');
+
+    const input = this.shadowRoot.querySelector('.bullet-input');
+
     if (window.editable) {
       const target = event.target;
 
-      const input = document.createElement('input');
+      input.style.display = 'block';
       input.value = target.innerText;
       input.id = 'newBullet';
 
-      target.parentElement.prepend(input);
       target.style.display = 'none';
       window.editable = false;
 
@@ -172,7 +176,7 @@ class BulletEntry extends HTMLElement {
           target.innerText = input.value;
           target.style.display = 'block';
 
-          input.remove();
+          input.style.display = 'none';
           window.editable = true;
 
           let jsonData = JSON.parse(this.data);
