@@ -59,7 +59,7 @@ Internal Variables of each bullet:
       - `B 21 1 02` : the 3rd bullet in the Goals section (2nd section) of year 2021
     - Note: 
       - date counts from 1, so '20' in date means the 20th day of the current month
-      - month counts from 0 to 11, so '0' is January, '2' is March, etc.
+      - month counts from 1 to 12, so '1' is January, '3' is March, etc.
       - year counts for the 21st century so '21' in year means 2021
       - This is for consistency with the dayjs library we're using.
 - `labelIDs`: Array of label IDs applied to this bullet
