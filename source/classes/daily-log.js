@@ -153,9 +153,6 @@ class DailyLog extends HTMLElement {
           }
         ]
       };
-
-      // store the new daily log object in the database
-      Database.store(id, jsonData);
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
@@ -454,6 +451,7 @@ class DailyLog extends HTMLElement {
         sec.bulletIDs.push(bulletID);
       }
     }
+    this.setAttribute('data', JSON.stringify(data));
 
     // store the updated daily JSON object in the database
     Database.store(dailyID, data);
