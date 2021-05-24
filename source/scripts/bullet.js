@@ -112,6 +112,8 @@ class BulletEntry extends HTMLElement {
    *
    *   a. Do a comparison between original text and current text <p>
    *
+   *   Edit: Also make sure that there is text to store ( no blanks, no empty newlines ) <p>
+   *
    *   b. Update interally stored text (for future reference) and update value on database <p>
    *
    * @param {[string, jsonObject]} - [bulletID, data for generating this bullet element]
@@ -150,7 +152,7 @@ class BulletEntry extends HTMLElement {
     }
 
     bulletText.addEventListener('blur', (event) => {
-      if (bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
+      if (bulletText.innerText && bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
         jsonData.text = bulletText.innerText;
         this.setAttribute('data', JSON.stringify(jsonData));
         this.storeToDatabase(id, jsonData, true);
