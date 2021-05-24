@@ -472,7 +472,7 @@ class DailyLog extends HTMLElement {
     section.insertBefore(bulletElement, newNoteButton);
 
     // prompt user to start typing note
-    bulletElement.querySelector('.bullet-text').focus();
+    bulletElement.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
