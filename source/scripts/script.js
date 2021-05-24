@@ -287,7 +287,7 @@ function generateID (type) {
   let ID = '';
   let day = currDate.date();
   day = (day < 10 ? '0' : '') + day;
-  let month = currDate.month();
+  let month = currDate.month() + 1;
   month = (month < 10 ? '0' : '') + month;
   const year = currDate.year() % 100;
 
