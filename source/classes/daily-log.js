@@ -9,6 +9,7 @@ import { Database } from '../classes/database.js';
  * const exampleDailyJSON = {
  *   widgets: [
  *     {
+ *       id: '00',
  *       type: 'reminder',
  *       bulletIDs: [
  *         'B 210515 00 00',
@@ -16,7 +17,8 @@ import { Database } from '../classes/database.js';
  *       ]
  *     },
  *     {
- *       "type": "weather"
+ *       id: '01'
+ *       type: 'weather'
  *     }
  *   ],
  *   trackers: [
@@ -42,26 +44,26 @@ import { Database } from '../classes/database.js';
  *       name: 'Daily Notes',
  *       type: 'log',
  *       bulletIDs: [
+ *         'B 210515 00 00',
+ *         'B 210515 00 01'
+ *       ]
+ *     },
+ *     {
+ *       id: '03',
+ *       name: 'Shopping List',
+ *       type: 'checklist',
+ *       bulletIDs: [
  *         'B 210515 01 00',
  *         'B 210515 01 01'
  *       ]
  *     },
  *     {
- *       id: '01',
- *       name: 'Shopping List',
+ *       id: '04',
+ *       name: 'Daily Goals',
  *       type: 'checklist',
  *       bulletIDs: [
  *         'B 210515 02 00',
  *         'B 210515 02 01'
- *       ]
- *     },
- *     {
- *       id: '02',
- *       name: 'Daily Goals',
- *       type: 'checklist',
- *       bulletIDs: [
- *         'B 210515 03 00',
- *         'B 210515 03 01'
  *       ]
  *     }
  *   ]
@@ -88,8 +90,8 @@ class DailyLog extends HTMLElement {
 
     template.innerHTML = `
       <link rel="stylesheet" href="../style/style.css">
-      <link rel="stylesheet" href="../css/all.css">
-      <div class="daily-div">
+      <link rel="stylesheet" href="../assets/css/all.css">
+      <div class="daily">
         <section class="header" id="daily-header">
           <h1 id="date"></h1>
           <button class="main-buttons" id="weather-icon"><i class="fas fa-cloud-sun icon-size"></i></button>
@@ -134,8 +136,8 @@ class DailyLog extends HTMLElement {
     // store this object in a variable so it can be passed to handlers later
     const dailyLog = this;
 
-    // set the class name of the custom element to 'daily' so the appropriate styles are applied
-    this.className = 'daily';
+    // set the id of the custon element to the given id
+    this.id = id;
 
     // if the jsonData is an empty object, then we should create an empty daily element
     if (Object.entries(jsonData).length === 0) {
@@ -435,7 +437,7 @@ class DailyLog extends HTMLElement {
     const section = event.target.closest('section');
     const sectionID = section.id;
     const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
-    const dailyID = this.shadowRoot.querySelector('div.daily-div').id;
+    const dailyID = this.shadowRoot.querySelector('div.daily').id;
     const date = this.getDateFromID(dailyID);
     const year = this.stringifyNum(date.getYear() % 100);
     const month = this.stringifyNum(date.getMonth() + 1);
@@ -446,8 +448,8 @@ class DailyLog extends HTMLElement {
     this.bulletCounts[Number(sectionID)]++;
 
     // add bullet ID to the daily JSON object bulletIDs in the right section
-    const data = this.getAttribute('data');
-    for (const sec in data.sections) {
+    const data = this.data;
+    for (const sec of data.sections) {
       if (sec.id === sectionID) {
         sec.bulletIDs.push(bulletID);
       }
@@ -467,7 +469,9 @@ class DailyLog extends HTMLElement {
       deleteHandler.call(dailyLog, event, bulletElement);
     });
 
-    section.appendChild(bulletElement);
+    // add the insert the new bullet element child before the new note button
+    const newNoteButton = section.querySelector('button.new-bullet');
+    section.insertBefore(bulletElement, newNoteButton);
   }
 
   /**
@@ -487,12 +491,12 @@ class DailyLog extends HTMLElement {
     // condition check to determine if the listener was triggered when backspace was pressed on an empty note
     if (event.target.innerText.length === 0 && event.keyCode === 8) {
       // get the section element that the bullet is a child of
-      const section = event.target.closest('section');
+      const section = element.closest('section');
 
       // loop through the daily JSON object to find the bullet ID to be deleted
       const sectionID = section.id;
-      const data = this.getAttribute('data');
-      for (const sec in data.sections) {
+      const data = this.data;
+      for (const sec of data.sections) {
         // condition check to determine if this is the right section in the daily JSON object
         if (sec.id === sectionID) {
           // loop through the bullet ID's of the section to find the one for deletion
@@ -505,7 +509,7 @@ class DailyLog extends HTMLElement {
       }
 
       // store the updated daily JSON object in the database
-      const dailyID = this.shadowRoot.querySelector('div.daily-div').id;
+      const dailyID = this.shadowRoot.querySelector('div.daily').id;
       Database.store(dailyID, data);
 
       // delete the bullet from the database
