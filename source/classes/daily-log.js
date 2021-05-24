@@ -470,6 +470,9 @@ class DailyLog extends HTMLElement {
     // add the insert the new bullet element child before the new note button
     const newNoteButton = section.querySelector('button.new-bullet');
     section.insertBefore(bulletElement, newNoteButton);
+
+    // prompt user to start typing note
+    bulletElement.querySelector('.bullet-text').focus();
   }
 
   /**
@@ -487,7 +490,7 @@ class DailyLog extends HTMLElement {
    */
   deleteNoteHandler (event, element) {
     // condition check to determine if the listener was triggered when backspace was pressed on an empty note
-    if (event.target.innerText.length === 0 && event.keyCode === 8) {
+    if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
       // get the section element that the bullet is a child of
       const section = element.closest('section');
 
