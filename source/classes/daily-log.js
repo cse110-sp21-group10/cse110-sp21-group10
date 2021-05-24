@@ -159,7 +159,7 @@ class DailyLog extends HTMLElement {
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
-    const root = this.shadowRoot.querySelector('.daily-div');
+    const root = this.shadowRoot.querySelector('.daily');
     root.id = id;
 
     // get all information about the date that is needed for the header display
