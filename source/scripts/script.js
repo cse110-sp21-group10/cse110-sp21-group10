@@ -28,20 +28,14 @@ dayjs.extend(window.dayjs_plugin_dayOfYear);
  *    backward loads the latest available dailyObj entry;
  *    forward creates a blank entry with the correct date, or reads in if it already exists:
  */
-
-// Boolean to toggle editability
-window.editable = true;
-let editable = window.editable;
-
 // Elements and buttons found on all pages
-let btnZoomOut, btnAddSection;
+let btnZoomOut;
 
-// bulletNum counter and currentDate (based on entry, the actual currentDate will be generated whenever needed)
-const bulNum = 0;
+// currentDate - based on entry, the actual currentDate will be generated whenever needed)
 let currDate;
 
 // Elements for the daily logs page
-let divDaily, btnMinimizeSection;
+let divDaily;
 
 // Elements for the monthly logs page
 let divMonthly;
@@ -49,8 +43,7 @@ let divMonthly;
 // Elements for the yearly logs page
 let divYearly;
 
-// Array to store all sections that will have bullet points
-let noteScts;
+const bulNum = 0;
 // -----------------------------------------------
 // End of variable definition
 
@@ -74,7 +67,6 @@ document.addEventListener('DOMContentLoaded', setupScript);
  * @param {PopStateEvent} event - info on target page contained in state
  */
 window.onpopstate = function (event) {
-  finalizeInputs();
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
@@ -120,8 +112,8 @@ function setupScript () {
   loadVars();
   setupButtons();
 
+  loadDay();
   /* For testing purposes /
-  createBullet();
   createBullet();
   createBullet();
   createBullet();
@@ -145,10 +137,6 @@ function loadVars () {
   divYearly = document.getElementsByClassName('yearly')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
-  btnAddSection = document.getElementById('related-sections-button');
-  btnMinimizeSection = document.getElementById('minimize-section');
-
-  noteScts = document.getElementsByClassName('notes');
 }
 
 /**
@@ -166,157 +154,6 @@ function loadVars () {
  */
 function setupButtons () {
   btnZoomOut.addEventListener('click', zoomOut);
-
-  document.querySelectorAll('li').forEach((listItem) => {
-    listItem.addEventListener('click', (event) => { editBullet(event); });
-  });
-
-  for (let i = 0; i < noteScts.length; i++) {
-    const btnAdd = document.createElement('button');
-    btnAdd.innerText = '+';
-    btnAdd.addEventListener('click', (event) => { addBullet(event); });
-    noteScts[i].appendChild(btnAdd);
-  }
-
-  btnAddSection.addEventListener('click', createSection);
-
-  btnMinimizeSection.addEventListener('click', () => {
-    $('ol').slideToggle();
-  });
-}
-
-/**
- * ------------ OUTDATED METHOD ---------- <p>
- * Will be replaced by createBullet <p>
- * ----------------------------------------- <p>
- */
-/*
- * Creates a new bullet under target's parent (button's section) that triggered event
- * - Function only run if editting is enable
- * - New list item with input textbox appended to parent section (user directed to inside input)
- * - Editing is disabled
- * - Input box triggers action upon reading 'Enter':
- *  - Textbox value used to create new list item
- *  - New list item replaces the 'input' list item
- *  - Editing is enabled
- * @param {OnClickEvent} event
- */
-function addBullet (event) {
-  if (editable === true) {
-    const parent = event.target.parentElement;
-    // console.log(target.innerHTML);
-
-    const newBullet = document.createElement('li');
-    const input = document.createElement('input');
-    input.id = 'newBullet';
-
-    newBullet.appendChild(input);
-    parent.replaceChild(newBullet, event.target);
-    input.focus();
-
-    input.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        const result = document.createElement('li');
-        result.innerHTML = input.value + '\n';
-
-        result.addEventListener('click', editBullet);
-        parent.replaceChild(result, newBullet);
-        editable = true;
-      }
-    });
-
-    parent.appendChild(event.target);
-    editable = false;
-  }
-}
-
-/**
- * ------------ OUTDATED METHOD ---------- <p>
- * Will be replaced by a function that is yet to be defined and implemented <p>
- * ----------------------------------------- <p>
- */
-/*
- * Edits existing bullet when clicked on
- * - Function only runs if editting is enabled AND only for the list item clicked (for nested list items)
- * - Input textbox created with value of first line of list item (in case list item has children)
- *  - Texbox replaces first child of list item (again in case list item has children) and user is directed inside textbox
- * - Editing is disabled
- * - Input box triggers helper funciton upon reading 'Enter':
- *  - Editing will be enabled within
- * @param {OnClickEvent} event
- */
-function editBullet (event) {
-  if (editable && event.target.innerText === event.currentTarget.innerText) {
-    const target = event.target;
-    // console.log(JSON.stringify(target.innerHTML));
-
-    const input = document.createElement('input');
-    input.value = target.innerText.split('\n')[0];
-    input.id = 'newBullet';
-
-    target.innerHTML = '<input>' + target.innerHTML.split('\n').slice(1).join('\n');
-    // console.log(JSON.stringify(target.innerHTML));
-    target.replaceChild(input, target.children[0]);
-    input.focus();
-
-    input.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        inputToBullet(input, target);
-      }
-    });
-
-    editable = false;
-  }
-}
-
-/**
- * ------------ OUTDATED METHOD ---------- <p>
- * Needs to be redefined once the custom bullet element is finished <p>
- * ----------------------------------------- <p>
- */
-/*
- * Finds any open inputs and finalizes the process of transforming inputs to bullets
- */
-function finalizeInputs () {
-  const input = document.getElementById('newBullet');
-  if (input) {
-    inputToBullet(input, input.parentElement);
-  }
-}
-
-/**
- * ------------ OUTDATED METHOD ---------- <p>
- * Needs to be redefined once the custom bullet element is finished <p>
- * ----------------------------------------- <p>
- */
-/*
- * Replaces input textbox with it's value in the list item
- * - Creates a new list item
- *  - Value of input text appended
- * - Iterates through all children of original list item
- *  - Adds a clickListener to each list item within to allow modifying afterwards
- * - New list item itself is given a clickListener to allow edits
- * - Old list item replaced with new list item
- * - Editing re-enabled
- * @param {HTMLElement} input - input textbox
- * @param {HTMLElement} target - list item that's parent of input
- */
-function inputToBullet (input, target) {
-  const result = document.createElement('li');
-  result.innerHTML = input.value + '\n';
-
-  const children = target.children;
-  for (let i = 1; i < children.length; i++) {
-    children[i].querySelectorAll('li').forEach((listItem) => {
-      listItem.addEventListener('click', editBullet);
-    });
-    result.append(children[i]);
-  }
-
-  result.addEventListener('click', editBullet);
-  target.parentElement.replaceChild(result, target);
-
-  editable = true;
 }
 
 /**
@@ -330,7 +167,6 @@ function inputToBullet (input, target) {
  * (transitionMonthly, transitionDaily)
  */
 function zoomOut () {
-  finalizeInputs();
   // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
@@ -396,33 +232,13 @@ function transitionYearly () {
  *
  * Triggered by the (+) section button near top of daily log <p>
  *
- */
+ *
 function createSection () {
   console.log('You clicked on the create section button');
 }
 /* For quick commenting out of code */
 
 // New & unprocessed code -----------------------------------------------------------------------
-
-/**
- * Creates and appends a new bullet entry based on target of clickEvent <p>
- *
- * Will only run if editting is enabled <p>
- *
- * New bullet item with input textbox appended to parent section (user directed to inside input textbox) <p>
- *
- * Editing is disabled <p>
- *
- * Input box triggers action upon reading 'Enter' keystroke. This will use value of input textbox to update bullet
- * element and re-enable Editing
- * @param {OnClickEvent} event
- *
- *
-function createBullet () {
-  const bulletElem = document.createElement('bullet-entry');
-  const bulletObj = [];
-}
-/* For quick commenting out of code */
 
 /**
  * Loads the current day into display <p>
@@ -440,7 +256,7 @@ function createBullet () {
  */
 function loadDay () {
   const ID = generateID('day');
-  const dayElem = document.createElement('day');
+  const dayElem = document.createElement('daily-log');
   Database.fetch(ID, (data) => {
     if (data) {
       dayElem.data = [ID, data];
@@ -449,31 +265,11 @@ function loadDay () {
       dayElem.data = [ID, {}];
     }
   });
+  // apend dayElem somewhere
+  divDaily.remove();
+  divDaily = dayElem;
+  document.getElementById('internal-content').appendChild(dayElem);
 }
-
-/**
- * Creates a bullet element <p>
- *
- * Creates a bullet-entry element and passes in ID + empty data (calls on empty setter to generate template) <p>
- *
- * Input textbox assigned a keyListener for the 'Enter' key. Empty input (user erased all text) signifies the
- * user intends to delete this entry
- *
-function createBullet () {
-  const ID = generateID('bullet');
-  const bulletElem = document.createElement('bullet-entry');
-  bulletElem.data = [ID, {}];
-  bulletElem.shadowRoot.querySelector('.bullet-input').addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-      if (event.target.value.length === 0) {
-        console.log(`Deleting ${ID} from database`);
-        bulletElem.remove();
-      }
-    }
-  });
-  document.getElementById('daily-log').appendChild(bulletElem);
-}
-/* For quickly commenting out code */
 
 /**
  * Uses currDate to generate the correct ID for the given object type <p>
