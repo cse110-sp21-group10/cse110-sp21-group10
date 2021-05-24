@@ -159,6 +159,8 @@ class DailyLog extends HTMLElement {
     const root = this.shadowRoot.querySelector('.daily');
     root.id = id;
 
+    // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
+
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
     const day = this.getDayFromDate(dateObj);
@@ -183,7 +185,7 @@ class DailyLog extends HTMLElement {
 
       for (const widget of jsonData.widgets) {
         console.log(widget);
-        // CONSTRUCT THE WIDGET HERE
+        // TODO: CONSTRUCT THE WIDGET HERE
       }
 
       root.appendChild(widgetSection);
@@ -201,7 +203,7 @@ class DailyLog extends HTMLElement {
 
       for (const tracker of jsonData.trackers) {
         console.log(tracker);
-        // CONSTRUCT THE TRACKER HERE
+        // TODO: CONSTRUCT THE TRACKER HERE
       }
 
       root.appendChild(trackerSection);
@@ -417,6 +419,26 @@ class DailyLog extends HTMLElement {
   }
 
   /**
+   * This function is a helper function to convert an ID number into the right string format.
+   * IDs for our objects are stored as strings, and if the number is less than 10, the string
+   * representation we use has a 0 in front of the number. For example a section number 1 would
+   * have an ID of '01'.
+   *
+   * @param {number} num - the integer that is being stringified
+   * @returns {string} a string representation of the number that can be used in object IDs
+   */
+  stringifyNum (num) {
+    if (num < 10) {
+      return `0${num}`;
+    }
+    return `${num}`;
+  }
+
+  // ------------------------------------ End Helper Functions ------------------------------------
+
+  // ------------------------------------ Start Event Handlers ------------------------------------
+
+  /**
    * This function creates a new bullet. It first generates a bullet ID by combining the date of
    * the daily log to which the bullet will belong, the ID of the section to which the bullet
    * is being added, and the ID of the new bullet, which is determined based on the number of
@@ -522,23 +544,7 @@ class DailyLog extends HTMLElement {
     }
   }
 
-  /**
-   * This function is a helper function to convert an ID number into the right string format.
-   * IDs for our objects are stored as strings, and if the number is less than 10, the string
-   * representation we use has a 0 in front of the number. For example a section number 1 would
-   * have an ID of '01'.
-   *
-   * @param {number} num - the integer that is being stringified
-   * @returns {string} a string representation of the number that can be used in object IDs
-   */
-  stringifyNum (num) {
-    if (num < 10) {
-      return `0${num}`;
-    }
-    return `${num}`;
-  }
-
-  // ------------------------------------ End Helper Functions ------------------------------------
+  // ------------------------------------- End Event Handlers -------------------------------------
 } // end class DailyLog
 
 // define a custom element for the DailyLog web component
