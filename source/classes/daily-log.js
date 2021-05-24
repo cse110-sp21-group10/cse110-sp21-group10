@@ -505,6 +505,7 @@ class DailyLog extends HTMLElement {
           }
         }
       }
+      this.setAttribute('data', JSON.stringify(data));
 
       // store the updated daily JSON object in the database
       const dailyID = this.shadowRoot.querySelector('div.daily').id;
