@@ -150,7 +150,7 @@ class BulletEntry extends HTMLElement {
     }
 
     bulletText.addEventListener('blur', (event) => {
-      if (bulletText.innerText !== this.data.text) {
+      if (bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
         jsonData.text = bulletText.innerText;
         this.setAttribute('data', JSON.stringify(jsonData));
         this.storeToDatabase(id, jsonData, true);
