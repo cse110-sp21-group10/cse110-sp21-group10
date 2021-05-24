@@ -119,6 +119,13 @@ function setupScript () {
 
   loadVars();
   setupButtons();
+
+  /* For testing purposes /
+  createBullet();
+  createBullet();
+  createBullet();
+  createBullet();
+  /* For quickly commenting out */
 }
 
 /**
@@ -420,12 +427,13 @@ function createBullet () {
 /**
  * Loads the current day into display <p>
  *
- * Calls generateID attempts to use ID to retrieve data for the current day <p>
+ * Calls generateID, attempts to use ID to retrieve data for the current day <p>
  *
  * If data is returned, calls on day custom element's setter for data <p>
  *
- * Otherwise, either an error occurred or ID isn't registered - regardless, an empty template
- * is passed into day custom element's setter for data <p>
+ * Otherwise, either an error occurred or ID isn't registered <p>
+ *
+ * Regardless, day custom element's blank setter is called <p>
  *
  * In both cases, the day element is appended to appropriate location in document (TODO)
  *
@@ -437,21 +445,35 @@ function loadDay () {
     if (data) {
       dayElem.data = [ID, data];
     } else {
-      console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new Day ._.");
-      dayElem.data = [ID, {
-        widgets: [],
-        trackers: [],
-        sections: [
-          {
-            name: 'Notes',
-            type: 'log',
-            bulletIDs: []
-      }
-        ]
-      }];
+      console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new (template) Day ._.");
+      dayElem.data = [ID, {}];
     }
   });
 }
+
+/**
+ * Creates a bullet element <p>
+ *
+ * Creates a bullet-entry element and passes in ID + empty data (calls on empty setter to generate template) <p>
+ *
+ * Input textbox assigned a keyListener for the 'Enter' key. Empty input (user erased all text) signifies the
+ * user intends to delete this entry
+ *
+function createBullet () {
+  const ID = generateID('bullet');
+  const bulletElem = document.createElement('bullet-entry');
+  bulletElem.data = [ID, {}];
+  bulletElem.shadowRoot.querySelector('.bullet-input').addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      if (event.target.value.length === 0) {
+        console.log(`Deleting ${ID} from database`);
+        bulletElem.remove();
+      }
+    }
+  });
+  document.getElementById('daily-log').appendChild(bulletElem);
+}
+/* For quickly commenting out code */
 
 /**
  * Uses currDate to generate the correct ID for the given object type <p>
