@@ -1,4 +1,4 @@
-import { Database } from '../classes/database.js'
+import { Database } from '../classes/database.js';
 
 /**
  * This class contains a constructor, edit, and remove functions for the bullet custom HTML class
@@ -90,7 +90,7 @@ class BulletEntry extends HTMLElement {
    *   a. Remove bullet with a click eventListener, delegating to deleteBullet <p>
    * 4. Saves data used to setup bullet in an attribute named data <p>
    * 5. Calls a function to  <p>
-   * 
+   *
    * To be implemented: <p>
    * - Update the type of bullet point based off value
    *
@@ -102,9 +102,9 @@ class BulletEntry extends HTMLElement {
 
     if (Object.entries(jsonData).length === 0) {
       jsonData = {
-          labelIDs: [],
-          text: '',
-          value: -1,
+        labelIDs: [],
+        text: '',
+        value: -1,
         childrenIDs: []
       };
       console.log(jsonData);
@@ -138,7 +138,7 @@ class BulletEntry extends HTMLElement {
   /**
    * Process for editing an existing bullet-entry element. <p>
    * Triggers onClick for element containing bullet-entry text. <p>
-   * Process consists of: <p> 
+   * Process consists of: <p>
    * 1. Checking that editting is enabled <p>
    * 2. Showing the hidden input textbox with value set to whatever's inside the current text <p>
    * 3. Hiding the current text of the bullet-element <p>
@@ -179,7 +179,7 @@ class BulletEntry extends HTMLElement {
           input.style.display = 'none';
           window.editable = true;
 
-          let jsonData = JSON.parse(this.data);
+          const jsonData = JSON.parse(this.data);
           jsonData.text = target.innerText;
           this.setAttribute('data', JSON.stringify(jsonData));
           this.storeToDatabase(this.id, jsonData, true);
@@ -189,11 +189,11 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Stores Obj using id to database, loggin if success or fail 
+   * Stores Obj using id to database, loggin if success or fail
    */
   storeToDatabase (id, jsonData, log = false) {
     Database.store(id, jsonData, (success) => {
-      if (log){
+      if (log) {
         if (success) {
           console.log(`Stored ${id} to database`);
         } else {
