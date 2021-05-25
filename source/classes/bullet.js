@@ -115,13 +115,7 @@ class BulletEntry extends HTMLElement {
    *
    * 5. To be implemented: Update the type of bullet point based off value <p>
    *
-   * 6. Add a listener to input once user stops focusing on it (blur -_-) <p>
-   *
-   *   a. Do a comparison between original text and current text <p>
-   *
-   *   Edit: Also make sure that there is text to store ( no blanks, no empty newlines ) <p>
-   *
-   *   b. Update interally stored text (for future reference) and update value on database <p>
+   * 6. Add a listener to handle changes to input once user stops focusing on it (called blur -_-) <p>
    *
    * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
    * @param {Object []} - [ID, data] pair used to create, load, and store bullet data from DB
@@ -171,6 +165,10 @@ class BulletEntry extends HTMLElement {
         break;
     }
 
+    /**
+     * Handles saving changes to bullet text to internal data and database under the right conditions
+     * @callback BulletEntry~editTextCallback
+     */
     bulletText.addEventListener('blur', (event) => {
       if (bulletText.innerText && bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
         jsonData.text = bulletText.innerText;
@@ -179,6 +177,16 @@ class BulletEntry extends HTMLElement {
       }
     });
   }
+
+  /**
+   * Does a comparison between original text and text currently stored in data for differences
+   * as well as ensuring there actually IS text to store (avoids re-saving after deletion bug found earlier) <p>
+   *
+   * Updates interally stored text (for future reference) and value in database <p>
+   *
+   * @callback BulletEntry~editTextCallback
+   * @param {blurEvent} event - provides access to element that stopped getting focused (for it's innerText)
+   */
 
   /**
    * Stores Obj using id to database, optionally logging on success or fail
@@ -227,8 +235,8 @@ class BulletEntry extends HTMLElement {
       this.shadowRoot.querySelector('.children').appendChild(child);
 
       /**
-       * Handles deletion of a child bullet from display, database, and childIDs list under the right conditions
-       * @param {BulletEntry~deleteChildCallback} callback - Decides whether to delete and does so where needed
+       * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
+       * @param {BulletEntry~removeChildCallback} callback - Decides whether to delete and does so where needed
        *
        */
       child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
@@ -242,7 +250,7 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Deletion triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
+   * Removal triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
    *
    * Removal starts with display - specifically removing child from div for containing children under this bullet.
    * Note that if a child bullet is deleted with children (grand-children of current bullet) under it,
@@ -253,7 +261,7 @@ class BulletEntry extends HTMLElement {
    *
    * Finally, the childIDs data is updated with the removal of the childID
    *
-   * @callback BulletEntry~deleteChildCallback
+   * @callback BulletEntry~removeChildCallback
    * @param {keydownEvent} event - provides access to key that was clicked as well as element that event was triggered under
    */
 }
