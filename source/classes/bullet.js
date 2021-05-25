@@ -84,23 +84,26 @@ class BulletEntry extends HTMLElement {
           border-radius: 20px;  
         }
         
-        .bullet:hover .bullet-remove {
+        .bullet:hover .bullet-remove,
+        .bullet:hover .child-add {
           display: inline-block;
         }
         
-        .bullet-remove {
+        .bullet-remove,
+        .child-add{
           display: none;
           float: right;
-          padding-top: .9%;
+          padding-top: .3%;
         
           border: none;
           background-color: transparent;
         }
         
-        .bullet-remove:hover {
+        .bullet-remove:hover,
+        .child-add:hover{
           font-size: 15px;
           position: relative;
-          padding-top: .8%;
+          padding-top: .5%;
           left: .75px;
         }
         
@@ -113,13 +116,14 @@ class BulletEntry extends HTMLElement {
 
       <div class="bullet">         
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
+        <button class="bullet-remove"><i class="fas fa-times"></i></button>
+        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>
         <p class="bullet-text" contenteditable="true">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
           dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <button class="bullet-remove"><i class="fas fa-times"></i></button>
         <div class="children"> </div>
       </div>
       `;
@@ -306,6 +310,12 @@ class BulletEntry extends HTMLElement {
           Database.delete(childID);
           this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
         }
+      });
+
+      child.shadowRoot.querySelector('.bullet-remove').addEventListener('click', (event) => {
+        this.shadowRoot.querySelector('.children').removeChild(child);
+        Database.delete(childID);
+        this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
       });
     }
   }
