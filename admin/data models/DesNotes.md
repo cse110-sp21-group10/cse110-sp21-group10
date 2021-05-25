@@ -3,7 +3,7 @@
 ## Days.json
 File contains data for all logged days so far.  
 Each day is represented as a JSON object with the following:
-- `ID`: just the YYMMDD Date of the Day
+- `ID`: 'D YYMMDD' - D character to signify data is for Day, followed by date
 - `Widgets`: A section of the log that's always near the top
   - Type examples: reminder, weather, etc.
   - Content relies on type and will be developed / implemented by assignee
@@ -21,7 +21,7 @@ Each day is represented as a JSON object with the following:
 ## Months.json
 File contains data for all logged months so far.  
 Each month is represented as a JSON object with the following:
-- `ID`: just the YYMM Date of the Month
+- `ID`: 'M YYMM' - M character to signify data is for Month, followed by date
 - `Sections`: A single-object Array of sections
   - `Notes`: The name of the solitary section saved under months
   - `Type`: Log (indicates non-checkboxed bullets)
@@ -31,7 +31,7 @@ Each month is represented as a JSON object with the following:
 ## Years.json
 File contains data for all logged years so far.  
 Each year is represented as a JSON object with the following:
-- `ID`: just the YY representation of the year
+- `ID`: 'Y YY' - Y character to signify data is for Year, followed by date
 - `Type`: one `log` and one `checklist`
 - `Name`: one `Notes` and one `Goals`
 - `bulletIDs`: Array of bullet IDs under their respective sections
@@ -57,6 +57,11 @@ Internal Variables of each bullet:
       - `B 210517 01 15` : the 16th bullet in the 2nd section of date 2021-05-17.  
       - `B 2105 03` : the 4th bullet in the Notes section (the only section) of month 2021-05 
       - `B 21 1 02` : the 3rd bullet in the Goals section (2nd section) of year 2021
+    - Note: 
+      - date counts from 1, so '20' in date means the 20th day of the current month
+      - month counts from 1 to 12, so '1' is January, '3' is March, etc.
+      - year counts for the 21st century so '21' in year means 2021
+      - This is for consistency with the dayjs library we're using.
 - `labelIDs`: Array of label IDs applied to this bullet
     - Refer to [Labels.json](#Labels.json) for details
 - `bulletIDs`: Array of bullet IDs that are subChildren of this bullet
@@ -215,3 +220,18 @@ Note:
   - expands onClick
     - migrate mode perhaps?
     - User can mass check off, migrate to today, or cross off
+
+## Back and Forward buttons
+- 2 types of buttons: unit (day, month, year) vs entry (day only)
+- Unit
+  - Have access to global variable for dayCount (1-365), monthCount (0-11), year (00-99)
+  - Increment/decrement the unit (day, month, year).
+  - Call respective load methods
+    - (Checks if there's a saved entry in database to show, else it'll show a blank/template page)
+- Entries (only for day view)
+  - Have access to an arraylist of dayIDs []
+  - Have access to global variable for index in that arraylist
+  - Check that there is a 'prev/next entry' and grey out button accordingly
+    - array count and index (-1 too far left, 'size' too far right)
+  - Just increment/decrease index and set dayCount, monthCount and year accordingly
+  - Then load the day from database
