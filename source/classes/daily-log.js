@@ -1,4 +1,4 @@
-import { Database } from '../classes/database.js';
+import { Database } from './database.js';
 
 /**
  * This class contains functions to construct and edit the daily log custom HTML element.

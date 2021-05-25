@@ -149,7 +149,7 @@ section.header button {
   }
 }
 
-.bullet-button {
+.bullet-point {
   font-size:10px;
   border: none;
   background: none;
@@ -157,7 +157,7 @@ section.header button {
   padding-top: .9%;
 }
 
-.bullet-button:hover {
+.bullet-point:hover {
   font-size: 12px;
   position: relative;
   padding-top: .8%;
@@ -165,7 +165,7 @@ section.header button {
   width: 22px;
 }
 
-.bullet-entry {
+.bullet-text {
   display: inline-block;
   width: 65vw;
   font-size: larger;
@@ -177,7 +177,7 @@ section.header button {
   padding-bottom: .5%;
 }
 
-.entry {
+.bullet {
   margin-left: 1%;
   margin-right: 12%;
 
@@ -185,12 +185,12 @@ section.header button {
   padding-right: 1%;
 }
 
-.entry:hover {
+.bullet:hover {
   background-color: rgb(241, 241, 241);
   border-radius: 20px;  
 }
 
-.entry:hover .bullet-delete {
+.bullet:hover .bullet-delete {
   display: inline-block;
 }
 
