@@ -1,4 +1,4 @@
-import { Database } from '../classes/database.js';
+import { Database } from './database.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
@@ -106,9 +106,11 @@ class BulletEntry extends HTMLElement {
    *
    *   a. `contenteditable` tag allows changing of text <p>
    *
-   * 4. To be implemented: Update the type of bullet point based off value <p>
+   * 4. Iterates through children and recursively sets their values <p>
    *
-   * 5. Add a listener to input once user stops focusing on it (blur -_-) <p>
+   * 5. To be implemented: Update the type of bullet point based off value <p>
+   *
+   * 6. Add a listener to input once user stops focusing on it (blur -_-) <p>
    *
    *   a. Do a comparison between original text and current text <p>
    *
@@ -116,7 +118,9 @@ class BulletEntry extends HTMLElement {
    *
    *   b. Update interally stored text (for future reference) and update value on database <p>
    *
-   * @param {[string, jsonObject]} - [bulletID, data for generating this bullet element]
+   * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
+   * @param {Object []} - [ID, data] pair used to create, load, and store bullet data from DB
+   * [string, jsonObject]} - [bulletID, data for generating this bullet element]
    */
   set data ([id, jsonData]) {
     console.log('Setter called');
