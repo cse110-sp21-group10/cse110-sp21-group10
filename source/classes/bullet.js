@@ -1,10 +1,10 @@
 class bulletElement extends HTMLElement {
-    constructor() {
-      super(); 
-  
-      const template = document.createElement('template');
-  
-      template.innerHTML = `
+  constructor () {
+    super();
+
+    const template = document.createElement('template');
+
+    template.innerHTML = `
           <style>
             .bullet-button {
               font-size:10px;
@@ -83,24 +83,23 @@ class bulletElement extends HTMLElement {
             <button class="bullet-delete"><i class="fas fa-times"></i></button>
           </div>
           `;
-  
-      this.attachShadow({ mode: 'open' })
-      this.shadowRoot.appendChild(template.content.cloneNode(true))
-    }
-  
-    get entry() {
 
-    }
-  
-    set entry(entry) {
-
-    }
-  
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
-  
-  customElements.define('bullet-element', bulletElement);
-  
-   /**
+
+  get entry () {
+
+  }
+
+  set entry (entry) {
+
+  }
+}
+
+customElements.define('bullet-element', bulletElement);
+
+/**
    * JSON Format:
    *
    * {
@@ -114,7 +113,7 @@ class bulletElement extends HTMLElement {
    *        "bulletIDs": [
    *            "B ###### ## ##",
    *            "B ###### ## ##"
-   *        ] 
+   *        ]
    *    }
    * }
    */
