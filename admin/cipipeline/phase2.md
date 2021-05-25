@@ -1,4 +1,4 @@
-# CI/CD Pipeline Phase 2 Status 
+# CI/CD Pipeline Phase 2 Status
 
 ## Implemented in Phase 2
 
