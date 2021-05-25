@@ -112,7 +112,7 @@ class DailyLog extends HTMLElement {
   /**
    * This function returns the data stored in this daily element as a JSON object.
    *
-   * @returns {string} JSON representation of data used to generate this daily log element
+   * @returns {Object} JSON representation of data used to generate this daily log element
    */
   get data () {
     return JSON.parse(this.getAttribute('data'));
