@@ -84,11 +84,11 @@ class BulletEntry extends HTMLElement {
           border-radius: 20px;  
         }
         
-        .bullet:hover .bullet-delete {
+        .bullet:hover .bullet-remove {
           display: inline-block;
         }
         
-        .bullet-delete {
+        .bullet-remove {
           display: none;
           float: right;
           padding-top: .9%;
@@ -97,7 +97,7 @@ class BulletEntry extends HTMLElement {
           background-color: transparent;
         }
         
-        .bullet-delete:hover {
+        .bullet-remove:hover {
           font-size: 15px;
           position: relative;
           padding-top: .8%;
@@ -119,7 +119,7 @@ class BulletEntry extends HTMLElement {
           dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <button class="bullet-delete"><i class="fas fa-times"></i></button>
+        <button class="bullet-remove"><i class="fas fa-times"></i></button>
         <div class="children"> </div>
       </div>
       `;
@@ -234,7 +234,7 @@ class BulletEntry extends HTMLElement {
    * Removal triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
    *
    * Removal starts with display - specifically removing child from div for containing children under this bullet.
-   * Note that if a child bullet is deleted with children (grand-children of current bullet) under it,
+   * Note that if a child bullet is removed with children (grand-children of current bullet) under it,
    * the grand-children will also disappear from display but will still exist in database and child's childID list
    * (not an issue since this childID will never be re-used) <p>
    *
@@ -297,7 +297,7 @@ class BulletEntry extends HTMLElement {
 
       /**
        * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
-       * @param {BulletEntry~removeChildCallback} callback - Decides whether to delete and does so where needed
+       * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
        *
        */
       child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
