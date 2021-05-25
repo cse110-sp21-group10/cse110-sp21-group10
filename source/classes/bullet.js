@@ -64,6 +64,10 @@ class BulletEntry extends HTMLElement {
           padding-left: 0.5em;
         }
 
+        .children {
+          padding-left: 20px;
+        }
+
         [contenteditable] {
           outline: 0px solid transparent;
         }
@@ -72,6 +76,7 @@ class BulletEntry extends HTMLElement {
       <div class="bullet">
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <p class="bullet-text" contenteditable="true">holdonmmmmmm </p>
+        <div class="children"> </div>
       </div>
     `;
 
@@ -143,6 +148,17 @@ class BulletEntry extends HTMLElement {
     const bulletText = this.shadowRoot.querySelector('.bullet-text');
     bulletText.innerText = this.text;
 
+    /** Iterate through children
+     * create bulletEntry + set data
+     * handles deletion via backspace on empty
+     * append to children div
+     */
+    this.setChildren();
+
+    /** Iterate through labels
+     *
+     */
+
     /** Checklist toggle based off value
      * - Implemented using display: none
      */
@@ -181,6 +197,65 @@ class BulletEntry extends HTMLElement {
       }
     });
   }
+
+  /**
+   * Handles the creation, appending, and deletion (if done via backspace) of children <p>
+   *
+   * Iterates through each childID in data: <p>
+   *
+   * 1. Creates a new bullet-entry element <p>
+   *
+   * 2. Fetches and sets data <p>
+   *
+   * 3. Appends child under appropriate div in current bullet element <p>
+   *
+   * 4. Registers button presses for children's text and under the right conditions,
+   * will remove child from display, database, and this bullet's childIDs list
+   */
+  setChildren () {
+    for (const childID of this.data.childrenIDs) {
+      const child = document.createElement('bullet-entry');
+
+      Database.fetch(childID, (data) => {
+        if (data) {
+          child.data = [childID, data];
+        } else {
+          console.log(`Something went wrong when fetching data for child: ${childID}`);
+        }
+      });
+
+      this.shadowRoot.querySelector('.children').appendChild(child);
+
+      /**
+       * Handles deletion of a child bullet from display, database, and childIDs list under the right conditions
+       * @param {BulletEntry~deleteChildCallback} callback - Decides whether to delete and does so where needed
+       *
+       */
+      child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
+        if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+          this.shadowRoot.querySelector('.children').removeChild(child);
+          Database.delete(childID);
+          this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
+        }
+      });
+    }
+  }
+
+  /**
+   * Deletion triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
+   *
+   * Removal starts with display - specifically removing child from div for containing children under this bullet.
+   * Note that if a child bullet is deleted with children (grand-children of current bullet) under it,
+   * the grand-children will also disappear from display but will still exist in database and child's childID list
+   * (not an issue since this childID will never be re-used) <p>
+   *
+   * Next the childID is used to remove from Database as well <p>
+   *
+   * Finally, the childIDs data is updated with the removal of the childID
+   *
+   * @callback BulletEntry~deleteChildCallback
+   * @param {keydownEvent} event - provides access to key that was clicked as well as element that event was triggered under
+   */
 }
 
 /** Define a custom element for the BulletEntry web component */
