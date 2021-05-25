@@ -211,5 +211,5 @@ section.header button {
 }
 
 [contenteditable] {
-  outline: 0px solid transparent;
+  outline: 0 solid transparent;
 }
