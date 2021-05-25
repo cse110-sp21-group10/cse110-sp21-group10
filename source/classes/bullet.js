@@ -24,7 +24,10 @@ import { Database } from './database.js';
  * const bullet = document.createElement('bullet-entry');
  * bullet.data = [ID, {}];
  *
- * @property {jsonObject} data - [string] labelIDs, string text, Number value, and [string] childrenIDs associated with this bulletEntry
+ * @property {jsonObject} data associated with this bulletEntry
+ * @property {string[]} data.labelIDs - IDs of the labels assigned
+ * @property {Number} data.value - value that determines the type of bullet (e.g. unchecked, dashed, crossed-off)
+ * @property {string[]} data.childrenIDs - IDs of direct children bullets under this bullet
  */
 
 class BulletEntry extends HTMLElement {
@@ -84,6 +87,7 @@ class BulletEntry extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
+  // ------------------------------------- Start of Set/Get definitions -------------------------------------------------
   /**
    * @returns {jsonObject} JSON object containing data representing this bullet element <p>
    * { labelIDs: [string] <p>
@@ -99,27 +103,22 @@ class BulletEntry extends HTMLElement {
   /**
    * Process for setting up data (mostly using shadowRoot) <p>
    *
-   * 0. Checks if empty data is passed in, replaces data with an empty template instead <p>
+   * Checks if jsonData is empty, replacing data with an empty template
+   * and writing newly created bullet data to DB <p>
    *
-   * 1. BulletEntry values for id, text, and data set <p>
+   * Sets up BulletEntry values for id, text, and data. Text is stored
+   * and used internally for determining when to update DB <p>
    *
-   *   a. text is stored and used internally for determining when to update Database <p>
+   * Fills display with input text, either passed in or generated from template <p>
    *
-   * 2. Now that data setup if done, will save to an attribute called data <p>
+   * Iterates through children and recursively sets their values, as well as any
+   * eventListeners or data updates <p>
    *
-   * 3. Grabs element that will contain bullet text and sets innerText value to either passed in text or template text <p>
+   * Adds a listener to handle changes to input once user stops focusing on it (called blur -_-) <p>
    *
-   *   a. `contenteditable` tag allows changing of text <p>
+   * TODO: Implement a way to update the type of bullet point based off value <p>
    *
-   * 4. Iterates through children and recursively sets their values <p>
-   *
-   * 5. To be implemented: Update the type of bullet point based off value <p>
-   *
-   * 6. Add a listener to handle changes to input once user stops focusing on it (called blur -_-) <p>
-   *
-   * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
-   * @param {Object []} - [ID, data] pair used to create, load, and store bullet data from DB
-   * [string, jsonObject]} - [bulletID, data for generating this bullet element]
+   * @param {Array.<{id: string, jsonData: Object}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB
    */
   set data ([id, jsonData]) {
     console.log('Setter called');
@@ -167,7 +166,7 @@ class BulletEntry extends HTMLElement {
 
     /**
      * Handles saving changes to bullet text to internal data and database under the right conditions
-     * @callback BulletEntry~editTextCallback
+     * @param {BulletEntry~editTextCallback} callback - Decides whether to update data and does so where needed
      */
     bulletText.addEventListener('blur', (event) => {
       if (bulletText.innerText && bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
@@ -177,7 +176,9 @@ class BulletEntry extends HTMLElement {
       }
     });
   }
+  // -------------------------------------- End of Set/Get definitions --------------------------------------------------
 
+  // ------------------------------------- Start of Callback definitions -------------------------------------------------
   /**
    * Does a comparison between original text and text currently stored in data for differences
    * as well as ensuring there actually IS text to store (avoids re-saving after deletion bug found earlier) <p>
@@ -189,10 +190,29 @@ class BulletEntry extends HTMLElement {
    */
 
   /**
+   * Removal triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
+   *
+   * Removal starts with display - specifically removing child from div for containing children under this bullet.
+   * Note that if a child bullet is deleted with children (grand-children of current bullet) under it,
+   * the grand-children will also disappear from display but will still exist in database and child's childID list
+   * (not an issue since this childID will never be re-used) <p>
+   *
+   * Next the childID is used to remove from Database as well <p>
+   *
+   * Finally, the childIDs data is updated with the removal of the childID
+   *
+   * @callback BulletEntry~removeChildCallback
+   * @param {keydownEvent} event - provides access to key that was clicked as well as element that event was triggered under
+   */
+  // ------------------------------------- End of Callback definitions -------------------------------------------------
+
+  // ------------------------------------- Start of Helper definitions -------------------------------------------------
+  /**
    * Stores Obj using id to database, optionally logging on success or fail
-   * @param {string} id - ID to store under
-   * @param {jsonObject} jsonData - Data to be stored
-   * @param {bool} log - whether or not to log Success/Fail
+   * @param {Object[]} array of parameters passed into function
+   * @param {string} array.id - ID to store under
+   * @param {jsonObject} array.jsonData - Data to be stored
+   * @param {bool} array.log - whether or not to log Success/Fail
    */
   storeToDatabase (id, jsonData, log = false) {
     Database.store(id, jsonData, (success) => {
@@ -248,22 +268,7 @@ class BulletEntry extends HTMLElement {
       });
     }
   }
-
-  /**
-   * Removal triggers if backspace is pressed when either there is no input or input is just a single newline (handles a bug we found) <p>
-   *
-   * Removal starts with display - specifically removing child from div for containing children under this bullet.
-   * Note that if a child bullet is deleted with children (grand-children of current bullet) under it,
-   * the grand-children will also disappear from display but will still exist in database and child's childID list
-   * (not an issue since this childID will never be re-used) <p>
-   *
-   * Next the childID is used to remove from Database as well <p>
-   *
-   * Finally, the childIDs data is updated with the removal of the childID
-   *
-   * @callback BulletEntry~removeChildCallback
-   * @param {keydownEvent} event - provides access to key that was clicked as well as element that event was triggered under
-   */
+  // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
 
 /** Define a custom element for the BulletEntry web component */
