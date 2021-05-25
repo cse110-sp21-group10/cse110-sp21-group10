@@ -21,7 +21,7 @@ h1 {
   margin-right: 5%;
 }
 
-/* Styling for exterior buttons (menu, zoom out, help) 
+/* Styling for exterior buttons (menu, zoom out, help)
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
@@ -41,13 +41,13 @@ h1 {
 }
 
 #prev-year-button {
-  height:5vh;
+  height: 5vh;
   position: absolute;
   right: 1vh;
 }
 
 #next-year-button {
-  height:5vh;
+  height: 5vh;
   position: absolute;
   right: 6vh;
 }
@@ -150,17 +150,17 @@ section.header button {
 }
 
 .bullet-point {
-  font-size:10px;
+  font-size: 10px;
   border: none;
   background: none;
   float: left;
-  padding-top: .9%;
+  padding-top: 0.9%;
 }
 
 .bullet-point:hover {
   font-size: 12px;
   position: relative;
-  padding-top: .8%;
+  padding-top: 0.8%;
   right: 1px;
   width: 22px;
 }
@@ -170,35 +170,30 @@ section.header button {
   width: 65vw;
   font-size: larger;
   margin: 0;
+
   /* border: 5px solid black; */
 
   padding-left: 1%;
-  padding-top: .5%;
-  padding-bottom: .5%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
 }
 
 .bullet {
   margin-left: 1%;
   margin-right: 12%;
-
-  padding-left: .5%;
+  padding-left: 0.5%;
   padding-right: 1%;
 }
 
 .bullet:hover {
   background-color: rgb(241, 241, 241);
-  border-radius: 20px;  
-}
-
-.bullet:hover .bullet-delete {
-  display: inline-block;
+  border-radius: 20px;
 }
 
 .bullet-delete {
   display: none;
   float: right;
-  padding-top: .9%;
-
+  padding-top: 0.9%;
   border: none;
   background-color: transparent;
 }
@@ -206,8 +201,12 @@ section.header button {
 .bullet-delete:hover {
   font-size: 15px;
   position: relative;
-  padding-top: .8%;
-  left: .75px;
+  padding-top: 0.8%;
+  left: 0.75px;
+}
+
+.bullet:hover .bullet-delete {
+  display: inline-block;
 }
 
 [contenteditable] {
