@@ -1,4 +1,5 @@
 import { Database } from '../classes/database.js';
+export { generateID };
 
 // Tell eslint that dayjs is imported in html
 /* global dayjs */
@@ -43,7 +44,7 @@ let divMonthly;
 // Elements for the yearly logs page
 let divYearly;
 
-const bulNum = 0;
+let bulNum = 7;
 // -----------------------------------------------
 // End of variable definition
 
@@ -297,13 +298,13 @@ function generateID (type) {
     case 'bullet':
       switch (window.history.state.view) {
         case 'day' :
-          ID = `B ${year}${month}${day} 00 ${bulNum}`;
+          ID = `B ${year}${month}${day} 00 ${(bulNum < 10 ? '0': '') + bulNum++}`;
           return ID;
         case 'month' :
-          ID = `B ${year}${month} ${bulNum}`;
+          ID = `B ${year}${month} ${bulNum++}`;
           return ID;
         case 'year' :
-          ID = `B ${year} 0 ${bulNum}`;
+          ID = `B ${year} 0 ${bulNum++}`;
           return ID;
       }
       break;
