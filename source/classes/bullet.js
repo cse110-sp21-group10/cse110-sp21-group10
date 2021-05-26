@@ -49,63 +49,75 @@ class BulletEntry extends HTMLElement {
           border: none;
           background: none;
           float: left;
-          padding-top: .9%;
+          padding-top: .4%;
         }
         
         .bullet-point:hover {
           font-size: 12px;
           position: relative;
-          padding-top: .8%;
+          padding-top: .35%;
           right: 1px;
           width: 22px;
         }
         
         .bullet-text {
           display: inline-block;
-          width: 65vw;
+          width: 90%;
           font-size: larger;
           margin: 0;
           /* border: 5px solid black; */
         
           padding-left: 1%;
-          padding-top: .5%;
-          padding-bottom: .5%;
         }
         
         .bullet {
-          margin-left: 1%;
-          margin-right: 12%;
-        
+          margin-left: 1.8%;
+
           padding-left: .5%;
-          padding-right: 1%;
+          padding-top: .5%;
+          // padding-bottom: .5%;
         }
         
         .bullet:hover {
           background-color: rgb(241, 241, 241);
-          border-radius: 20px;  
+          border-radius: 20px;
         }
         
         .bullet:hover .bullet-remove,
         .bullet:hover .child-add {
-          display: inline-block;
+          color: black;
         }
         
-        .bullet-remove,
-        .child-add{
-          display: none;
+        .child-add {
+          float: left;
+          max-width: 1.5%;
+        }
+
+        .bullet-remove {
           float: right;
-          padding-top: .3%;
+          padding-right: 1%;
+        }
+
+        .bullet-remove:hover {
+          font-size: 15px;
+          position: relative;
+          padding-top: .1%;
+        }
+
+        .child-add:hover {
+          font-size: 15px;
+          position: relative;
+          padding-top: .1%;
+        }
+
+        .child-add,
+        .bullet-remove {
+          padding-top: .2%;
+
+          color: transparent;
         
           border: none;
           background-color: transparent;
-        }
-        
-        .bullet-remove:hover,
-        .child-add:hover{
-          font-size: 15px;
-          position: relative;
-          padding-top: .5%;
-          left: .75px;
         }
         
         [contenteditable] {
@@ -115,17 +127,17 @@ class BulletEntry extends HTMLElement {
       
       <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
 
-      <div class="bullet">         
+      <div class="bullet"> 
+        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>      
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
-        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>
+        
         <p class="bullet-text" contenteditable="true">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
           dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <div class="children"> </div>
       </div>
       `;
 
@@ -306,7 +318,7 @@ class BulletEntry extends HTMLElement {
     const child = document.createElement('bullet-entry');
     child.data = [childID, childData];
 
-    this.shadowRoot.querySelector('.children').appendChild(child);
+    this.shadowRoot.querySelector('.bullet').appendChild(child);
 
     /**
      * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
@@ -327,7 +339,7 @@ class BulletEntry extends HTMLElement {
   }
 
   removeChild (child, childID) {
-    this.shadowRoot.querySelector('.children').removeChild(child);
+    this.shadowRoot.querySelector('.bullet').removeChild(child);
     Database.delete(childID);
     this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
   }
