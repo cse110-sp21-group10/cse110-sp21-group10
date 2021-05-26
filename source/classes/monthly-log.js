@@ -1,83 +1,34 @@
 import { Database } from '../classes/database.js';
 
 /**
- * This class contains functions to construct and edit the daily log custom HTML element.
+ * This class contains functions to construct and edit the monthly log custom HTML element.
  *
  * @classdesc
- * @example <caption>Daily Log class</caption>
- * // Example of a daily JSON object used to generate a daily-log element
- * const exampleDailyJSON = {
- *   widgets: [
- *     {
- *       id: '00',
- *       type: 'reminder',
- *       bulletIDs: [
- *         'B 210515 00 00',
- *         'B 210515 00 01'
- *       ]
- *     },
- *     {
- *       id: '01'
- *       type: 'weather'
- *     }
- *   ],
- *   trackers: [
- *     {
- *       type: 'slider',
- *       name: mood,
- *       value: 3
- *     },
- *     {
- *       type: 'checkbox',
- *       name: 'Meditate',
- *       value: 0
- *     },
- *     {
- *       type: 'checkbox',
- *       name: 'Work out',
- *       value: 1
- *     }
- *   ],
+ * @example <caption>Monthly Log class</caption>
+ * // Example of a monthly JSON object used to generate a monthly-log element
+ * const exampleMonthlyJSON = {
  *   sections: [
  *     {
  *       id: '00',
- *       name: 'Daily Notes',
+ *       name: 'Monthly Notes',
  *       type: 'log',
  *       bulletIDs: [
- *         'B 210515 00 00',
- *         'B 210515 00 01'
- *       ]
- *     },
- *     {
- *       id: '03',
- *       name: 'Shopping List',
- *       type: 'checklist',
- *       bulletIDs: [
- *         'B 210515 01 00',
- *         'B 210515 01 01'
- *       ]
- *     },
- *     {
- *       id: '04',
- *       name: 'Daily Goals',
- *       type: 'checklist',
- *       bulletIDs: [
- *         'B 210515 02 00',
- *         'B 210515 02 01'
+ *         'B 2105 00 00',
+ *         'B 2105 00 01'
  *       ]
  *     }
  *   ]
  * }
- * // Create a new daily log HTML element using the object
- * let daily = document.createElement('daily-log');
- * daily.data = exampleDailyJSON;
+ * // Create a new monthly log HTML element using the object
+ * let monthly = document.createElement('monthly-log');
+ * monthly.data = exampleMonthlyJSON;
  */
 
-class DailyLog extends HTMLElement {
+class MonthlyLog extends HTMLElement {
   // -------------------------------------- Start Constructor -------------------------------------
 
   /**
-   * Constructs a blank daily log HTML element using the defined HTML template
+   * Constructs a blank monthly log HTML element using the defined HTML template
    *
    * @constructor
    */
@@ -91,13 +42,12 @@ class DailyLog extends HTMLElement {
     template.innerHTML = `
       <link rel="stylesheet" href="../style/style.css">
       <link rel="stylesheet" href="../assets/css/all.css">
-      <div class="daily">
-        <section class="header" id="daily-header">
+      <div class="monthly">
+        <section class="header" id="monthly-header">
           <h1></h1>
-          <button class="main-buttons" id="weather-icon"><i class="fas fa-cloud-sun icon-size"></i></button>
-          <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></button>
           <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
         </section>
+        <section id="monthly-calendar"></section>
       </div>
     `;
 
@@ -110,23 +60,23 @@ class DailyLog extends HTMLElement {
   // ---------------------------------- Start Get/Set Functions -----------------------------------
 
   /**
-   * This function returns the data stored in this daily element as a JSON object.
+   * This function returns the data stored in this monthly element as a JSON object.
    *
-   * @returns {string} JSON representation of data used to generate this daily log element
+   * @returns {Object} JSON representation of data used to generate this monthly log element
    */
   get data () {
     return JSON.parse(this.getAttribute('data'));
   }
 
   /**
-   * This function constructs the daily log HTML element using the given ID and daily log
+   * This function constructs the monthly log HTML element using the given ID and monthly log
    * object data. It starts by constructing and setting the header text for the element, then
-   * goes through each attribute of the daily log object to construct the widgets, trackers, and
-   * notes sections of the element. Each notes section is constructed by fetching the data of
-   * each bullet in the section from the database, and creating a custom bullet-entry HTML
-   * element that is appended to the section. Finally, the setAttribute function is called
-   * on this element to set the 'data' attribute of the element to be the given JSON data,
-   * so that the data can be retrieved from the element later if needed.
+   * goes through each attribute of the monthly log object to construct the notes sections of
+   * the element. Each notes section is constructed by fetching the data of each bullet in the
+   * section from the database, and creating a custom bullet-entry HTML element that is appended
+   * to the section. Finally, the setAttribute function is called on this element to set the
+   * 'data' attribute of the element to be the given JSON data, so that the data can be retrieved
+   * from the element later if needed.
    *
    * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
    * is the string ID of the object, and the second element is the JSON object data) that is used
@@ -134,20 +84,18 @@ class DailyLog extends HTMLElement {
    */
   set data ([id, jsonData]) {
     // store this object in a variable so it can be passed to handlers later
-    const dailyLog = this;
+    const monthlyLog = this;
 
     // set the id of the custon element to the given id
     this.id = id;
 
-    // if the jsonData is an empty object, then we should create an empty daily element
+    // if the jsonData is an empty object, then we should create an empty monthly element
     if (Object.entries(jsonData).length === 0) {
       jsonData = {
-        widgets: [],
-        trackers: [],
         sections: [
           {
             id: '00',
-            name: 'Daily Notes',
+            name: 'Monthly Notes',
             type: 'log',
             bulletIDs: []
           }
@@ -157,58 +105,48 @@ class DailyLog extends HTMLElement {
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
-    const root = this.shadowRoot.querySelector('.daily');
+    const root = this.shadowRoot.querySelector('.monthly');
     root.id = id;
 
     // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
 
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
-    const day = this.getDayFromDate(dateObj);
     const month = this.getMonthFromDate(dateObj);
-    const date = dateObj.getDate();
-    const suffix = this.getSuffixOfDate(dateObj);
-    const dateString = `${day}, ${month} ${date}${suffix}`;
+    const year = dateObj.getFullYear();
+    const dateString = `${month} ${year}`;
 
     // get the header text of this custom HTML element and set its contents to the constructed date string
-    const headerText = root.querySelector('#daily-header > h1');
+    const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
 
-    // creates all widgets in one section
-    if (jsonData.widgets && jsonData.widgets.length > 0) {
-      const widgetSection = document.createElement('section');
-      widgetSection.className = 'widgets';
-      widgetSection.innerHTML = `
-        <h2>Widgets</h2>
-        <button class="add" id="add-widget">Add Widget</button >
-        <button class="minimize" id="minimize-widgets">Minimize Widgets</button>
-      `;
-
-      for (const widget of jsonData.widgets) {
-        console.log(widget);
-        // TODO: CONSTRUCT THE WIDGET HERE
-      }
-
-      root.appendChild(widgetSection);
+    const calendar = root.querySelector('#monthly-calendar');
+    const numDays = dateObj.getDate();
+    console.log(numDays);
+    for (let i = 1; i <= numDays; i++) {
+      const dateButton = document.createElement('button');
+      dateButton.className = 'monthly-calendar-button';
+      dateButton.innerText = String(i);
+      calendar.appendChild(dateButton);
     }
 
     // creates all trackers in one section
-    if (jsonData.trackers && jsonData.trackers.length > 0) {
-      const trackerSection = document.createElement('section');
-      trackerSection.className = 'trackers';
-      trackerSection.innerHTML = `
-        <h2>Trackers</h2>
-        <button class="add" id="add-tracker">Add Tracker</button >
-        <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
-      `;
+    // if (jsonData.trackers && jsonData.trackers.length > 0) {
+    //   const trackerSection = document.createElement('section');
+    //   trackerSection.className = 'trackers';
+    //   trackerSection.innerHTML = `
+    //     <h2>Trackers</h2>
+    //     <button class="add" id="add-tracker">Add Tracker</button >
+    //     <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
+    //   `;
 
-      for (const tracker of jsonData.trackers) {
-        console.log(tracker);
-        // TODO: CONSTRUCT THE TRACKER HERE
-      }
+    //   for (const tracker of jsonData.trackers) {
+    //     console.log(tracker);
+    //     // TODO: CONSTRUCT THE TRACKER HERE
+    //   }
 
-      root.appendChild(trackerSection);
-    }
+    //   root.appendChild(trackerSection);
+    // }
 
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
@@ -234,7 +172,7 @@ class DailyLog extends HTMLElement {
           // create bullet element and add the deletion event listener to it
           const bulletElement = document.createElement('bullet-entry');
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-            dailyLog.deleteNoteHandler(event, bulletElement);
+            monthlyLog.deleteNoteHandler(event, bulletElement);
           });
           sectionElement.appendChild(bulletElement);
 
@@ -252,8 +190,7 @@ class DailyLog extends HTMLElement {
           <i class="fas fa-plus icon-size"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
-          // addHandler.call(dailyLog, event);
-          dailyLog.newNoteHandler(event);
+          monthlyLog.newNoteHandler(event);
         });
         sectionElement.appendChild(newNoteButton);
 
@@ -271,48 +208,47 @@ class DailyLog extends HTMLElement {
 
   /**
    * This function is a helper function that is used to determine the date for a given ID. The function
-   * parses the given ID to determine the year, month, and date, and returns a corresponding Date object.
+   * parses the given ID to determine the year, and month, and returns a corresponding Date object.
    *
-   * @param {string} id - The daily ID (with the format 'D YYMMDD') to parse
+   * @param {string} id - The monthly ID (with the format 'M YYMM') to parse
    * @returns {Date} a Date object representing the date determined by the ID
    */
   getDateFromID (id) {
-    // parse year, month, date
+    // parse year, month
     const year = Number(id.substring(2, 4)) + 2000;
-    const month = Number(id.substring(4, 6)) - 1;
-    const date = Number(id.substring(6, 8));
+    const month = Number(id.substring(4, 6));
 
-    return new Date(year, month, date);
+    return new Date(year, month, 0);
   }
 
-  /**
-   * This function is a helper function that is used to determine the day of the week for a given date.
-   * The function takes a Date object, then retrieves and converts the day-of-week integer representation
-   * into the corresponding string (English) format.
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve day-of-week
-   * @returns {string} The day of the week, as a string
-   */
-  getDayFromDate (dateObj) {
-    const dayIndex = dateObj.getDay();
-    // convert 0-6 to Sunday-Saturday
-    switch (dayIndex) {
-      case 0:
-        return 'Sunday';
-      case 1:
-        return 'Monday';
-      case 2:
-        return 'Tuesday';
-      case 3:
-        return 'Wednesday';
-      case 4:
-        return 'Thursday';
-      case 5:
-        return 'Friday';
-      case 6:
-        return 'Saturday';
-    }
-  }
+  // /**
+  //  * This function is a helper function that is used to determine the day of the week for a given date.
+  //  * The function takes a Date object, then retrieves and converts the day-of-week integer representation
+  //  * into the corresponding string (English) format.
+  //  *
+  //  * @param {Date} dateObj - The Date object from which to retrieve day-of-week
+  //  * @returns {string} The day of the week, as a string
+  //  */
+  // getDayFromDate (dateObj) {
+  //   const dayIndex = dateObj.getDay();
+  //   // convert 0-6 to Sunday-Saturday
+  //   switch (dayIndex) {
+  //     case 0:
+  //       return 'Sunday';
+  //     case 1:
+  //       return 'Monday';
+  //     case 2:
+  //       return 'Tuesday';
+  //     case 3:
+  //       return 'Wednesday';
+  //     case 4:
+  //       return 'Thursday';
+  //     case 5:
+  //       return 'Friday';
+  //     case 6:
+  //       return 'Saturday';
+  //   }
+  // }
 
   /**
    * This function is a helper function that is used to determine the month for a given date.
@@ -350,52 +286,6 @@ class DailyLog extends HTMLElement {
         return 'November';
       case 11:
         return 'December';
-    }
-  }
-
-  /**
-   * This function is a helper function that is used to determine the suffix for a given
-   * date based on how it would be read. The function takes a Date object, then retrieves
-   * the date integer and determines the suffix for the date integer that should be
-   * displayed. <p>
-   *
-   * date integer ending in 1 -> suffix 'st' <p>
-   * date integer ending in 2 -> suffix 'nd' <p>
-   * date integer ending in 3 -> suffix 'rd' <p>
-   * date integer ending in 0 or 4-9 -> suffix 'th' <p>
-   * special cases: date integers 11, 12, and 13 -> suffix 'th'
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve the date and determine its suffix
-   * @returns {string} The suffix ('st', 'nd', 'rd', 'th') corresponding to the date integer
-   */
-  getSuffixOfDate (dateObj) {
-    const date = dateObj.getDate();
-
-    // possible suffixes
-    const ST = 'st';
-    const ND = 'nd';
-    const RD = 'rd';
-    const TH = 'th';
-
-    /*
-      11, 12, 13 are special 'th'
-      for all other ones digits:
-      1 -> 'st'
-      2 -> 'nd'
-      3 -> 'rd'
-      0, 4-9 -> 'th'
-      (no need to address any number greater than 31 because there are at most 31 days in a month)
-    */
-    if (date === 11 || date === 12 || date === 13) {
-      return TH;
-    } else if (date % 10 === 1) {
-      return ST;
-    } else if (date % 10 === 2) {
-      return ND;
-    } else if (date % 10 === 3) {
-      return RD;
-    } else {
-      return TH;
     }
   }
 
@@ -440,10 +330,10 @@ class DailyLog extends HTMLElement {
 
   /**
    * This function creates a new bullet. It first generates a bullet ID by combining the date of
-   * the daily log to which the bullet will belong, the ID of the section to which the bullet
+   * the monthly log to which the bullet will belong, the ID of the section to which the bullet
    * is being added, and the ID of the new bullet, which is determined based on the number of
-   * bullets currently in the section. It then adds the bullet ID to the daily JSON object in
-   * the appropriate section, and stores the updated daily JSON object in the database. Lastly,
+   * bullets currently in the section. It then adds the bullet ID to the monthly JSON object in
+   * the appropriate section, and stores the updated monthly JSON object in the database. Lastly,
    * it creates a new bullet-entry HTML element, and adds the appropriate event listener to it
    * to allow for future deletion of the bullet element.
    *
@@ -456,17 +346,16 @@ class DailyLog extends HTMLElement {
     const section = event.target.closest('section');
     const sectionID = section.id;
     const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
-    const dailyID = this.shadowRoot.querySelector('div.daily').id;
-    const date = this.getDateFromID(dailyID);
+    const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
+    const date = this.getDateFromID(monthlyID);
     const year = this.stringifyNum(date.getFullYear() % 100);
     const month = this.stringifyNum(date.getMonth() + 1);
-    const day = this.stringifyNum(date.getDate());
-    const bulletID = `B ${year}${month}${day} ${sectionID} ${bulletCount}`;
+    const bulletID = `B ${year}${month} ${sectionID} ${bulletCount}`;
 
     // increment the number of bullets in the section
     this.bulletCounts[Number(sectionID)]++;
 
-    // add bullet ID to the daily JSON object bulletIDs in the right section
+    // add bullet ID to the monthly JSON object bulletIDs in the right section
     const data = this.data;
     for (const sec of data.sections) {
       if (sec.id === sectionID) {
@@ -475,17 +364,17 @@ class DailyLog extends HTMLElement {
     }
     this.setAttribute('data', JSON.stringify(data));
 
-    // store the updated daily JSON object in the database
-    Database.store(dailyID, data);
+    // store the updated monthly JSON object in the database
+    Database.store(monthlyID, data);
 
     // create a blank bullet HTML element with the generated ID
     const bulletElement = document.createElement('bullet-entry');
     this.setBulletData({}, bulletID, bulletElement);
 
     // add event listener to the bullet element to handle bullet deletion
-    const dailyLog = this;
+    const monthlyLog = this;
     bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      dailyLog.deleteNodeHandler(event, bulletElement);
+      monthlyLog.deleteNoteHandler(event, bulletElement);
     });
 
     // add the insert the new bullet element child before the new note button
@@ -500,8 +389,8 @@ class DailyLog extends HTMLElement {
    * This function handles the deletion of a bullet. It first checks if the event that triggered
    * the listener is one such that the backspace button was clicked on a bullet with no text,
    * because that is how we decided we want the user to be able to delete notes. If the condition
-   * for deletion is met, the function looks through the daily JSON object to remove the ID of
-   * the bullet being deleted from the appropriate section, and then stores the updated daily
+   * for deletion is met, the function looks through the monthly JSON object to remove the ID of
+   * the bullet being deleted from the appropriate section, and then stores the updated monthly
    * JSON object in the database and removes the bullet-entry HTML element from the section.
    *
    * @param {Event} event - the click event that triggered the listener; it contains information
@@ -515,11 +404,11 @@ class DailyLog extends HTMLElement {
       // get the section element that the bullet is a child of
       const section = element.closest('section');
 
-      // loop through the daily JSON object to find the bullet ID to be deleted
+      // loop through the monthly JSON object to find the bullet ID to be deleted
       const sectionID = section.id;
       const data = this.data;
       for (const sec of data.sections) {
-        // condition check to determine if this is the right section in the daily JSON object
+        // condition check to determine if this is the right section in the monthly JSON object
         if (sec.id === sectionID) {
           // loop through the bullet ID's of the section to find the one for deletion
           for (let i = 0; i < sec.bulletIDs.length; i++) {
@@ -531,9 +420,9 @@ class DailyLog extends HTMLElement {
       }
       this.setAttribute('data', JSON.stringify(data));
 
-      // store the updated daily JSON object in the database
-      const dailyID = this.shadowRoot.querySelector('div.daily').id;
-      Database.store(dailyID, data);
+      // store the updated monthly JSON object in the database
+      const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
+      Database.store(monthlyID, data);
 
       // delete the bullet from the database
       Database.delete(element.id);
@@ -544,7 +433,7 @@ class DailyLog extends HTMLElement {
   }
 
   // ------------------------------------- End Event Handlers -------------------------------------
-} // end class DailyLog
+} // end class MonthlyLog
 
-// define a custom element for the DailyLog web component
-customElements.define('daily-log', DailyLog);
+// define a custom element for the MonthlyLog web component
+customElements.define('monthly-log', MonthlyLog);
