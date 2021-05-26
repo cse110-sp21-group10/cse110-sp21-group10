@@ -93,7 +93,7 @@ class DailyLog extends HTMLElement {
       <link rel="stylesheet" href="../assets/css/all.css">
       <div class="daily">
         <section class="header" id="daily-header">
-          <h1 id="date"></h1>
+          <h1></h1>
           <button class="main-buttons" id="weather-icon"><i class="fas fa-cloud-sun icon-size"></i></button>
           <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></button>
           <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
@@ -112,7 +112,7 @@ class DailyLog extends HTMLElement {
   /**
    * This function returns the data stored in this daily element as a JSON object.
    *
-   * @returns {string} JSON representation of data used to generate this daily log element
+   * @returns {Object} JSON representation of data used to generate this daily log element
    */
   get data () {
     return JSON.parse(this.getAttribute('data'));
@@ -153,6 +153,7 @@ class DailyLog extends HTMLElement {
           }
         ]
       };
+      Database.store(id, jsonData);
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
@@ -170,7 +171,7 @@ class DailyLog extends HTMLElement {
     const dateString = `${day}, ${month} ${date}${suffix}`;
 
     // get the header text of this custom HTML element and set its contents to the constructed date string
-    const headerText = root.querySelector('.header > h1');
+    const headerText = root.querySelector('#daily-header > h1');
     headerText.innerText = dateString;
 
     // creates all widgets in one section
@@ -179,7 +180,7 @@ class DailyLog extends HTMLElement {
       widgetSection.className = 'widgets';
       widgetSection.innerHTML = `
         <h2>Widgets</h2>
-        <button class="add" id="add-widget">Add widget</button >
+        <button class="add" id="add-widget">Add Widget</button >
         <button class="minimize" id="minimize-widgets">Minimize Widgets</button>
       `;
 
@@ -197,7 +198,7 @@ class DailyLog extends HTMLElement {
       trackerSection.className = 'trackers';
       trackerSection.innerHTML = `
         <h2>Trackers</h2>
-        <button class="add" id="add-tracker">Add tracker</button >
+        <button class="add" id="add-tracker">Add Tracker</button >
         <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
       `;
 
