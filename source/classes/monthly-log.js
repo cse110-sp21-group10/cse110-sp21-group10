@@ -126,27 +126,13 @@ class MonthlyLog extends HTMLElement {
     for (let i = 1; i <= numDays; i++) {
       const dateButton = document.createElement('button');
       dateButton.className = 'monthly-calendar-button';
+      const idYear = this.stringifyNum(dateObj.getFullYear() % 100);
+      const idMonth = this.stringifyNum(dateObj.getMonth() + 1);
+      const idDate = this.stringifyNum(i);
+      dateButton.id = `D ${idYear}${idMonth}${idDate}`;
       dateButton.innerText = String(i);
       calendar.appendChild(dateButton);
     }
-
-    // creates all trackers in one section
-    // if (jsonData.trackers && jsonData.trackers.length > 0) {
-    //   const trackerSection = document.createElement('section');
-    //   trackerSection.className = 'trackers';
-    //   trackerSection.innerHTML = `
-    //     <h2>Trackers</h2>
-    //     <button class="add" id="add-tracker">Add Tracker</button >
-    //     <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
-    //   `;
-
-    //   for (const tracker of jsonData.trackers) {
-    //     console.log(tracker);
-    //     // TODO: CONSTRUCT THE TRACKER HERE
-    //   }
-
-    //   root.appendChild(trackerSection);
-    // }
 
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
@@ -220,35 +206,6 @@ class MonthlyLog extends HTMLElement {
 
     return new Date(year, month, 0);
   }
-
-  // /**
-  //  * This function is a helper function that is used to determine the day of the week for a given date.
-  //  * The function takes a Date object, then retrieves and converts the day-of-week integer representation
-  //  * into the corresponding string (English) format.
-  //  *
-  //  * @param {Date} dateObj - The Date object from which to retrieve day-of-week
-  //  * @returns {string} The day of the week, as a string
-  //  */
-  // getDayFromDate (dateObj) {
-  //   const dayIndex = dateObj.getDay();
-  //   // convert 0-6 to Sunday-Saturday
-  //   switch (dayIndex) {
-  //     case 0:
-  //       return 'Sunday';
-  //     case 1:
-  //       return 'Monday';
-  //     case 2:
-  //       return 'Tuesday';
-  //     case 3:
-  //       return 'Wednesday';
-  //     case 4:
-  //       return 'Thursday';
-  //     case 5:
-  //       return 'Friday';
-  //     case 6:
-  //       return 'Saturday';
-  //   }
-  // }
 
   /**
    * This function is a helper function that is used to determine the month for a given date.
