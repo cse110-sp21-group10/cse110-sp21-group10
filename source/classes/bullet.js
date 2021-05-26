@@ -1,4 +1,5 @@
 import { Database } from './database.js';
+import { generateID } from '../scripts/script.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
@@ -220,6 +221,10 @@ class BulletEntry extends HTMLElement {
         this.storeToDatabase(id, jsonData, true);
       }
     });
+
+    this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
+      this.createChild();
+    });
   }
   // -------------------------------------- End of Set/Get definitions --------------------------------------------------
 
@@ -287,37 +292,44 @@ class BulletEntry extends HTMLElement {
    */
   setChildren () {
     for (const childID of this.data.childrenIDs) {
-      const child = document.createElement('bullet-entry');
-
       Database.fetch(childID, (data) => {
         if (data) {
-          child.data = [childID, data];
+          this.createChild(childID, data);
         } else {
           console.log(`Something went wrong when fetching data for child: ${childID}`);
         }
       });
-
-      this.shadowRoot.querySelector('.children').appendChild(child);
-
-      /**
-       * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
-       * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
-       *
-       */
-      child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
-        if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-          this.shadowRoot.querySelector('.children').removeChild(child);
-          Database.delete(childID);
-          this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
-        }
-      });
-
-      child.shadowRoot.querySelector('.bullet-remove').addEventListener('click', (event) => {
-        this.shadowRoot.querySelector('.children').removeChild(child);
-        Database.delete(childID);
-        this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
-      });
     }
+  }
+
+  createChild (childID = generateID('bullet'), childData = {}) {
+    const child = document.createElement('bullet-entry');
+    child.data = [childID, childData];
+
+    this.shadowRoot.querySelector('.children').appendChild(child);
+
+    /**
+     * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
+     * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
+     *
+     */
+    child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
+      if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        this.removeChild(child, childID);
+      }
+    });
+
+    child.shadowRoot.querySelector('.bullet-remove').addEventListener('click', (event) => {
+      this.removeChild(child, childID);
+    });
+
+    child.shadowRoot.querySelector('.bullet-text').focus();
+  }
+
+  removeChild (child, childID) {
+    this.shadowRoot.querySelector('.children').removeChild(child);
+    Database.delete(childID);
+    this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
   }
   // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
