@@ -3,6 +3,8 @@ env:
   es2021: true
   jquery: true
   jest: true
+globals:
+  page: true
 extends:
   - standard
 parserOptions:
