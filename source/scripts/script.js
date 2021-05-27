@@ -1,11 +1,4 @@
 import { Database } from '../classes/database.js';
-export { generateID };
-
-// Tell eslint that dayjs is imported in html
-/* global dayjs */
-
-// Load the dayOfYear plugin
-dayjs.extend(window.dayjs_plugin_dayOfYear);
 
 /*
  * Workflow (to be implemented):
@@ -30,10 +23,10 @@ dayjs.extend(window.dayjs_plugin_dayOfYear);
  *    forward creates a blank entry with the correct date, or reads in if it already exists:
  */
 // Elements and buttons found on all pages
-let btnZoomOut;
+let btnZoomOut, btnNextUnit, btnPrevUnit; //, btnNextEntry, btnPrevEntry;
 
 // currentDate - based on entry, the actual currentDate will be generated whenever needed)
-let currDate;
+let currDate = new Date();
 
 // Elements for the daily logs page
 let divDaily;
@@ -43,8 +36,6 @@ let divMonthly;
 
 // Elements for the yearly logs page
 let divYearly;
-
-let bulNum = 7;
 // -----------------------------------------------
 // End of variable definition
 
@@ -71,24 +62,24 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
-      if (event.state.currDate) {
-        currDate = event.state.currDate;
+      if (event.state.date) {
+        currDate = event.state.date;
         loadDay();
       } else {
         transitionDaily();
       }
       break;
     case 'month':
-      if (event.state.currDate) {
-        currDate = event.state.currDate;
+      if (event.state.date) {
+        currDate = event.state.date;
         // loadMonth();
       } else {
         transitionMonthly();
       }
       break;
     case 'year':
-      if (event.state.currDate) {
-        currDate = event.state.currDate;
+      if (event.state.date) {
+        currDate = event.state.date;
         // loadYear();
       } else {
         transitionYearly();
@@ -108,7 +99,7 @@ window.onpopstate = function (event) {
  * @callback setupScript
  */
 function setupScript () {
-  window.history.pushState({ view: 'day' }, 'Daily Log', '#daily');
+  window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#daily');
 
   loadVars();
   setupButtons();
@@ -124,7 +115,6 @@ function setupScript () {
 /**
  * Values assigned to variables defined earlier <p>
  *
- * currDate set to a new dayjs object <p>
  *
  * Classnames used to load divs for the 3 views, the associated icon group, and all bullet elements
  * (currently sections holding list elements but will be replaced once custom bullet element is defined) <p>
@@ -132,12 +122,15 @@ function setupScript () {
  * IDs used to load button elements
  */
 function loadVars () {
-  currDate = dayjs();
   divDaily = document.getElementsByClassName('daily')[0];
   divMonthly = document.getElementsByClassName('monthly')[0];
   divYearly = document.getElementsByClassName('yearly')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
+  btnNextUnit = document.getElementById('next-day');
+  btnPrevUnit = document.getElementById('prev-day');
+  // btnNextEntry = document.getElementById('last-entry-forward');
+  // btnPrevEntry = document.getElementById('last-entry-back');
 }
 
 /**
@@ -155,6 +148,8 @@ function loadVars () {
  */
 function setupButtons () {
   btnZoomOut.addEventListener('click', zoomOut);
+  btnNextUnit.addEventListener('click', onNextUnit);
+  btnPrevUnit.addEventListener('click', onPrevUnit);
 }
 
 /**
@@ -285,29 +280,15 @@ function loadDay () {
  *
  */
 function generateID (type) {
-  let ID = '';
-  let day = currDate.date();
+  let day = currDate.getDate();
   day = (day < 10 ? '0' : '') + day;
-  let month = currDate.month() + 1;
+  let month = currDate.getMonth() + 1;
   month = (month < 10 ? '0' : '') + month;
-  const year = currDate.year() % 100;
+  const year = currDate.getFullYear() % 100;
 
   switch (type) {
     case 'day':
       return `D ${year}${month}${day}`;
-    case 'bullet':
-      switch (window.history.state.view) {
-        case 'day' :
-          ID = `B ${year}${month}${day} 00 ${(bulNum < 10 ? '0' : '') + bulNum++}`;
-          return ID;
-        case 'month' :
-          ID = `B ${year}${month} ${bulNum++}`;
-          return ID;
-        case 'year' :
-          ID = `B ${year} 0 ${bulNum++}`;
-          return ID;
-      }
-      break;
     default:
       console.log(`No implementation yet for generating ${type} IDs`);
   }
@@ -322,23 +303,22 @@ function generateID (type) {
  * Records currentDate in history state, then navigates to the next unit with appropriate load function
  * (loadDay, loadMonth, loadYear)
  *
- *
+ */
 function onNextUnit () {
-  finalizeInputs();
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'day', currDate }, 'Daily Log', '#day');
-      currDate = currDate.dayOfYear(currDate.dayOfYear() + 1);
+      currDate.setDate(currDate.getDate() + 1);
+      window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       break;
     case 'month':
-      window.history.pushState({ view: 'month', currDate }, 'Monthly Log', '#month');
-      currDate = currDate.month(currDate.month() + 1);
+      currDate.setMonth(currDate.getMonth() + 1, 1);
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       // loadMonth();
       break;
     case 'year':
-      window.history.pushState({ view: 'year,', currDate }, 'Yearly Log', '#year');
-      currDate = currDate.year(currDate.year() + 1);
+      currDate.setFullYear(currDate.getFullYear() + 1);
+      window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
       // loadYear();
       break;
   }
@@ -353,23 +333,22 @@ function onNextUnit () {
  * Records currentDate in history state, then navigates to the previous unit with appropriate load function
  * (loadDay, loadMonth, loadYear)
  *
- *
+ */
 function onPrevUnit () {
-  finalizeInputs();
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'day', currDate }, 'Daily Log', '#day');
-      currDate = currDate.dayOfYear(currDate.dayOfYear() - 1);
+      currDate.setDate(currDate.getDate() - 1);
+      window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       break;
     case 'month':
-      window.history.pushState({ view: 'month', currDate }, 'Monthly Log', '#month');
-      currDate = currDate.month(currDate.month() - 1);
+      currDate.setMonth(currDate.getMonth() - 1, 1);
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       loadDay();
       break;
     case 'year':
-      window.history.pushState({ view: 'year,', currDate }, 'Yearly Log', '#year');
-      currDate = currDate.year(currDate.year() - 1);
+      currDate.setYear(currDate.getFullYear() - 1);
+      window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
       break;
   }
 }
