@@ -238,12 +238,18 @@ class BulletEntry extends HTMLElement {
       }
     });
 
+    /**
+     * Handles for the addition of a NEW child
+     * @param {BulletEntry~addChildBullet} callback - Creates NEW child and updates data (parent and database)
+     */
     this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
       const childID = newBulletID();
-      this.createChild(childID, {}, newBulletID);
+
       jsonData.childrenIDs.push(childID);
       this.setAttribute('data', JSON.stringify(jsonData));
       this.storeToDatabase(id, jsonData, true);
+
+      this.createChild(childID, {}, newBulletID);
     });
   }
   // -------------------------------------- End of Set/Get definitions --------------------------------------------------
@@ -257,6 +263,19 @@ class BulletEntry extends HTMLElement {
    *
    * @callback BulletEntry~editTextCallback
    * @param {blurEvent} event - provides access to element that stopped getting focused (for it's innerText)
+   */
+
+  /**
+   * Handles the process for creating a NEW bullet <p>
+   *
+   * Performs generation of an ID via the passed in callback (which also updates calling section's newBulNum) <p>
+   *
+   * Updates data (both parent and database) with new child (ID) <p>
+   *
+   * Calls on helper function for generating the child bullet element
+   *
+   * @callback BulletEntry~addChildBullet
+   * @param {onClickEvent} event - provides access to parent to append child bullet to
    */
 
   /**
@@ -297,18 +316,14 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Handles the creation, appending, and deletion (if done via backspace) of children <p>
+   * Handles the creation, appending, and deletion of EXISTING children <p>
    *
    * Iterates through each childID in data: <p>
    *
    * 1. Creates a new bullet-entry element <p>
    *
-   * 2. Fetches and sets data <p>
+   * 2. Fetches data and calls on helper function for child creation
    *
-   * 3. Appends child under appropriate div in current bullet element <p>
-   *
-   * 4. Registers button presses for children's text and under the right conditions,
-   * will remove child from display, database, and this bullet's childIDs list
    */
   setChildren () {
     for (const childID of this.data.childrenIDs) {
@@ -322,6 +337,21 @@ class BulletEntry extends HTMLElement {
     }
   }
 
+  /**
+   * Handles the creation, data setting, appending to display, and potential deletion of children <p>
+   *
+   * Called for both creation of new and existing children (based off whether param is empty jsonObj or not) <p>
+   *
+   * Creation and data setting handled by the bullet-element methods. Appends child under appropriate div in current bullet element <p>
+   *
+   * Special definitions for removal of a child bullet (both through buttons and backspacing empty content) <p>
+   *
+   * Finally, focused after creation for immediate text input
+   *
+   * @param {string} childID - ID used to retrieve (existing) / store (new) child bullet element
+   * @param {jsonObject} childData - used to store child bullet's data (empty for new)
+   * @param {function} callback - used to generate IDs for potential children
+   */
   createChild (childID, childData = {}, callback) {
     const child = document.createElement('bullet-entry');
     child.data = [childID, childData, callback];
@@ -346,13 +376,21 @@ class BulletEntry extends HTMLElement {
     child.shadowRoot.querySelector('.bullet-text').focus();
   }
 
+  /**
+   * Handles removal of a child from display, parent data, and database <p>
+   *
+   * @param {HTMLElement} child - reference to child bullet's html element
+   * @param {string} childID - used to remove from childIDs list in parent and from database
+   */
   removeChild (child, childID) {
     this.shadowRoot.querySelector('.bullet').removeChild(child);
-    Database.delete(childID);
+
     const data = this.data;
     data.childrenIDs = data.childrenIDs.filter(child => child !== childID);
     this.setAttribute('data', JSON.stringify(data));
     this.storeToDatabase(this.id, data);
+
+    Database.delete(childID);
   }
   // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
