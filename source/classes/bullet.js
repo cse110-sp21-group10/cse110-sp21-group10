@@ -1,5 +1,4 @@
 import { Database } from './database.js';
-import { generateID } from '../scripts/script.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
@@ -76,16 +75,16 @@ class BulletEntry extends HTMLElement {
         
         .bullet {
           margin-left: 1.8%;
-
+        
           padding-left: .5%;
           padding-top: .5%;
 
           background-color: white;
         }
-
+        
         .bullet:hover {
           filter: brightness(95%);
-          border-radius: 20px;
+          border-radius: 20px;  
         }
         
         .bullet:hover .bullet-remove,
@@ -102,13 +101,13 @@ class BulletEntry extends HTMLElement {
           float: right;
           padding-right: 1%;
         }
-
+        
         .bullet-remove:hover {
           font-size: 15px;
           position: relative;
           padding-top: .1%;
         }
-
+        
         .child-add:hover {
           font-size: 15px;
           position: relative;
@@ -132,7 +131,7 @@ class BulletEntry extends HTMLElement {
       
       <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
 
-      <div class="bullet"> 
+      <div class="bullet">         
         <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>      
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
@@ -181,9 +180,9 @@ class BulletEntry extends HTMLElement {
    *
    * TODO: Implement a way to update the type of bullet point based off value <p>
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB
+   * @param {Array.<{id: string, jsonData: Object, incrementBullet: callback}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [callback] used to generateID and increment bullet counter when creating children
    */
-  set data ([id, jsonData]) {
+  set data ([id, jsonData, newBulletID]) {
     console.log('Setter called');
 
     if (Object.entries(jsonData).length === 0) {
@@ -240,7 +239,7 @@ class BulletEntry extends HTMLElement {
     });
 
     this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
-      this.createChild();
+      this.createChild(newBulletID(), {}, newBulletID);
     });
   }
   // -------------------------------------- End of Set/Get definitions --------------------------------------------------
@@ -319,11 +318,11 @@ class BulletEntry extends HTMLElement {
     }
   }
 
-  createChild (childID = generateID('bullet'), childData = {}) {
+  createChild (childID, childData = {}, callback) {
     const child = document.createElement('bullet-entry');
-    child.data = [childID, childData];
+    child.data = [childID, childData, callback];
 
-    this.shadowRoot.querySelector('.bullet').appendChild(child);
+    this.shadowRoot.querySelector('.children').appendChild(child);
 
     /**
      * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
@@ -344,7 +343,7 @@ class BulletEntry extends HTMLElement {
   }
 
   removeChild (child, childID) {
-    this.shadowRoot.querySelector('.bullet').removeChild(child);
+    this.shadowRoot.querySelector('.children').removeChild(child);
     Database.delete(childID);
     this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
   }

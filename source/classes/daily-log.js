@@ -9,39 +9,31 @@ import { Database } from './database.js';
  * const exampleDailyJSON = {
  *   widgets: [
  *     {
- *       id: '00',
- *       type: 'reminder',
- *       bulletIDs: [
- *         'B 210515 00 00',
- *         'B 210515 00 01'
- *       ]
- *     },
- *     {
- *       id: '01'
+ *       id: '00'
  *       type: 'weather'
  *     }
  *   ],
  *   trackers: [
  *     {
  *       type: 'slider',
- *       name: mood,
+ *       name: 'Mood',
  *       value: 3
  *     },
  *     {
- *       type: 'checkbox',
- *       name: 'Meditate',
- *       value: 0
+ *       type: 'slider',
+ *       name: 'Sleep',
+ *       value: 5
  *     },
  *     {
  *       type: 'checkbox',
- *       name: 'Work out',
+ *       name: 'Workout',
  *       value: 1
  *     }
  *   ],
  *   sections: [
  *     {
  *       id: '00',
- *       name: 'Daily Notes',
+ *       name: 'Reminders',
  *       type: 'log',
  *       bulletIDs: [
  *         'B 210515 00 00',
@@ -49,21 +41,30 @@ import { Database } from './database.js';
  *       ]
  *     },
  *     {
- *       id: '03',
- *       name: 'Shopping List',
- *       type: 'checklist',
+ *       id: '01',
+ *       name: 'Daily Notes',
+ *       type: 'log',
  *       bulletIDs: [
  *         'B 210515 01 00',
  *         'B 210515 01 01'
  *       ]
  *     },
  *     {
- *       id: '04',
- *       name: 'Daily Goals',
+ *       id: '02',
+ *       name: 'Shopping List',
  *       type: 'checklist',
  *       bulletIDs: [
  *         'B 210515 02 00',
  *         'B 210515 02 01'
+ *       ]
+ *     },
+ *     {
+ *       id: '03',
+ *       name: 'Daily Goals',
+ *       type: 'checklist',
+ *       bulletIDs: [
+ *         'B 210515 03 00',
+ *         'B 210515 03 01'
  *       ]
  *     }
  *   ]
@@ -147,20 +148,29 @@ class DailyLog extends HTMLElement {
         sections: [
           {
             id: '00',
+            name: 'Reminders',
+            type: 'log',
+            bulletIDs: []
+          },
+          {
+            id: '01',
             name: 'Daily Notes',
             type: 'log',
             bulletIDs: []
           }
         ]
       };
-      Database.store(id, jsonData);
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
-    const root = this.shadowRoot.querySelector('.daily');
+    const root = this.shadowRoot.querySelector('div.daily');
     root.id = id;
 
     // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
+    const newSectionButton = root.querySelector('#related-sections-button');
+    newSectionButton.addEventListener('click', function (event) {
+      dailyLog.newSectionHandler(event.target.closest('div.daily'));
+    });
 
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
@@ -213,7 +223,7 @@ class DailyLog extends HTMLElement {
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
-        const sectionID = Number(section.id);
+        const sectionID = section.id;
         let bulletCount = 0;
 
         // construct section element
@@ -226,25 +236,72 @@ class DailyLog extends HTMLElement {
         sectionHeader.innerText = section.name;
         sectionElement.appendChild(sectionHeader);
 
+        // check if we are creating a custom section
+        // (reminders section always has default section ID of '00')
+        // (daily notes section always has default section ID of '01')
+        if (sectionID !== '00' && sectionID !== '01') {
+          // allow the user to change the section title
+          sectionHeader.contentEditable = 'true';
+
+          // add event listener to the header to update the daily log element when the header text is updated
+          sectionHeader.addEventListener('blur', (event) => {
+            const sectionName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
+            if (sectionHeader.innerText !== sectionName) {
+              const dailyData = dailyLog.data;
+              for (const sec of dailyData.sections) {
+                if (sec.id === sectionID) {
+                  sec.name = sectionHeader.innerText;
+                }
+              }
+              this.setAttribute('data', JSON.stringify(dailyData));
+              Database.store(id, dailyData);
+            }
+          });
+
+          // add event listener to the header to prevent newlines in headers
+          sectionHeader.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+              sectionHeader.blur();
+            }
+          });
+
+          // create a button to delete the section and add the delete section event listener to it
+          const deleteSectionButton = document.createElement('button');
+          deleteSectionButton.className = 'delete-section';
+          deleteSectionButton.innerText = 'Delete Section';
+          deleteSectionButton.addEventListener('click', function (event) {
+            dailyLog.deleteSectionHandler(sectionElement);
+          });
+          sectionElement.appendChild(deleteSectionButton);
+        }
+
         // construct bullet elements
         for (const bulletID of section.bulletIDs) {
           // increment the number of bullets in the section
           bulletCount++;
 
-          // create bullet element and add the deletion event listener to it
+          // create bullet element and add the deletion event listeners to it
           const bulletElement = document.createElement('bullet-entry');
-          const deleteHandler = this.deleteNoteHandler;
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-            deleteHandler.call(dailyLog, event, bulletElement);
+            // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+            if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+              dailyLog.deleteNoteHandler(bulletElement);
+            }
           });
+          bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+            dailyLog.deleteNoteHandler(bulletElement);
+          });
+
           sectionElement.appendChild(bulletElement);
 
           // fetch the bullet data and set the bullet element's data in the callback
-          Database.fetch(bulletID, this.setBulletData, bulletID, bulletElement);
+          Database.fetch(bulletID, function (bulletData, bulletID, bulletElement, sectionID) {
+            dailyLog.setBulletData(bulletData, bulletID, bulletElement, sectionID);
+          }, bulletID, bulletElement, sectionID);
         }
 
         // set the number of bullets in this section
-        this.bulletCounts[sectionID] = bulletCount;
+        this.bulletCounts[Number(sectionID)] = bulletCount;
 
         // create a button to add new notes to the section and add the add new bullet event listener to it
         const newNoteButton = document.createElement('button');
@@ -252,9 +309,8 @@ class DailyLog extends HTMLElement {
         newNoteButton.innerHTML = `
           <i class="fas fa-plus icon-size"></i>
         `;
-        const addHandler = this.newNoteHandler;
         newNoteButton.addEventListener('click', function (event) {
-          addHandler.call(dailyLog, event);
+          dailyLog.newNoteHandler(event.target.closest('section'));
         });
         sectionElement.appendChild(newNoteButton);
 
@@ -402,21 +458,47 @@ class DailyLog extends HTMLElement {
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
-   * data from the database. The function checks if the data is not null or undefined. If the
-   * data isn't null/undefined, the bullet element's data is set to the given data. If the data
-   * is null/undefined, the bullet element's data is set to an empty JSON object, which creates
-   * a blank bullet.
+   * data from the database or when we are creating a new bullet. The function first creates a
+   * function that will be used by the created bullet object to update the bullet count in
+   * the appropriate section of the daily log and generate a bullet ID for sub-bullets (nested
+   * bullets that are children of this created bullet). The function then checks if the data
+   * is not null or undefined. If the data isn't null/undefined, the bullet element's data is
+   * set to the given data. If the data is null/undefined, the bullet element's data is set to
+   * an empty JSON object, which creates a blank bullet.
    *
-   * @param {Object} bulletData - the JSON object data that will be stored in the bullet
-   * @param {string} bulletID - the string ID of the bullet object
-   * @param {HTMLElement} bulletElement - the bullet-entry element whose data will be set
+   * @param {Object} bulletData - The JSON object data that will be stored in the bullet
+   * @param {string} bulletID - The string ID of the bullet object
+   * @param {HTMLElement} bulletElement - The bullet-entry element whose data will be set
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
    */
-  setBulletData (bulletData, bulletID, bulletElement) {
+  setBulletData (bulletData, bulletID, bulletElement, sectionID) {
+    const dailyLog = this;
+    const newBulletID = function () {
+      const newID = dailyLog.generateBulletID(sectionID);
+      dailyLog.bulletCounts[Number(sectionID)]++;
+      return newID;
+    };
+
     if (bulletData) {
-      bulletElement.data = [bulletID, bulletData];
+      bulletElement.data = [bulletID, bulletData, newBulletID];
     } else {
-      bulletElement.data = [bulletID, {}];
+      bulletElement.data = [bulletID, {}, newBulletID];
     }
+  }
+
+  /**
+   * This function is a helper function that is used to create a new bullet ID. The given section
+   * ID determines which section the bullet is being created in. The function then combines the
+   * bullet count for that section, the section ID, and the date of the daily object in which
+   * the bullet is being added in order to create a new bullet ID, which is then returned.
+   *
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
+   * @returns {string} The string ID to be used for the new bullet
+   */
+  generateBulletID (sectionID) {
+    const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
+    const dailyID = this.shadowRoot.querySelector('div.daily').id;
+    return `B ${dailyID.substring(2)} ${sectionID} ${bulletCount}`;
   }
 
   /**
@@ -448,21 +530,14 @@ class DailyLog extends HTMLElement {
    * it creates a new bullet-entry HTML element, and adds the appropriate event listener to it
    * to allow for future deletion of the bullet element.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being added to
+   * @param {HTMLElement} sectionElement - The section element in which the new note button
+   * was clicked to trigger the listener
    */
-  newNoteHandler (event) {
+  newNoteHandler (sectionElement) {
     // generate a bullet ID
-    const section = event.target.closest('section');
-    const sectionID = section.id;
-    const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
+    const sectionID = sectionElement.id;
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
-    const date = this.getDateFromID(dailyID);
-    const year = this.stringifyNum(date.getYear() % 100);
-    const month = this.stringifyNum(date.getMonth() + 1);
-    const day = this.stringifyNum(date.getDate());
-    const bulletID = `B ${year}${month}${day} ${sectionID} ${bulletCount}`;
+    const bulletID = this.generateBulletID(sectionID);
 
     // increment the number of bullets in the section
     this.bulletCounts[Number(sectionID)]++;
@@ -481,68 +556,178 @@ class DailyLog extends HTMLElement {
 
     // create a blank bullet HTML element with the generated ID
     const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement);
+    this.setBulletData({}, bulletID, bulletElement, sectionID);
 
-    // add event listener to the bullet element to handle bullet deletion
+    // add event listeners to the bullet element to handle bullet deletion
     const dailyLog = this;
-    const deleteHandler = this.deleteNoteHandler;
     bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      deleteHandler.call(dailyLog, event, bulletElement);
+      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+      if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        dailyLog.deleteNoteHandler(bulletElement);
+      }
+    });
+    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      dailyLog.deleteNoteHandler(bulletElement);
     });
 
     // add the insert the new bullet element child before the new note button
-    const newNoteButton = section.querySelector('button.new-bullet');
-    section.insertBefore(bulletElement, newNoteButton);
+    const newNoteButton = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bulletElement, newNoteButton);
 
     // prompt user to start typing note
     bulletElement.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
-   * This function handles the deletion of a bullet. It first checks if the event that triggered
-   * the listener is one such that the backspace button was clicked on a bullet with no text,
-   * because that is how we decided we want the user to be able to delete notes. If the condition
-   * for deletion is met, the function looks through the daily JSON object to remove the ID of
-   * the bullet being deleted from the appropriate section, and then stores the updated daily
-   * JSON object in the database and removes the bullet-entry HTML element from the section.
+   * This function handles the deletion of a bullet. The function looks through the daily JSON
+   * object to remove the ID of the bullet being deleted from the appropriate section, and then
+   * stores the updated daily JSON object in the database and removes the bullet-entry HTML
+   * element from the section.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being deleted from
-   * @param {HTMLElement} element - the bullet-entry element that is being deleted
+   * @param {HTMLElement} bulletElement - The bullet-entry element that is being deleted
    */
-  deleteNoteHandler (event, element) {
-    // condition check to determine if the listener was triggered when backspace was pressed on an empty note
-    if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-      // get the section element that the bullet is a child of
-      const section = element.closest('section');
+  deleteNoteHandler (bulletElement) {
+    // get the section element that the bullet is a child of
+    const section = bulletElement.closest('section');
 
-      // loop through the daily JSON object to find the bullet ID to be deleted
-      const sectionID = section.id;
-      const data = this.data;
-      for (const sec of data.sections) {
-        // condition check to determine if this is the right section in the daily JSON object
-        if (sec.id === sectionID) {
-          // loop through the bullet ID's of the section to find the one for deletion
-          for (let i = 0; i < sec.bulletIDs.length; i++) {
-            if (sec.bulletIDs[i] === element.id) {
-              sec.bulletIDs.splice(i, 1);
-            }
+    // loop through the daily JSON object to find the bullet ID to be deleted
+    const sectionID = section.id;
+    const data = this.data;
+    for (const sec of data.sections) {
+      // condition check to determine if this is the right section in the daily JSON object
+      if (sec.id === sectionID) {
+        sec.bulletIDs = sec.bulletIDs.filter((bulletID) => bulletID !== bulletElement.id);
+      }
+    }
+    this.setAttribute('data', JSON.stringify(data));
+
+    // store the updated daily JSON object in the database
+    const dailyID = this.shadowRoot.querySelector('div.daily').id;
+    Database.store(dailyID, data);
+
+    // delete the bullet from the database
+    Database.delete(bulletElement.id);
+
+    // remove the bullet-entry HTML element from the section
+    section.removeChild(bulletElement);
+  }
+
+  /**
+   * This function creates a new section. It first creates a section ID by looking at how many
+   * sections are currently in the daily log and adding 1. It then creates the new section
+   * object for storage and adds it to the daily JSON object, then updates the daily JSON object
+   * in the database. Lastly, it creates a new section HTML element, and adds the appropriate
+   * buttons for note addition and section deletion, adds event listeners to those buttons, and
+   * appends the section to the daily-log element.
+   *
+   * @param {HTMLElement} divElement - The daily-log div element in which the new section is
+   * being created was clicked to trigger the listener
+   */
+  newSectionHandler (divElement) {
+    const dailyLog = this;
+    const dailyID = divElement.id;
+    const sectionID = this.stringifyNum(this.bulletCounts.length);
+
+    // initialize the number of bullets in the section
+    this.bulletCounts[Number(sectionID)] = 0;
+
+    // create new section object
+    const sectionObj = {
+      id: sectionID,
+      name: '',
+      type: 'log',
+      bulletIDs: []
+    };
+
+    // add section to the daily JSON object
+    const data = this.data;
+    data.sections.push(sectionObj);
+    this.setAttribute('data', JSON.stringify(data));
+
+    // store the updated daily JSON object in the database
+    Database.store(dailyID, data);
+
+    // create a blank section HTML element with the section ID
+    const sectionElement = document.createElement('section');
+    sectionElement.id = sectionObj.id;
+    sectionElement.className = sectionObj.type;
+
+    // create the editable section header element
+    const sectionHeader = document.createElement('h2');
+    sectionHeader.contentEditable = 'true';
+    sectionElement.appendChild(sectionHeader);
+
+    // add event listener to the header to update the daily log element when the header text is updated
+    sectionHeader.addEventListener('blur', (event) => {
+      const sectionName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
+      if (sectionHeader.innerText !== sectionName) {
+        const dailyData = dailyLog.data;
+        for (const sec of dailyData.sections) {
+          if (sec.id === sectionID) {
+            sec.name = sectionHeader.innerText;
           }
         }
+        this.setAttribute('data', JSON.stringify(dailyData));
+        Database.store(dailyID, dailyData);
       }
-      this.setAttribute('data', JSON.stringify(data));
+    });
 
-      // store the updated daily JSON object in the database
-      const dailyID = this.shadowRoot.querySelector('div.daily').id;
-      Database.store(dailyID, data);
+    // add event listener to the header to prevent newlines in headers
+    sectionHeader.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        sectionHeader.blur();
+      }
+    });
 
-      // delete the bullet from the database
-      Database.delete(element.id);
+    // create a button to delete the section and add the delete section event listener to it
+    const deleteSectionButton = document.createElement('button');
+    deleteSectionButton.className = 'delete-section';
+    deleteSectionButton.innerText = 'Delete Section';
+    deleteSectionButton.addEventListener('click', function (event) {
+      dailyLog.deleteSectionHandler(event.target.closest('section'));
+    });
+    sectionElement.appendChild(deleteSectionButton);
 
-      // remove the bullet-entry HTML element from the section
-      section.removeChild(element);
-    }
+    // create a button to add new notes to the section and add the add new bullet event listener to it
+    const newNoteButton = document.createElement('button');
+    newNoteButton.className = 'new-bullet';
+    newNoteButton.innerHTML = `
+      <i class="fas fa-plus icon-size"></i>
+    `;
+    newNoteButton.addEventListener('click', function (event) {
+      dailyLog.newNoteHandler(event.target.closest('section'));
+    });
+    sectionElement.appendChild(newNoteButton);
+
+    divElement.appendChild(sectionElement);
+
+    // prompt user to start typing section name
+    sectionHeader.focus();
+  }
+
+  /**
+   * This function handles the deletion of a section. The function looks through the daily JSON
+   * object to remove the section object that is being deleted, and then stores the updated daily
+   * JSON object in the database and removes the section HTML element from the daily log div.
+   *
+   * @param {HTMLElement} sectionElement - The section element that is being deleted
+   */
+  deleteSectionHandler (sectionElement) {
+    // get the div element that the section is a child of
+    const dailyDiv = this.shadowRoot.querySelector('div.daily');
+
+    // delete the section object from the daily JSON object
+    const sectionID = sectionElement.id;
+    const data = this.data;
+    data.sections = data.sections.filter((sec) => sec.id !== sectionID);
+    this.setAttribute('data', JSON.stringify(data));
+
+    // store the updated daily JSON object in the database
+    const dailyID = dailyDiv.id;
+    Database.store(dailyID, data);
+
+    // remove the section HTML element from the daily div
+    dailyDiv.removeChild(sectionElement);
   }
 
   // ------------------------------------- End Event Handlers -------------------------------------
