@@ -10,68 +10,124 @@ h1 {
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
+  font-family: 'Kaushan Script', cursive;
 }
 
 #internal-content {
+  box-sizing: border-box;
   border: 5px solid black;
   border-radius: 75px;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  margin-left: 5%;
-  margin-right: 5%;
+  position: absolute;
+  min-height: 80vh;
+  width: 85%;
+  top: 10%;
+  left: 7.5%;
+
+  max-height: 80vh;
+  overflow: auto;
+
+  font-size: larger;
+}
+
+/* To hide scrollbar */
+#internal-content::-webkit-scrollbar {
+  display: none;
 }
 
 /* Styling for exterior buttons (menu, zoom out, help)
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
+.global-icons button{
+  border: none;
+  background: none;
+}
+
 #menu-button {
   position: absolute;
-  top: 1vh;
+  left: 2.4%;
+  top: 4%;
+  font-size: medium;
+  border-radius: 10px;
+  width: 4%;
+  height: 7%;
 }
-
+  
 #zoom-out-button {
   position: absolute;
-  right: 1vh;
+  right: 2.4%;
+  top: 4%;
+  font-size: medium;
+  border-radius: 20px;
+  width: 4%;
+  height: 7%;
+}
+  
+#last-entry-back {
+  position: absolute;
+  left: 2.4%;
+  bottom: 4%;
+  font-size: medium;
+  border-radius: 30px;
+  width: 4%;
+  height: 7%;
+}
+  
+#prev-day {
+  position: absolute;
+  left: 33%;
+  bottom: 1.5%;
+  font-size: medium;
+  border-radius: 30px;
+  width: 4%;
+  height: 7%;
+}
+  
+#next-day {
+  position: absolute;
+  right: 33%;
+  bottom: 1.5%;
+  font-size: medium;
+  border-radius: 30px;
+  width: 4%;
+  height: 7%;
+}
+  
+#last-entry-forward {
+  position: absolute;
+  right: 2.4%;
+  bottom: 4%;
+  font-size: medium;
+  border-radius: 30px;
+  width: 4%;
+  height: 7%;
 }
 
-#help-button {
-  position: absolute;
-  left: 1vh;
-}
-
-#prev-year-button {
-  height: 5vh;
-  position: absolute;
-  right: 1vh;
-}
-
-#next-year-button {
-  height: 5vh;
-  position: absolute;
-  right: 6vh;
+/* Add a background color on hover */
+.global-icons button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
 }
 
 nav.navigation {
   display: none;
 }
 
-.exterior-buttons {
-  border: 0;
-  background: none;
-}
+/* Tooltip hovering functionality */
 
-.exterior-buttons:hover {
-  background: lightgray;
+/* #last-entry-back .last-entry-tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
 }
-
-.icons-for-yearly:hover {
-  background: lightgray;
-}
-
-[type="image"]:hover {
-  background: lightgray;
-}
+#last-entry-back:hover .last-entry-tooltip {
+  visibility: visible;
+} */
 
 /* This will keep the daily screen open and viewable.
 This block may not be necessary as it's the default on the page

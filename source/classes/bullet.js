@@ -51,6 +51,10 @@ class BulletEntry extends HTMLElement {
           float: left;
           padding-top: .4%;
         }
+
+        div < div.bullet-remove {
+          color: transparent;
+        }
         
         .bullet-point:hover {
           font-size: 12px;
@@ -75,11 +79,12 @@ class BulletEntry extends HTMLElement {
 
           padding-left: .5%;
           padding-top: .5%;
-          // padding-bottom: .5%;
+
+          background-color: white;
         }
-        
+
         .bullet:hover {
-          background-color: rgb(241, 241, 241);
+          filter: brightness(95%);
           border-radius: 20px;
         }
         
