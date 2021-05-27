@@ -250,7 +250,7 @@ class DailyLog extends HTMLElement {
         const newNoteButton = document.createElement('button');
         newNoteButton.className = 'new-bullet';
         newNoteButton.innerHTML = `
-          <i class="fas fa-plus icon-size"></i>
+          <i class="fas fa-plus"></i>
         `;
         const addHandler = this.newNoteHandler;
         newNoteButton.addEventListener('click', function (event) {

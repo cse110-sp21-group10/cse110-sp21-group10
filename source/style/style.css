@@ -255,6 +255,31 @@ section.header button:hover {
   display: inline-block;
 }
 
+.log {
+  display: inline-block;
+  border: 2px solid black;
+  border-radius: 30px;
+  min-height: 30%;
+  /* padding-top: 10px; */
+  padding-left: 2%;
+  padding-bottom: 1%;
+  width: 97.5%;
+}
+
+.new-bullet {
+  size: 10px;
+  position: relative;
+  left: 1.29%;
+  border-radius: 25%;
+  background: none;
+  border: none;
+}
+
+.new-bullet:hover {
+  background-color: rgb(241, 241, 241);;
+  color: #33cc33;
+}
+
 [contenteditable] {
   outline: 0 solid transparent;
 }
