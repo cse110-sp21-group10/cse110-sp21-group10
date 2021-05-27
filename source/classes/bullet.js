@@ -84,7 +84,7 @@ class BulletEntry extends HTMLElement {
         }
 
         .bullet:hover {
-          filter: brightness(95%);
+          filter: brightness(96%);
           border-radius: 20px;
         }
         
