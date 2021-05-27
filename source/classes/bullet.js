@@ -239,7 +239,11 @@ class BulletEntry extends HTMLElement {
     });
 
     this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
-      this.createChild(newBulletID(), {}, newBulletID);
+      const childID = newBulletID();
+      this.createChild(childID, {}, newBulletID);
+      jsonData.childrenIDs.push(childID);
+      this.setAttribute('data', JSON.stringify(jsonData));
+      this.storeToDatabase(id, jsonData, true);
     });
   }
   // -------------------------------------- End of Set/Get definitions --------------------------------------------------
@@ -322,7 +326,7 @@ class BulletEntry extends HTMLElement {
     const child = document.createElement('bullet-entry');
     child.data = [childID, childData, callback];
 
-    this.shadowRoot.querySelector('.children').appendChild(child);
+    this.shadowRoot.querySelector('.bullet').appendChild(child);
 
     /**
      * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
@@ -343,9 +347,12 @@ class BulletEntry extends HTMLElement {
   }
 
   removeChild (child, childID) {
-    this.shadowRoot.querySelector('.children').removeChild(child);
+    this.shadowRoot.querySelector('.bullet').removeChild(child);
     Database.delete(childID);
-    this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
+    const data = this.data;
+    data.childrenIDs = data.childrenIDs.filter(child => child !== childID);
+    this.setAttribute('data', JSON.stringify(data));
+    this.storeToDatabase(this.id, data);
   }
   // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
