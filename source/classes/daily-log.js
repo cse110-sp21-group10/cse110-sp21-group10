@@ -85,7 +85,7 @@ class DailyLog extends HTMLElement {
   constructor () {
     super();
 
-    this.bulletCounts = [];
+    this.nextSectionNum = 0;
 
     const template = document.createElement('template');
 
@@ -150,13 +150,15 @@ class DailyLog extends HTMLElement {
             id: '00',
             name: 'Reminders',
             type: 'log',
-            bulletIDs: []
+            bulletIDs: [],
+            nextBulNum: 0
           },
           {
             id: '01',
             name: 'Daily Notes',
             type: 'log',
-            bulletIDs: []
+            bulletIDs: [],
+            nextBulNum: 0
           }
         ]
       };
@@ -224,7 +226,11 @@ class DailyLog extends HTMLElement {
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
         const sectionID = section.id;
-        let bulletCount = 0;
+
+        // update next section number
+        if (Number(section.id) >= this.nextSectionNum) {
+          this.nextSectionNum = Number(section.id) + 1;
+        }
 
         // construct section element
         const sectionElement = document.createElement('section');
@@ -277,9 +283,6 @@ class DailyLog extends HTMLElement {
 
         // construct bullet elements
         for (const bulletID of section.bulletIDs) {
-          // increment the number of bullets in the section
-          bulletCount++;
-
           // create bullet element and add the deletion event listeners to it
           const bulletElement = document.createElement('bullet-entry');
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
@@ -299,9 +302,6 @@ class DailyLog extends HTMLElement {
             dailyLog.setBulletData(bulletData, bulletID, bulletElement, sectionID);
           }, bulletID, bulletElement, sectionID);
         }
-
-        // set the number of bullets in this section
-        this.bulletCounts[Number(sectionID)] = bulletCount;
 
         // create a button to add new notes to the section and add the add new bullet event listener to it
         const newNoteButton = document.createElement('button');
@@ -475,7 +475,6 @@ class DailyLog extends HTMLElement {
     const dailyLog = this;
     const newBulletID = function () {
       const newID = dailyLog.generateBulletID(sectionID);
-      dailyLog.bulletCounts[Number(sectionID)]++;
       return newID;
     };
 
@@ -496,7 +495,17 @@ class DailyLog extends HTMLElement {
    * @returns {string} The string ID to be used for the new bullet
    */
   generateBulletID (sectionID) {
-    const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
+    const data = this.data;
+    let newBulNum;
+    for (const section of data.sections) {
+      if (section.id === sectionID) {
+        newBulNum = section.nextBulNum;
+        section.nextBulNum++;
+      }
+    }
+    this.setAttribute('data', JSON.stringify(data));
+    Database.store(this.id, data);
+    const bulletCount = this.stringifyNum(newBulNum);
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
     return `B ${dailyID.substring(2)} ${sectionID} ${bulletCount}`;
   }
@@ -538,9 +547,6 @@ class DailyLog extends HTMLElement {
     const sectionID = sectionElement.id;
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
     const bulletID = this.generateBulletID(sectionID);
-
-    // increment the number of bullets in the section
-    this.bulletCounts[Number(sectionID)]++;
 
     // add bullet ID to the daily JSON object bulletIDs in the right section
     const data = this.data;
@@ -626,17 +632,16 @@ class DailyLog extends HTMLElement {
   newSectionHandler (divElement) {
     const dailyLog = this;
     const dailyID = divElement.id;
-    const sectionID = this.stringifyNum(this.bulletCounts.length);
-
-    // initialize the number of bullets in the section
-    this.bulletCounts[Number(sectionID)] = 0;
+    const sectionID = this.stringifyNum(this.nextSectionNum);
+    this.nextSectionNum++;
 
     // create new section object
     const sectionObj = {
       id: sectionID,
       name: '',
       type: 'log',
-      bulletIDs: []
+      bulletIDs: [],
+      nextBulNum: 0
     };
 
     // add section to the daily JSON object
