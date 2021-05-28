@@ -6,7 +6,7 @@
 */
 
 h1 {
-  font-size: 350%;
+  font-size: 4vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -77,7 +77,7 @@ h1 {
 #last-entry-back, #prev-day,
 #next-day, #last-entry-forward {
   position: absolute;
-  font-size: medium;
+  font-size: .8vw;
   border-radius: 30px;
   width: 4%;
   height: 7%;
@@ -117,7 +117,8 @@ div.daily {
   display: block;
   margin-left: 7.5%;
   margin-top: 2%;
-  margin-right: 12%;
+  margin-right: 7.5%;
+  margin-bottom: 2%;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
@@ -166,8 +167,9 @@ section.header button {
   background: none;
   height: 0%;
   padding: 1%;
-  margin-top: 2.8%;
+  margin-top: 1.8%;
   border-radius: 30px;
+  font-size: .8vw;
 }
 
 section.header button:hover {
