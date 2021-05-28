@@ -10,21 +10,24 @@ import { Database } from '../classes/database.js';
  *   sections: [
  *     {
  *       id: '00',
- *       name: 'Yearly Notes',
+ *       name: 'Yearly Goals',
  *       type: 'log',
  *       bulletIDs: [
  *         'B 21 00 00',
  *         'B 21 00 01'
- *       ]
+ *       ],
+ *       nextBulNum: 2
  *     },
  *     {
  *       id: '01',
- *       name: 'Yearly Goals',
+ *       name: 'Yearly Notes',
  *       type: 'log',
  *       bulletIDs: [
- *         'B 21 00 02',
- *         'B 21 00 03'
- *       ]
+ *         'B 21 01 00',
+ *         'B 21 01 01',
+ *         'B 21 01 02'
+ *       ],
+ *       nextBulNum: 3
  *     }
  *   ]
  * }
@@ -44,8 +47,6 @@ class YearlyLog extends HTMLElement {
   constructor () {
     super();
 
-    this.bulletCounts = [];
-
     const template = document.createElement('template');
 
     template.innerHTML = `
@@ -54,7 +55,6 @@ class YearlyLog extends HTMLElement {
       <div class="yearly">
         <section class="header" id="yearly-header">
           <h1></h1>
-          <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
         </section>
         <section id="yearly-calendar"></section>
       </div>
@@ -104,26 +104,25 @@ class YearlyLog extends HTMLElement {
         sections: [
           {
             id: '00',
-            name: 'Yearly Notes',
+            name: 'Yearly Goals',
             type: 'log',
-            bulletIDs: []
+            bulletIDs: [],
+            nextBulNum: 0
           },
           {
             id: '01',
-            name: 'Yearly Goals',
+            name: 'Yearly Notes',
             type: 'checklist',
-            bulletIDs: []
+            bulletIDs: [],
+            nextBulNum: 0
           }
         ]
       };
-      Database.store(id, jsonData);
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
-    const root = this.shadowRoot.querySelector('.yearly');
+    const root = this.shadowRoot.querySelector('div.yearly');
     root.id = id;
-
-    // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
 
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
@@ -134,13 +133,12 @@ class YearlyLog extends HTMLElement {
     const headerText = root.querySelector('#yearly-header > h1');
     headerText.innerText = dateString;
 
+    // create buttons for each month in the yearly calendar
     const calendar = root.querySelector('#yearly-calendar');
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i <= 11; i++) {
       const monthButton = document.createElement('button');
       monthButton.className = 'yearly-calendar-button';
-      const idYear = this.stringifyNum(year % 100);
-      const idMonth = this.stringifyNum(i + 1);
-      monthButton.id = `M ${idYear}${idMonth}`;
+      monthButton.id = `M ${id.substring(2)}${this.stringifyNum(i + 1)}`;
       monthButton.innerText = String(this.getMonthFromDate(new Date(year, i)));
       calendar.appendChild(monthButton);
     }
@@ -148,8 +146,7 @@ class YearlyLog extends HTMLElement {
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
-        const sectionID = Number(section.id);
-        let bulletCount = 0;
+        const sectionID = section.id;
 
         // construct section element
         const sectionElement = document.createElement('section');
@@ -163,22 +160,25 @@ class YearlyLog extends HTMLElement {
 
         // construct bullet elements
         for (const bulletID of section.bulletIDs) {
-          // increment the number of bullets in the section
-          bulletCount++;
-
-          // create bullet element and add the deletion event listener to it
+          // create bullet element and add the deletion event listeners to it
           const bulletElement = document.createElement('bullet-entry');
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-            yearlyLog.deleteNoteHandler(event, bulletElement);
+            // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+            if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+              yearlyLog.deleteNoteHandler(bulletElement);
+            }
           });
+          bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+            yearlyLog.deleteNoteHandler(bulletElement);
+          });
+
           sectionElement.appendChild(bulletElement);
 
           // fetch the bullet data and set the bullet element's data in the callback
-          Database.fetch(bulletID, this.setBulletData, bulletID, bulletElement);
+          Database.fetch(bulletID, function (bulletData, bulletID, bulletElement, sectionID) {
+            yearlyLog.setBulletData(bulletData, bulletID, bulletElement, sectionID);
+          }, bulletID, bulletElement, sectionID);
         }
-
-        // set the number of bullets in this section
-        this.bulletCounts[sectionID] = bulletCount;
 
         // create a button to add new notes to the section and add the add new bullet event listener to it
         const newNoteButton = document.createElement('button');
@@ -187,7 +187,7 @@ class YearlyLog extends HTMLElement {
           <i class="fas fa-plus icon-size"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
-          yearlyLog.newNoteHandler(event);
+          yearlyLog.newNoteHandler(event.target.closest('section'));
         });
         sectionElement.appendChild(newNoteButton);
 
@@ -208,7 +208,7 @@ class YearlyLog extends HTMLElement {
    * parses the given ID to determine the year, and returns a corresponding Date object.
    *
    * @param {string} id - The yearly ID (with the format 'Y YY') to parse
-   * @returns {Date} a Date object representing the date determined by the ID
+   * @returns {Date} A Date object representing the date determined by the ID
    */
   getDateFromID (id) {
     // parse year
@@ -258,21 +258,62 @@ class YearlyLog extends HTMLElement {
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
-   * data from the database. The function checks if the data is not null or undefined. If the
-   * data isn't null/undefined, the bullet element's data is set to the given data. If the data
-   * is null/undefined, the bullet element's data is set to an empty JSON object, which creates
-   * a blank bullet.
+   * data from the database or when we are creating a new bullet. The function first creates a
+   * function that will be used by the created bullet object to update the bullet count in
+   * the appropriate section of the yearly log and generate a bullet ID for sub-bullets (nested
+   * bullets that are children of this created bullet). The function then checks if the data
+   * is not null or undefined. If the data isn't null/undefined, the bullet element's data is
+   * set to the given data. If the data is null/undefined, the bullet element's data is set to
+   * an empty JSON object, which creates a blank bullet.
    *
-   * @param {Object} bulletData - the JSON object data that will be stored in the bullet
-   * @param {string} bulletID - the string ID of the bullet object
-   * @param {HTMLElement} bulletElement - the bullet-entry element whose data will be set
+   * @param {Object} bulletData - The JSON object data that will be stored in the bullet
+   * @param {string} bulletID - The string ID of the bullet object
+   * @param {HTMLElement} bulletElement - The bullet-entry element whose data will be set
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
    */
-  setBulletData (bulletData, bulletID, bulletElement) {
+  setBulletData (bulletData, bulletID, bulletElement, sectionID) {
+    const yearlyLog = this;
+    const newBulletID = function () {
+      const newID = yearlyLog.generateBulletID(sectionID);
+      return newID;
+    };
+
     if (bulletData) {
-      bulletElement.data = [bulletID, bulletData];
+      bulletElement.data = [bulletID, bulletData, newBulletID];
     } else {
-      bulletElement.data = [bulletID, {}];
+      bulletElement.data = [bulletID, {}, newBulletID];
     }
+  }
+
+  /**
+   * This function is a helper function that is used to create a new bullet ID. The given section
+   * ID determines which section the bullet is being created in. The function then combines the
+   * bullet count for that section, the section ID, and the date of the yearly object in which
+   * the bullet is being added in order to create a new bullet ID, which is then returned.
+   *
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
+   * @returns {string} The string ID to be used for the new bullet
+   */
+  generateBulletID (sectionID) {
+    // get the data and find the section in which the bullet is being added to determine the new bullet number
+    const data = this.data;
+    let newBulNum;
+    for (const section of data.sections) {
+      if (section.id === sectionID) {
+        newBulNum = section.nextBulNum;
+        section.nextBulNum++;
+      }
+    }
+
+    // store the udpated data
+    this.setAttribute('data', JSON.stringify(data));
+    Database.store(this.id, data);
+
+    // generate the new bullet ID
+    const bulletCount = this.stringifyNum(newBulNum);
+    const yearlyID = this.shadowRoot.querySelector('div.yearly').id;
+
+    return `B ${yearlyID.substring(2)} ${sectionID} ${bulletCount}`;
   }
 
   /**
@@ -281,8 +322,8 @@ class YearlyLog extends HTMLElement {
    * representation we use has a 0 in front of the number. For example a section number 1 would
    * have an ID of '01'.
    *
-   * @param {number} num - the integer that is being stringified
-   * @returns {string} a string representation of the number that can be used in object IDs
+   * @param {number} num - The integer that is being stringified
+   * @returns {string} A string representation of the number that can be used in object IDs
    */
   stringifyNum (num) {
     if (num < 10) {
@@ -304,22 +345,14 @@ class YearlyLog extends HTMLElement {
    * it creates a new bullet-entry HTML element, and adds the appropriate event listener to it
    * to allow for future deletion of the bullet element.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being added to
+   * @param {HTMLElement} sectionElement - The section element in which the new note button
+   * was clicked to trigger the listener
    */
-  newNoteHandler (event) {
+  newNoteHandler (sectionElement) {
     // generate a bullet ID
-    const section = event.target.closest('section');
-    const sectionID = section.id;
-    const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
+    const sectionID = sectionElement.id;
     const yearlyID = this.shadowRoot.querySelector('div.yearly').id;
-    const date = this.getDateFromID(yearlyID);
-    const year = this.stringifyNum(date.getFullYear() % 100);
-    const bulletID = `B ${year} ${sectionID} ${bulletCount}`;
-
-    // increment the number of bullets in the section
-    this.bulletCounts[Number(sectionID)]++;
+    const bulletID = this.generateBulletID(sectionID);
 
     // add bullet ID to the yearly JSON object bulletIDs in the right section
     const data = this.data;
@@ -335,67 +368,60 @@ class YearlyLog extends HTMLElement {
 
     // create a blank bullet HTML element with the generated ID
     const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement);
+    this.setBulletData({}, bulletID, bulletElement, sectionID);
 
     // add event listener to the bullet element to handle bullet deletion
     const yearlyLog = this;
     bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      yearlyLog.deleteNoteHandler(event, bulletElement);
+      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+      if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        yearlyLog.deleteNoteHandler(bulletElement);
+      }
+    });
+    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      yearlyLog.deleteNoteHandler(bulletElement);
     });
 
     // add the insert the new bullet element child before the new note button
-    const newNoteButton = section.querySelector('button.new-bullet');
-    section.insertBefore(bulletElement, newNoteButton);
+    const newNoteButton = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bulletElement, newNoteButton);
 
     // prompt user to start typing note
     bulletElement.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
-   * This function handles the deletion of a bullet. It first checks if the event that triggered
-   * the listener is one such that the backspace button was clicked on a bullet with no text,
-   * because that is how we decided we want the user to be able to delete notes. If the condition
-   * for deletion is met, the function looks through the yearly JSON object to remove the ID of
-   * the bullet being deleted from the appropriate section, and then stores the updated yearly
-   * JSON object in the database and removes the bullet-entry HTML element from the section.
+   * This function handles the deletion of a bullet. The function looks through the yearly JSON
+   * object to remove the ID of the bullet being deleted from the appropriate section, and then
+   * stores the updated yearly JSON object in the database and removes the bullet-entry HTML
+   * element from the section.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being deleted from
-   * @param {HTMLElement} element - the bullet-entry element that is being deleted
+   * @param {HTMLElement} bulletElement - The bullet-entry element that is being deleted
    */
-  deleteNoteHandler (event, element) {
-    // condition check to determine if the listener was triggered when backspace was pressed on an empty note
-    if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-      // get the section element that the bullet is a child of
-      const section = element.closest('section');
+  deleteNoteHandler (bulletElement) {
+    // get the section element that the bullet is a child of
+    const section = bulletElement.closest('section');
 
-      // loop through the yearly JSON object to find the bullet ID to be deleted
-      const sectionID = section.id;
-      const data = this.data;
-      for (const sec of data.sections) {
-        // condition check to determine if this is the right section in the yearly JSON object
-        if (sec.id === sectionID) {
-          // loop through the bullet ID's of the section to find the one for deletion
-          for (let i = 0; i < sec.bulletIDs.length; i++) {
-            if (sec.bulletIDs[i] === element.id) {
-              sec.bulletIDs.splice(i, 1);
-            }
-          }
-        }
+    // loop through the yearly JSON object to find the bullet ID to be deleted
+    const sectionID = section.id;
+    const data = this.data;
+    for (const sec of data.sections) {
+      // condition check to determine if this is the right section in the yearly JSON object
+      if (sec.id === sectionID) {
+        sec.bulletIDs = sec.bulletIDs.filter((bulletID) => bulletID !== bulletElement.id);
       }
-      this.setAttribute('data', JSON.stringify(data));
-
-      // store the updated yearly JSON object in the database
-      const yearlyID = this.shadowRoot.querySelector('div.yearly').id;
-      Database.store(yearlyID, data);
-
-      // delete the bullet from the database
-      Database.delete(element.id);
-
-      // remove the bullet-entry HTML element from the section
-      section.removeChild(element);
     }
+    this.setAttribute('data', JSON.stringify(data));
+
+    // store the updated yearly JSON object in the database
+    const yearlyID = this.shadowRoot.querySelector('div.yearly').id;
+    Database.store(yearlyID, data);
+
+    // delete the bullet from the database
+    Database.delete(bulletElement.id);
+
+    // remove the bullet-entry HTML element from the section
+    section.removeChild(bulletElement);
   }
 
   // ------------------------------------- End Event Handlers -------------------------------------
