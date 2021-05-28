@@ -46,8 +46,6 @@ class MonthlyLog extends HTMLElement {
   constructor () {
     super();
 
-    this.bulletCounts = [];
-
     const template = document.createElement('template');
 
     template.innerHTML = `
