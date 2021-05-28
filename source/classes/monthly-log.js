@@ -10,12 +10,23 @@ import { Database } from '../classes/database.js';
  *   sections: [
  *     {
  *       id: '00',
- *       name: 'Monthly Notes',
+ *       name: 'Monthly Goals',
  *       type: 'log',
  *       bulletIDs: [
  *         'B 2105 00 00',
  *         'B 2105 00 01'
- *       ]
+ *       ],
+ *       nextBulNum: 2
+ *     },
+ *     {
+ *       id: '01',
+ *       name: 'Monthly Notes',
+ *       type: 'log',
+ *       bulletIDs: [
+ *         'B 2105 01 00',
+ *         'B 2105 01 01'
+ *       ],
+ *       nextBulNum: 2
  *     }
  *   ]
  * }
@@ -45,7 +56,6 @@ class MonthlyLog extends HTMLElement {
       <div class="monthly">
         <section class="header" id="monthly-header">
           <h1></h1>
-          <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
         </section>
         <section id="monthly-calendar"></section>
       </div>
@@ -95,20 +105,25 @@ class MonthlyLog extends HTMLElement {
         sections: [
           {
             id: '00',
+            name: 'Monthly Goals',
+            type: 'log',
+            bulletIDs: [],
+            nextBulNum: 0
+          },
+          {
+            id: '01',
             name: 'Monthly Notes',
             type: 'log',
-            bulletIDs: []
+            bulletIDs: [],
+            nextBulNum: 0
           }
         ]
       };
-      Database.store(id, jsonData);
     }
 
     // get the shadow root of this custom HTML element and set its ID to the given ID
-    const root = this.shadowRoot.querySelector('.monthly');
+    const root = this.shadowRoot.querySelector('div.monthly');
     root.id = id;
-
-    // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
 
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
@@ -120,16 +135,13 @@ class MonthlyLog extends HTMLElement {
     const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
 
+    // create buttons for each date in the monthly calendar
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
-    console.log(numDays);
     for (let i = 1; i <= numDays; i++) {
       const dateButton = document.createElement('button');
       dateButton.className = 'monthly-calendar-button';
-      const idYear = this.stringifyNum(dateObj.getFullYear() % 100);
-      const idMonth = this.stringifyNum(dateObj.getMonth() + 1);
-      const idDate = this.stringifyNum(i);
-      dateButton.id = `D ${idYear}${idMonth}${idDate}`;
+      dateButton.id = `D ${id.substring(2)}${this.stringifyNum(i)}`;
       dateButton.innerText = String(i);
       calendar.appendChild(dateButton);
     }
@@ -137,8 +149,7 @@ class MonthlyLog extends HTMLElement {
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
-        const sectionID = Number(section.id);
-        let bulletCount = 0;
+        const sectionID = section.id;
 
         // construct section element
         const sectionElement = document.createElement('section');
@@ -152,22 +163,25 @@ class MonthlyLog extends HTMLElement {
 
         // construct bullet elements
         for (const bulletID of section.bulletIDs) {
-          // increment the number of bullets in the section
-          bulletCount++;
-
-          // create bullet element and add the deletion event listener to it
+          // create bullet element and add the deletion event listeners to it
           const bulletElement = document.createElement('bullet-entry');
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-            monthlyLog.deleteNoteHandler(event, bulletElement);
+            // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+            if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+              monthlyLog.deleteNoteHandler(bulletElement);
+            }
           });
+          bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+            monthlyLog.deleteNoteHandler(bulletElement);
+          });
+
           sectionElement.appendChild(bulletElement);
 
           // fetch the bullet data and set the bullet element's data in the callback
-          Database.fetch(bulletID, this.setBulletData, bulletID, bulletElement);
+          Database.fetch(bulletID, function (bulletData, bulletID, bulletElement, sectionID) {
+            monthlyLog.setBulletData(bulletData, bulletID, bulletElement, sectionID);
+          }, bulletID, bulletElement, sectionID);
         }
-
-        // set the number of bullets in this section
-        this.bulletCounts[sectionID] = bulletCount;
 
         // create a button to add new notes to the section and add the add new bullet event listener to it
         const newNoteButton = document.createElement('button');
@@ -176,7 +190,7 @@ class MonthlyLog extends HTMLElement {
           <i class="fas fa-plus icon-size"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
-          monthlyLog.newNoteHandler(event);
+          monthlyLog.newNoteHandler(event.target.closest('section'));
         });
         sectionElement.appendChild(newNoteButton);
 
@@ -197,7 +211,7 @@ class MonthlyLog extends HTMLElement {
    * parses the given ID to determine the year, and month, and returns a corresponding Date object.
    *
    * @param {string} id - The monthly ID (with the format 'M YYMM') to parse
-   * @returns {Date} a Date object representing the date determined by the ID
+   * @returns {Date} A Date object representing the date determined by the ID
    */
   getDateFromID (id) {
     // parse year, month
@@ -248,21 +262,62 @@ class MonthlyLog extends HTMLElement {
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
-   * data from the database. The function checks if the data is not null or undefined. If the
-   * data isn't null/undefined, the bullet element's data is set to the given data. If the data
-   * is null/undefined, the bullet element's data is set to an empty JSON object, which creates
-   * a blank bullet.
+   * data from the database or when we are creating a new bullet. The function first creates a
+   * function that will be used by the created bullet object to update the bullet count in
+   * the appropriate section of the monthly log and generate a bullet ID for sub-bullets (nested
+   * bullets that are children of this created bullet). The function then checks if the data
+   * is not null or undefined. If the data isn't null/undefined, the bullet element's data is
+   * set to the given data. If the data is null/undefined, the bullet element's data is set to
+   * an empty JSON object, which creates a blank bullet.
    *
-   * @param {Object} bulletData - the JSON object data that will be stored in the bullet
-   * @param {string} bulletID - the string ID of the bullet object
-   * @param {HTMLElement} bulletElement - the bullet-entry element whose data will be set
+   * @param {Object} bulletData - The JSON object data that will be stored in the bullet
+   * @param {string} bulletID - The string ID of the bullet object
+   * @param {HTMLElement} bulletElement - The bullet-entry element whose data will be set
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
    */
-  setBulletData (bulletData, bulletID, bulletElement) {
+  setBulletData (bulletData, bulletID, bulletElement, sectionID) {
+    const monthlyLog = this;
+    const newBulletID = function () {
+      const newID = monthlyLog.generateBulletID(sectionID);
+      return newID;
+    };
+
     if (bulletData) {
-      bulletElement.data = [bulletID, bulletData];
+      bulletElement.data = [bulletID, bulletData, newBulletID];
     } else {
-      bulletElement.data = [bulletID, {}];
+      bulletElement.data = [bulletID, {}, newBulletID];
     }
+  }
+
+  /**
+   * This function is a helper function that is used to create a new bullet ID. The given section
+   * ID determines which section the bullet is being created in. The function then combines the
+   * bullet count for that section, the section ID, and the date of the monthly object in which
+   * the bullet is being added in order to create a new bullet ID, which is then returned.
+   *
+   * @param {string} sectionID - The string ID of the section in which the bullet is being created
+   * @returns {string} The string ID to be used for the new bullet
+   */
+  generateBulletID (sectionID) {
+    // get the data and find the section in which the bullet is being added to determine the new bullet number
+    const data = this.data;
+    let newBulNum;
+    for (const section of data.sections) {
+      if (section.id === sectionID) {
+        newBulNum = section.nextBulNum;
+        section.nextBulNum++;
+      }
+    }
+
+    // store the udpated data
+    this.setAttribute('data', JSON.stringify(data));
+    Database.store(this.id, data);
+
+    // generate the new bullet ID
+    const bulletCount = this.stringifyNum(newBulNum);
+    const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
+
+    return `B ${monthlyID.substring(2)} ${sectionID} ${bulletCount}`;
   }
 
   /**
@@ -271,8 +326,8 @@ class MonthlyLog extends HTMLElement {
    * representation we use has a 0 in front of the number. For example a section number 1 would
    * have an ID of '01'.
    *
-   * @param {number} num - the integer that is being stringified
-   * @returns {string} a string representation of the number that can be used in object IDs
+   * @param {number} num - The integer that is being stringified
+   * @returns {string} A string representation of the number that can be used in object IDs
    */
   stringifyNum (num) {
     if (num < 10) {
@@ -294,23 +349,14 @@ class MonthlyLog extends HTMLElement {
    * it creates a new bullet-entry HTML element, and adds the appropriate event listener to it
    * to allow for future deletion of the bullet element.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being added to
+   * @param {HTMLElement} sectionElement - The section element in which the new note button
+   * was clicked to trigger the listener
    */
-  newNoteHandler (event) {
+  newNoteHandler (sectionElement) {
     // generate a bullet ID
-    const section = event.target.closest('section');
-    const sectionID = section.id;
-    const bulletCount = this.stringifyNum(this.bulletCounts[Number(sectionID)]);
+    const sectionID = sectionElement.id;
     const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
-    const date = this.getDateFromID(monthlyID);
-    const year = this.stringifyNum(date.getFullYear() % 100);
-    const month = this.stringifyNum(date.getMonth() + 1);
-    const bulletID = `B ${year}${month} ${sectionID} ${bulletCount}`;
-
-    // increment the number of bullets in the section
-    this.bulletCounts[Number(sectionID)]++;
+    const bulletID = this.generateBulletID(sectionID);
 
     // add bullet ID to the monthly JSON object bulletIDs in the right section
     const data = this.data;
@@ -326,67 +372,60 @@ class MonthlyLog extends HTMLElement {
 
     // create a blank bullet HTML element with the generated ID
     const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement);
+    this.setBulletData({}, bulletID, bulletElement, sectionID);
 
-    // add event listener to the bullet element to handle bullet deletion
+    // add event listeners to the bullet element to handle bullet deletion
     const monthlyLog = this;
     bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      monthlyLog.deleteNoteHandler(event, bulletElement);
+      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+      if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        monthlyLog.deleteNoteHandler(bulletElement);
+      }
+    });
+    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      monthlyLog.deleteNoteHandler(bulletElement);
     });
 
     // add the insert the new bullet element child before the new note button
-    const newNoteButton = section.querySelector('button.new-bullet');
-    section.insertBefore(bulletElement, newNoteButton);
+    const newNoteButton = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bulletElement, newNoteButton);
 
     // prompt user to start typing note
     bulletElement.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
-   * This function handles the deletion of a bullet. It first checks if the event that triggered
-   * the listener is one such that the backspace button was clicked on a bullet with no text,
-   * because that is how we decided we want the user to be able to delete notes. If the condition
-   * for deletion is met, the function looks through the monthly JSON object to remove the ID of
-   * the bullet being deleted from the appropriate section, and then stores the updated monthly
-   * JSON object in the database and removes the bullet-entry HTML element from the section.
+   * This function handles the deletion of a bullet. The function looks through the monthly JSON
+   * object to remove the ID of the bullet being deleted from the appropriate section, and then
+   * stores the updated monthly JSON object in the database and removes the bullet-entry HTML
+   * element from the section.
    *
-   * @param {Event} event - the click event that triggered the listener; it contains information
-   * about the target of the event, which can be used to figure out which section the bullet
-   * is being deleted from
-   * @param {HTMLElement} element - the bullet-entry element that is being deleted
+   * @param {HTMLElement} bulletElement - The bullet-entry element that is being deleted
    */
-  deleteNoteHandler (event, element) {
-    // condition check to determine if the listener was triggered when backspace was pressed on an empty note
-    if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-      // get the section element that the bullet is a child of
-      const section = element.closest('section');
+  deleteNoteHandler (bulletElement) {
+    // get the section element that the bullet is a child of
+    const section = bulletElement.closest('section');
 
-      // loop through the monthly JSON object to find the bullet ID to be deleted
-      const sectionID = section.id;
-      const data = this.data;
-      for (const sec of data.sections) {
-        // condition check to determine if this is the right section in the monthly JSON object
-        if (sec.id === sectionID) {
-          // loop through the bullet ID's of the section to find the one for deletion
-          for (let i = 0; i < sec.bulletIDs.length; i++) {
-            if (sec.bulletIDs[i] === element.id) {
-              sec.bulletIDs.splice(i, 1);
-            }
-          }
-        }
+    // loop through the monthly JSON object to find the bullet ID to be deleted
+    const sectionID = section.id;
+    const data = this.data;
+    for (const sec of data.sections) {
+      // condition check to determine if this is the right section in the monthly JSON object
+      if (sec.id === sectionID) {
+        sec.bulletIDs = sec.bulletIDs.filter((bulletID) => bulletID !== bulletElement.id);
       }
-      this.setAttribute('data', JSON.stringify(data));
-
-      // store the updated monthly JSON object in the database
-      const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
-      Database.store(monthlyID, data);
-
-      // delete the bullet from the database
-      Database.delete(element.id);
-
-      // remove the bullet-entry HTML element from the section
-      section.removeChild(element);
     }
+    this.setAttribute('data', JSON.stringify(data));
+
+    // store the updated monthly JSON object in the database
+    const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
+    Database.store(monthlyID, data);
+
+    // delete the bullet from the database
+    Database.delete(bulletElement.id);
+
+    // remove the bullet-entry HTML element from the section
+    section.removeChild(bulletElement);
   }
 
   // ------------------------------------- End Event Handlers -------------------------------------
