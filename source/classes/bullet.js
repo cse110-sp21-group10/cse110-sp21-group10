@@ -1,5 +1,4 @@
 import { Database } from './database.js';
-import { generateID } from '../scripts/script.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
@@ -49,63 +48,80 @@ class BulletEntry extends HTMLElement {
           border: none;
           background: none;
           float: left;
-          padding-top: .9%;
+          padding-top: .4%;
+        }
+
+        div < div.bullet-remove {
+          color: transparent;
         }
         
         .bullet-point:hover {
           font-size: 12px;
           position: relative;
-          padding-top: .8%;
+          padding-top: .35%;
           right: 1px;
           width: 22px;
         }
         
         .bullet-text {
           display: inline-block;
-          width: 65vw;
+          width: 90%;
           font-size: larger;
           margin: 0;
           /* border: 5px solid black; */
         
           padding-left: 1%;
-          padding-top: .5%;
-          padding-bottom: .5%;
         }
         
         .bullet {
-          margin-left: 1%;
-          margin-right: 12%;
+          margin-left: 1.8%;
         
           padding-left: .5%;
-          padding-right: 1%;
+          padding-top: .5%;
+
+          background-color: white;
         }
         
         .bullet:hover {
-          background-color: rgb(241, 241, 241);
+          filter: brightness(95%);
           border-radius: 20px;  
         }
         
         .bullet:hover .bullet-remove,
         .bullet:hover .child-add {
-          display: inline-block;
+          color: black;
         }
         
-        .bullet-remove,
-        .child-add{
-          display: none;
+        .child-add {
+          float: left;
+          max-width: 1.5%;
+        }
+
+        .bullet-remove {
           float: right;
-          padding-top: .3%;
+          padding-right: 1%;
+        }
+        
+        .bullet-remove:hover {
+          font-size: 15px;
+          position: relative;
+          padding-top: .1%;
+        }
+        
+        .child-add:hover {
+          font-size: 15px;
+          position: relative;
+          padding-top: .1%;
+        }
+
+        .child-add,
+        .bullet-remove {
+          padding-top: .2%;
+
+          color: transparent;
         
           border: none;
           background-color: transparent;
-        }
-        
-        .bullet-remove:hover,
-        .child-add:hover{
-          font-size: 15px;
-          position: relative;
-          padding-top: .5%;
-          left: .75px;
         }
         
         [contenteditable] {
@@ -116,16 +132,16 @@ class BulletEntry extends HTMLElement {
       <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
 
       <div class="bullet">         
+        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>      
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
-        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>
+        
         <p class="bullet-text" contenteditable="true">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
           Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
           dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non 
           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </p>
-        <div class="children"> </div>
       </div>
       `;
 
@@ -164,9 +180,9 @@ class BulletEntry extends HTMLElement {
    *
    * TODO: Implement a way to update the type of bullet point based off value <p>
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB
+   * @param {Array.<{id: string, jsonData: Object, incrementBullet: callback}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [callback] used to generateID and increment bullet counter when creating children
    */
-  set data ([id, jsonData]) {
+  set data ([id, jsonData, newBulletID]) {
     console.log('Setter called');
 
     if (Object.entries(jsonData).length === 0) {
@@ -222,8 +238,18 @@ class BulletEntry extends HTMLElement {
       }
     });
 
+    /**
+     * Handles for the addition of a NEW child
+     * @param {BulletEntry~addChildBullet} callback - Creates NEW child and updates data (parent and database)
+     */
     this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
-      this.createChild();
+      const childID = newBulletID();
+
+      jsonData.childrenIDs.push(childID);
+      this.setAttribute('data', JSON.stringify(jsonData));
+      this.storeToDatabase(id, jsonData, true);
+
+      this.createChild(childID, {}, newBulletID);
     });
   }
   // -------------------------------------- End of Set/Get definitions --------------------------------------------------
@@ -237,6 +263,19 @@ class BulletEntry extends HTMLElement {
    *
    * @callback BulletEntry~editTextCallback
    * @param {blurEvent} event - provides access to element that stopped getting focused (for it's innerText)
+   */
+
+  /**
+   * Handles the process for creating a NEW bullet <p>
+   *
+   * Performs generation of an ID via the passed in callback (which also updates calling section's newBulNum) <p>
+   *
+   * Updates data (both parent and database) with new child (ID) <p>
+   *
+   * Calls on helper function for generating the child bullet element
+   *
+   * @callback BulletEntry~addChildBullet
+   * @param {onClickEvent} event - provides access to parent to append child bullet to
    */
 
   /**
@@ -277,18 +316,14 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Handles the creation, appending, and deletion (if done via backspace) of children <p>
+   * Handles the creation, appending, and deletion of EXISTING children <p>
    *
    * Iterates through each childID in data: <p>
    *
    * 1. Creates a new bullet-entry element <p>
    *
-   * 2. Fetches and sets data <p>
+   * 2. Fetches data and calls on helper function for child creation
    *
-   * 3. Appends child under appropriate div in current bullet element <p>
-   *
-   * 4. Registers button presses for children's text and under the right conditions,
-   * will remove child from display, database, and this bullet's childIDs list
    */
   setChildren () {
     for (const childID of this.data.childrenIDs) {
@@ -302,11 +337,26 @@ class BulletEntry extends HTMLElement {
     }
   }
 
-  createChild (childID = generateID('bullet'), childData = {}) {
+  /**
+   * Handles the creation, data setting, appending to display, and potential deletion of children <p>
+   *
+   * Called for both creation of new and existing children (based off whether param is empty jsonObj or not) <p>
+   *
+   * Creation and data setting handled by the bullet-element methods. Appends child under appropriate div in current bullet element <p>
+   *
+   * Special definitions for removal of a child bullet (both through buttons and backspacing empty content) <p>
+   *
+   * Finally, focused after creation for immediate text input
+   *
+   * @param {string} childID - ID used to retrieve (existing) / store (new) child bullet element
+   * @param {jsonObject} childData - used to store child bullet's data (empty for new)
+   * @param {function} callback - used to generate IDs for potential children
+   */
+  createChild (childID, childData = {}, callback) {
     const child = document.createElement('bullet-entry');
-    child.data = [childID, childData];
+    child.data = [childID, childData, callback];
 
-    this.shadowRoot.querySelector('.children').appendChild(child);
+    this.shadowRoot.querySelector('.bullet').appendChild(child);
 
     /**
      * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
@@ -326,10 +376,21 @@ class BulletEntry extends HTMLElement {
     child.shadowRoot.querySelector('.bullet-text').focus();
   }
 
+  /**
+   * Handles removal of a child from display, parent data, and database <p>
+   *
+   * @param {HTMLElement} child - reference to child bullet's html element
+   * @param {string} childID - used to remove from childIDs list in parent and from database
+   */
   removeChild (child, childID) {
-    this.shadowRoot.querySelector('.children').removeChild(child);
+    this.shadowRoot.querySelector('.bullet').removeChild(child);
+
+    const data = this.data;
+    data.childrenIDs = data.childrenIDs.filter(child => child !== childID);
+    this.setAttribute('data', JSON.stringify(data));
+    this.storeToDatabase(this.id, data);
+
     Database.delete(childID);
-    this.data.childrenIDs = this.data.childrenIDs.filter(child => child !== childID);
   }
   // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
