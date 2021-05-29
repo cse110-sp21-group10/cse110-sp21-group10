@@ -101,12 +101,6 @@ h1 {
   height: 7%;
 }
 
-/* Add a background color on hover */
-.global-icons button:hover {
-  background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
-}
-
 nav.navigation {
   display: none;
 }
@@ -182,6 +176,12 @@ section.header button {
   margin-right: 4%;
   border: 0;
   background: none;
+}
+
+/* Add a background color on hover */
+.global-icons button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
 }
 
 /* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
