@@ -368,28 +368,28 @@ class MonthlyLog extends HTMLElement {
     // store the updated monthly JSON object in the database
     Database.store(monthlyID, data);
 
-    // create a blank bullet HTML element with the generated ID
-    const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement, sectionID);
+    // create a blank bullet element with the generated ID
+    const bullet = document.createElement('bullet-entry');
+    this.setBulletData({}, bulletID, bullet, sectionID);
 
-    // add event listeners to the bullet element to handle bullet deletion
+    // add event listeners to the bullet element to handle deletion
     const monthlyLog = this;
-    bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+    bullet.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
+      // condition check to determine if backspace was pressed on an empty note
       if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-        monthlyLog.deleteNoteHandler(bulletElement);
+        monthlyLog.deleteNoteHandler(bullet);
       }
     });
-    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
-      monthlyLog.deleteNoteHandler(bulletElement);
+    bullet.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      monthlyLog.deleteNoteHandler(bullet);
     });
 
     // add the insert the new bullet element child before the new note button
-    const newNoteButton = sectionElement.querySelector('button.new-bullet');
-    sectionElement.insertBefore(bulletElement, newNoteButton);
+    const newNote = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bullet, newNote);
 
     // prompt user to start typing note
-    bulletElement.shadowRoot.querySelector('.bullet-text').focus();
+    bullet.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
