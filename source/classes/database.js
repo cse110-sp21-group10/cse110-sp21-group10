@@ -338,13 +338,12 @@ export class Database {
   }
 
   /**
-   * This function retrieves the keys of all the daily JSON objects in the database. It first uses the format of
-   * the given object ID to determine what type of object (ex. bullet, daily, monthly, yearly, etc) is being
-   * retrieved. It then makes an asynchronous call to IndexedDB's get function on the appropriate object store
-   * to retrieve the desired object, and then passes the retrieved object to the given callback function if the
-   * retrieval operation succeeded, or passes null to the given callback if the retrieval operation failed. In
-   * addition to the retrieved object, any other given parameters (specified by varArgs) are also passed to the
-   * callback function.
+   * This function retrieves the keys of all the daily JSON objects in the database. The function makes an
+   * asynchronous call to IndexedDB's getAllKeys function on the daily object store to retrieve all the keys
+   * of the daily objects in the database, and then passes the retrieved object to the given callback function
+   * if the retrieval operation succeeded, or passes null to the given callback if the retrieval operation
+   * failed. In addition to the retrieved object, any other given parameters (specified by varArgs) are also
+   * passed to the callback function.
    *
    * @static
    * @param {?fetchCallback} [callback=null] - Callback function that is run after the database transaction
@@ -356,8 +355,8 @@ export class Database {
     this.openDatabase(function (db) {
       if (db != null) {
         // starts a transaction to create a get request for the object with the given ID
-        const transaction = db.transaction([this.Stores.DAILY], 'readwrite');
-        const store = transaction.objectStore(this.Stores.DAILY);
+        const transaction = db.transaction([Database.Stores.DAILY], 'readwrite');
+        const store = transaction.objectStore(Database.Stores.DAILY);
         const getRequest = store.getAllKeys();
 
         // on success, call the callback function with the retrieved data and the varArgs if any were provided

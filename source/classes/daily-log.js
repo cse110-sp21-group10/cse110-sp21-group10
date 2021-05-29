@@ -38,7 +38,8 @@ import { Database } from './database.js';
  *       bulletIDs: [
  *         'B 210515 00 00',
  *         'B 210515 00 01'
- *       ]
+ *       ],
+ *       nextBulNum: 2
  *     },
  *     {
  *       id: '01',
@@ -46,26 +47,30 @@ import { Database } from './database.js';
  *       type: 'log',
  *       bulletIDs: [
  *         'B 210515 01 00',
- *         'B 210515 01 01'
- *       ]
+ *         'B 210515 01 01',
+ *         'B 210515 01 02'
+ *       ],
+ *       nextBulNum: 3
  *     },
  *     {
  *       id: '02',
  *       name: 'Shopping List',
- *       type: 'checklist',
+ *       type: 'log',
  *       bulletIDs: [
  *         'B 210515 02 00',
  *         'B 210515 02 01'
- *       ]
+ *       ],
+ *       nextBulNum: 2
  *     },
  *     {
  *       id: '03',
  *       name: 'Daily Goals',
- *       type: 'checklist',
+ *       type: 'log',
  *       bulletIDs: [
  *         'B 210515 03 00',
  *         'B 210515 03 01'
- *       ]
+ *       ],
+ *       nextBulNum: 2
  *     }
  *   ]
  * }
@@ -495,6 +500,7 @@ class DailyLog extends HTMLElement {
    * @returns {string} The string ID to be used for the new bullet
    */
   generateBulletID (sectionID) {
+    // get the data and find the section in which the bullet is being added to determine the new bullet number
     const data = this.data;
     let newBulNum;
     for (const section of data.sections) {
@@ -503,10 +509,15 @@ class DailyLog extends HTMLElement {
         section.nextBulNum++;
       }
     }
+
+    // store the udpated data
     this.setAttribute('data', JSON.stringify(data));
     Database.store(this.id, data);
+
+    // generate the new bullet ID
     const bulletCount = this.stringifyNum(newBulNum);
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
+
     return `B ${dailyID.substring(2)} ${sectionID} ${bulletCount}`;
   }
 
