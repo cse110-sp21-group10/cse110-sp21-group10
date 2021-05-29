@@ -6,7 +6,7 @@ export class IDConverter {
    * @param {string} id - the daily id (with the format 'd yymmdd') to parse
    * @returns {date} a date object representing the date determined by the id
    */
-  static getdatefromid (id) {
+  static getDateFromId (id) {
     // parse year, month, date
     const year = Number(id.substring(2, 4)) + 2000;
     const month = Number(id.substring(4, 6)) - 1;
@@ -175,5 +175,32 @@ export class IDConverter {
       default:
         console.error(`No implementation yet for generating ${type} IDs`);
     }
+  }
+
+  /**
+   * Generates the index for where given ID should be located in sorted array of IDs <p>
+   *
+   * Uses binary search for O(log n) runtime, and performs a dual function of both
+   * looking up indices for existing IDs as well as deciding where new IDs would be
+   * inserted to maintain the sorted structure
+   *
+   * @param {Array.<string>} entries - dayIDs of current entries
+   * @param {string} ID - dayID to either lookup or add to entries
+   * @returns {Number} index that ID belongs in list
+   */
+  static generateIndex (entries, ID) {
+    let low = 0;
+    let high = entries.length;
+
+    while (low < high) {
+      const mid = low + high >>> 1;
+      if (entries[mid] < ID) {
+        low = mid + 1;
+      } else {
+        high = mid;
+      }
+    }
+
+    return low;
   }
 }
