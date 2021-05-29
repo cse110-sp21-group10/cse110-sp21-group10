@@ -8,6 +8,7 @@
         <!-- Main Stylesheet -->
         <link rel="stylesheet" href="../style/style.css">
         <link rel="stylesheet" href="../assets/css/all.css">
+        <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
     </head>
     <body>
         <header>
@@ -28,20 +29,18 @@
                     Note: placeholder images found online used for now, 
                     preferably will replace with better icon imgs
                 -->
-                <div class="icons-for-daily-and-monthly"> 
-                    <!-- Icons for menu and zoom out -->
+                <div class="global-icons"> 
+                    <!-- Icons for menu, zoom out, help, day forward, day back, next entry, last entry -->
                     <button class="exterior-buttons" id="menu-button"><i class="fas fa-bars icon-size"></i></button>
-                    <button class="exterior-buttons" id="zoom-out-button" ><i class="fas fa-search-minus icon-size"></i></button>
-                    
-                    <!--
-                        TODO: Which icons did we want to use???????????
-                    
-                    
-                    <input type="image" id="menu-button" alt="button" style="position: fixed; left: 5vh; top: 5vh; height: 5vh" src="https://static.thenounproject.com/png/356889-200.png">
-                    <input type="image" id="help-button" alt="button" style="position: fixed; left: 5vh; bottom: 5vh; height: 5vh" src="https://cdn4.iconfinder.com/data/icons/symbols-2-1/32/11_questionmark_ask_circle_round-512.png" >
-                    <input type="image" id="zoom-out-button" alt="button" style="position: fixed; right: 5vh; top: 5vh; height: 5vh" src="https://cdn3.iconfinder.com/data/icons/buttons/512/Icon_15-512.png">
-                    
-                    -->
+                    <button class="exterior-buttons" id="zoom-out-button"><i class="fas fa-search-minus icon-size"></i></button>
+                    <!-- <button class="exterior-buttons" id="help-button"><i class="far fa-question-circle icon-size"></i></button> -->
+
+                    <button class="exterior-buttons" id="last-entry-back"><i class="fas fa-angle-double-left icon-size"></i>
+                         <!-- <span class="last-entry-tooltip">test tooltip</span> -->
+                    </button>
+                    <button class="exterior-buttons" id="prev-day"><i class="fas fa-angle-left icon-size"></i></button>
+                    <button class="exterior-buttons" id="next-day"><i class="fas fa-angle-right icon-size"></i></button>
+                    <button class="exterior-buttons" id="last-entry-forward"><i class="fas fa-angle-double-right icon-size"></i></button>
                 </div>
 
                 <!--
@@ -50,10 +49,6 @@
                     log uses prev/next year buttons instead, which are positioned where the 
                     Zoom-out button would be (disabled for now)
                 -->
-                <div class="icons-for-yearly">
-                    <input type="image" id="prev-year-button" alt="button" disabled  src="https://cdn0.iconfinder.com/data/icons/arrows-volume-5/48/262-512.png" >
-                    <input type="image" id="next-year-button" alt="button" disabled  src="https://cdn2.iconfinder.com/data/icons/symbols-signs-outline/19/40-512.png" >
-                </div>
                 
                 <div id="internal-content">
                     <!-- SPA first try (no judge plz)! : 
@@ -310,15 +305,7 @@
 
                 </div>
 
-                <!--Help Icon-->
-                <button class="exterior-buttons" id="help-button"><i class="button-left button-bottom fas fa-question-circle icon-size"></i></button>
             </main>
-        
-            <script src="../scripts/dayjs.min.js"></script>
-            <script>
-                dayjs().format()
-            </script>
-            <script src="../scripts/dayOfYear.js"></script>
             <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
             <script type="module" src="../classes/daily-log.js"></script>
             <script type="module" src="../classes/bullet.js"></script>
