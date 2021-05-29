@@ -366,28 +366,28 @@ class YearlyLog extends HTMLElement {
     // store the updated yearly JSON object in the database
     Database.store(yearlyID, data);
 
-    // create a blank bullet HTML element with the generated ID
-    const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement, sectionID);
+    // create a blank bullet element with the generated ID
+    const bullet = document.createElement('bullet-entry');
+    this.setBulletData({}, bulletID, bullet, sectionID);
 
-    // add event listener to the bullet element to handle bullet deletion
+    // add event listener to the bullet element to handle deletion
     const yearlyLog = this;
-    bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+    bullet.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
+      // condition check to determine if backspace was pressed on an empty note
       if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-        yearlyLog.deleteNoteHandler(bulletElement);
+        yearlyLog.deleteNoteHandler(bullet);
       }
     });
-    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
-      yearlyLog.deleteNoteHandler(bulletElement);
+    bullet.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      yearlyLog.deleteNoteHandler(bullet);
     });
 
-    // add the insert the new bullet element child before the new note button
-    const newNoteButton = sectionElement.querySelector('button.new-bullet');
-    sectionElement.insertBefore(bulletElement, newNoteButton);
+    // insert the new bullet element child before the new note button
+    const newNote = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bullet, newNote);
 
     // prompt user to start typing note
-    bulletElement.shadowRoot.querySelector('.bullet-text').focus();
+    bullet.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
