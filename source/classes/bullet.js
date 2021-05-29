@@ -48,7 +48,7 @@ class BulletEntry extends HTMLElement {
           border: none;
           background: none;
           float: left;
-          padding-top: .4%;
+          padding-top: .6%;
         }
 
         div < div.bullet-remove {
@@ -58,7 +58,7 @@ class BulletEntry extends HTMLElement {
         .bullet-point:hover {
           font-size: 12px;
           position: relative;
-          padding-top: .35%;
+          padding-top: .5%;
           right: 1px;
           width: 22px;
         }
@@ -77,14 +77,14 @@ class BulletEntry extends HTMLElement {
           margin-left: 1.8%;
         
           padding-left: .5%;
-          padding-top: .5%;
+          // padding-top: .5%;
 
           background-color: white;
         }
         
         .bullet:hover {
-          filter: brightness(95%);
-          border-radius: 20px;  
+          filter: brightness(96%);
+          border-radius: 20px;
         }
         
         .bullet:hover .bullet-remove,
@@ -105,18 +105,18 @@ class BulletEntry extends HTMLElement {
         .bullet-remove:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .1%;
+          padding-top: .35%;
         }
         
         .child-add:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .1%;
+          padding-top: .35%;
         }
 
         .child-add,
         .bullet-remove {
-          padding-top: .2%;
+          padding-top: .4%;
 
           color: transparent;
         
