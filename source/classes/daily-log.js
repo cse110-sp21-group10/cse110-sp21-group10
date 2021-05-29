@@ -571,28 +571,28 @@ class DailyLog extends HTMLElement {
     // store the updated daily JSON object in the database
     Database.store(dailyID, data);
 
-    // create a blank bullet HTML element with the generated ID
-    const bulletElement = document.createElement('bullet-entry');
-    this.setBulletData({}, bulletID, bulletElement, sectionID);
+    // create a blank bullet element with the generated ID
+    const bullet = document.createElement('bullet-entry');
+    this.setBulletData({}, bulletID, bullet, sectionID);
 
-    // add event listeners to the bullet element to handle bullet deletion
+    // add event listeners to the bullet element to handle deletion
     const dailyLog = this;
-    bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+    bullet.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
+      // condition check to determine if backspace was pressed on an empty note
       if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-        dailyLog.deleteNoteHandler(bulletElement);
+        dailyLog.deleteNoteHandler(bullet);
       }
     });
-    bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
-      dailyLog.deleteNoteHandler(bulletElement);
+    bullet.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
+      dailyLog.deleteNoteHandler(bullet);
     });
 
-    // add the insert the new bullet element child before the new note button
-    const newNoteButton = sectionElement.querySelector('button.new-bullet');
-    sectionElement.insertBefore(bulletElement, newNoteButton);
+    // insert the new bullet element child before the new note button
+    const newNote = sectionElement.querySelector('button.new-bullet');
+    sectionElement.insertBefore(bullet, newNote);
 
     // prompt user to start typing note
-    bulletElement.shadowRoot.querySelector('.bullet-text').focus();
+    bullet.shadowRoot.querySelector('.bullet-text').focus();
   }
 
   /**
@@ -663,24 +663,24 @@ class DailyLog extends HTMLElement {
     // store the updated daily JSON object in the database
     Database.store(dailyID, data);
 
-    // create a blank section HTML element with the section ID
-    const sectionElement = document.createElement('section');
-    sectionElement.id = sectionObj.id;
-    sectionElement.className = sectionObj.type;
+    // create a blank section element with the section ID
+    const section = document.createElement('section');
+    section.id = sectionObj.id;
+    section.className = sectionObj.type;
 
-    // create the editable section header element
-    const sectionHeader = document.createElement('h2');
-    sectionHeader.contentEditable = 'true';
-    sectionElement.appendChild(sectionHeader);
+    // create the editable section title element
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.contentEditable = 'true';
+    section.appendChild(sectionTitle);
 
-    // add event listener to the header to update the daily log element when the header text is updated
-    sectionHeader.addEventListener('blur', (event) => {
+    // add event listener to the title to update the daily log element when the title text is updated
+    sectionTitle.addEventListener('blur', (event) => {
       const sectionName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
-      if (sectionHeader.innerText !== sectionName) {
+      if (sectionTitle.innerText !== sectionName) {
         const dailyData = dailyLog.data;
         for (const sec of dailyData.sections) {
           if (sec.id === sectionID) {
-            sec.name = sectionHeader.innerText;
+            sec.name = sectionTitle.innerText;
           }
         }
         this.setAttribute('data', JSON.stringify(dailyData));
@@ -688,37 +688,37 @@ class DailyLog extends HTMLElement {
       }
     });
 
-    // add event listener to the header to prevent newlines in headers
-    sectionHeader.addEventListener('keypress', (event) => {
+    // add event listener to the title to prevent newlines
+    sectionTitle.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
-        sectionHeader.blur();
+        sectionTitle.blur();
       }
     });
 
     // create a button to delete the section and add the delete section event listener to it
-    const deleteSectionButton = document.createElement('button');
-    deleteSectionButton.className = 'delete-section';
-    deleteSectionButton.innerText = 'Delete Section';
-    deleteSectionButton.addEventListener('click', function (event) {
+    const deleteSection = document.createElement('button');
+    deleteSection.className = 'delete-section';
+    deleteSection.innerText = 'Delete Section';
+    deleteSection.addEventListener('click', function (event) {
       dailyLog.deleteSectionHandler(event.target.closest('section'));
     });
-    sectionElement.appendChild(deleteSectionButton);
+    sectionTitle.appendChild(deleteSection);
 
     // create a button to add new notes to the section and add the add new bullet event listener to it
-    const newNoteButton = document.createElement('button');
-    newNoteButton.className = 'new-bullet';
-    newNoteButton.innerHTML = `
+    const newNote = document.createElement('button');
+    newNote.className = 'new-bullet';
+    newNote.innerHTML = `
       <i class="fas fa-plus icon-size"></i>
     `;
-    newNoteButton.addEventListener('click', function (event) {
+    newNote.addEventListener('click', function (event) {
       dailyLog.newNoteHandler(event.target.closest('section'));
     });
-    sectionElement.appendChild(newNoteButton);
+    section.appendChild(newNote);
 
-    divElement.appendChild(sectionElement);
+    divElement.appendChild(section);
 
     // prompt user to start typing section name
-    sectionHeader.focus();
+    sectionTitle.focus();
   }
 
   /**

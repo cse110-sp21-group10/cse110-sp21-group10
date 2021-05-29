@@ -22,10 +22,8 @@ h1 {
   width: 85%;
   top: 10%;
   left: 7.5%;
-
   max-height: 80vh;
   overflow: auto;
-
   font-size: larger;
 }
 
@@ -38,7 +36,7 @@ h1 {
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
-.global-icons button{
+.global-icons button {
   border: none;
   background: none;
 }
@@ -52,7 +50,7 @@ h1 {
   width: 4%;
   height: 7%;
 }
-  
+
 #zoom-out-button {
   position: absolute;
   right: 2.4%;
@@ -62,7 +60,7 @@ h1 {
   width: 4%;
   height: 7%;
 }
-  
+
 #last-entry-back {
   position: absolute;
   left: 2.4%;
@@ -72,7 +70,7 @@ h1 {
   width: 4%;
   height: 7%;
 }
-  
+
 #prev-day {
   position: absolute;
   left: 33%;
@@ -82,7 +80,7 @@ h1 {
   width: 4%;
   height: 7%;
 }
-  
+
 #next-day {
   position: absolute;
   right: 33%;
@@ -92,7 +90,7 @@ h1 {
   width: 4%;
   height: 7%;
 }
-  
+
 #last-entry-forward {
   position: absolute;
   right: 2.4%;
