@@ -134,11 +134,12 @@ class DailyLog extends HTMLElement {
    * on this element to set the 'data' attribute of the element to be the given JSON data,
    * so that the data can be retrieved from the element later if needed.
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
-   * is the string ID of the object, and the second element is the JSON object data) that is used
+   * @param {Array.<{id: string, jsonData: Object}>} data - Array of three elements (first element
+   * is the string ID of the object, second element is the JSON object data, third element is a callback
+   * used to update the dayID[] "entries" for jumping between entries) that is used
    * to construct and set the data in this HTML element
    */
-  set data ([id, jsonData]) {
+  set data ([id, jsonData, callback]) {
     // store this object in a variable so it can be passed to handlers later
     const dailyLog = this;
 
@@ -177,6 +178,7 @@ class DailyLog extends HTMLElement {
     const newSectionButton = root.querySelector('#related-sections-button');
     newSectionButton.addEventListener('click', function (event) {
       dailyLog.newSectionHandler(event.target.closest('div.daily'));
+      callback();
     });
 
     // get all information about the date that is needed for the header display
@@ -316,6 +318,7 @@ class DailyLog extends HTMLElement {
         `;
         newNoteButton.addEventListener('click', function (event) {
           dailyLog.newNoteHandler(event.target.closest('section'));
+          callback();
         });
         sectionElement.appendChild(newNoteButton);
 
