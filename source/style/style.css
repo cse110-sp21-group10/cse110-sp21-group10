@@ -22,10 +22,8 @@ h1 {
   width: 85%;
   top: 10%;
   left: 7.5%;
-
   max-height: 80vh;
   overflow: auto;
-
   font-size: larger;
 }
 
@@ -38,7 +36,7 @@ h1 {
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
-.global-icons button{
+.global-icons button {
   border: none;
   background: none;
 }
@@ -47,27 +45,27 @@ h1 {
   left: 2.4%;
   top: 4%;
 }
-  
+
 #zoom-out-button {
   right: 2.4%;
   top: 4%;
 }
-  
+
 #last-entry-back {
   left: 2.4%;
   bottom: 4%;
 }
-  
+
 #prev-day {
   left: 33%;
   bottom: 1.5%;
 }
-  
+
 #next-day {
   right: 33%;
   bottom: 1.5%;
 }
-  
+
 #last-entry-forward {
   right: 2.4%;
   bottom: 4%;
@@ -81,12 +79,6 @@ h1 {
   border-radius: 30px;
   width: 4%;
   height: 7%;
-}
-
-/* Add a background color on hover */
-.global-icons button:hover {
-  background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
 }
 
 nav.navigation {
@@ -173,6 +165,12 @@ section.header button {
 }
 
 section.header button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
+}
+
+/* Add a background color on hover */
+.global-icons button:hover {
   background-color: lightgray;
   cursor: pointer; /* Pointer/hand icon */
 }
