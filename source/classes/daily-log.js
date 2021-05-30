@@ -21,13 +21,23 @@ import { Database } from './database.js';
  *     },
  *     {
  *       type: 'slider',
- *       name: 'Sleep',
+ *       name: 'Sleep Quality',
  *       value: 5
  *     },
  *     {
+ *       type: 'numInput',
+ *       name: 'Calorie Intake',
+ *       value: -1 // signifies unused tracker
+ *     },
+ *     {
  *       type: 'checkbox',
- *       name: 'Workout',
- *       value: 1
+ *       name: 'Exercise',
+ *       value: 0
+ *     },
+ *     {
+ *       type: 'numInput',
+ *       name: 'Money Spent',
+ *       value: 25
  *     }
  *   ],
  *   sections: [
@@ -168,7 +178,7 @@ class DailyLog extends HTMLElement {
           {
             type: 'checkbox',
             name: 'Exercise',
-            value: -1
+            value: 0
           },
           {
             type: 'numInput',
@@ -199,7 +209,7 @@ class DailyLog extends HTMLElement {
     const root = this.shadowRoot.querySelector('div.daily');
     root.id = id;
 
-    // TODO: ADD EVENT LISTENERS TO HEADER BUTTONS HERE
+    // add event listener for the add section button in the header
     const newSectionButton = root.querySelector('#related-sections-button');
     newSectionButton.addEventListener('click', function (event) {
       dailyLog.newSectionHandler(event.target.closest('div.daily'));
@@ -685,7 +695,7 @@ class DailyLog extends HTMLElement {
         // check if this is the right tracker object
         if (trackerObj.name === tracker.name) {
           // if the tracker value is currently 1 (means it is checked), we want to uncheck it
-          // if the tracker object is 0 or -1 (means it is unchecked), we want to check it
+          // if the tracker object is 0 (means it is unchecked), we want to check it
           if (trackerObj.value === 1) {
             trackerObj.value = 0;
           } else {
