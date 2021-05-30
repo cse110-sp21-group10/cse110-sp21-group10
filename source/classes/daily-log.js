@@ -702,7 +702,7 @@ class DailyLog extends HTMLElement {
     deleteSection.addEventListener('click', function (event) {
       dailyLog.deleteSectionHandler(event.target.closest('section'));
     });
-    sectionTitle.appendChild(deleteSection);
+    section.appendChild(deleteSection);
 
     // create a button to add new notes to the section and add the add new bullet event listener to it
     const newNote = document.createElement('button');
