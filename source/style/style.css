@@ -152,6 +152,7 @@ Primarily keeps the header and buttons in the same line */
 
 section.header {
   display: flex;
+  margin-bottom: 2%;
 }
 
 section.header h1 {
@@ -285,3 +286,106 @@ section.header button:hover {
 [contenteditable] {
   outline: 0 solid transparent;
 }
+
+/* For the weather */
+
+.container{
+  width: 13vw;  
+  height: 5vw;  
+  background-color: transparent;
+  
+  display: block;
+  margin: 0;
+  margin-left: 1vw;
+
+  padding-top: 0.2vw;
+  /* padding-bottom : 50px; */
+}
+
+.notification {
+  background-color: transparent;
+  display: none;
+}
+
+.notification p{
+  color: #721c24;
+  font-size: 1.2em;
+  margin: 0;
+  text-align: center;
+  height: 0;
+}
+
+.weather-container{
+  width: 13vw;
+  height: 5vw;
+  background-color: transparent;
+}
+
+.weather-icon{
+  display: inline-block;
+  width: 5vw;
+  height: 5vw;
+}
+
+.weather-icon img{
+  display: block;
+  margin: 0;
+  width: 8.5vw;
+  height: 8.5vw;
+
+  position: relative;
+  bottom: 2vw;
+  right: 1vw;
+  z-index: -1;
+}
+
+.temperature-value{
+  display: inline-block;
+  width: 7vw;
+}
+
+.temperature-value p{
+  padding: .5vw;
+  margin: 0;
+  color: black;
+  font-size: 2vw;
+  font-family: cursive;
+  cursor: pointer;
+}
+
+.temperature-value p:hover{
+  
+}
+
+.temperature-value span{
+  color: black;
+  font-size: 1.5vw;
+
+}
+
+.temperature-description{
+  width: 10vw;
+  height: 2vw;
+  position: relative;
+  bottom: 1.3vw;
+}
+
+.temperature-description p{
+  margin: 0;
+  color: black;
+  text-align: center;
+  font-size: 1.5vw;
+  font-family: cursive;
+}
+
+/* .location{
+  
+}
+
+.location p{
+  margin: 0;
+  padding: 0;
+  color: black;
+  text-align: center;
+  font-size: 0.8em;
+} */
