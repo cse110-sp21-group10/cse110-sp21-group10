@@ -357,17 +357,17 @@ export class Database {
         // starts a transaction to create a get request for the object with the given ID
         const transaction = db.transaction([Database.Stores.DAILY], 'readwrite');
         const store = transaction.objectStore(Database.Stores.DAILY);
-        const getRequest = store.getAllKeys();
+        const getKeysRequest = store.getAllKeys();
 
-        // on success, call the callback function with the retrieved data and the varArgs if any were provided
-        getRequest.onsuccess = function (event) {
+        // on success, call the callback function with the retrieved list of keys and the varArgs if any were provided
+        getKeysRequest.onsuccess = function (event) {
           if (callback != null) {
             callback(event.target.result, ...varArgs);
           }
         };
 
         // on error, call the callback function with null and the varArgs if any were provided
-        getRequest.onerror = function (event) {
+        getKeysRequest.onerror = function (event) {
           if (callback != null) {
             callback(null, ...varArgs);
           }
