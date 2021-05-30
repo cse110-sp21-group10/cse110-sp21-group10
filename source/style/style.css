@@ -22,10 +22,8 @@ h1 {
   width: 85%;
   top: 10%;
   left: 7.5%;
-
   max-height: 80vh;
   overflow: auto;
-
   font-size: larger;
 }
 
@@ -38,7 +36,7 @@ h1 {
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
-.global-icons button{
+.global-icons button {
   border: none;
   background: none;
 }
@@ -47,46 +45,43 @@ h1 {
   left: 2.4%;
   top: 4%;
 }
-  
+
 #zoom-out-button {
   right: 2.4%;
   top: 4%;
 }
-  
+
 #last-entry-back {
   left: 2.4%;
   bottom: 4%;
 }
-  
+
 #prev-day {
   left: 33%;
   bottom: 1.5%;
 }
-  
+
 #next-day {
   right: 33%;
   bottom: 1.5%;
 }
-  
+
 #last-entry-forward {
   right: 2.4%;
   bottom: 4%;
 }
 
-#menu-button, #zoom-out-button,
-#last-entry-back, #prev-day,
-#next-day, #last-entry-forward {
+#menu-button,
+#zoom-out-button,
+#last-entry-back,
+#prev-day,
+#next-day,
+#last-entry-forward {
   position: absolute;
-  font-size: .8vw;
+  font-size: 0.8vw;
   border-radius: 30px;
   width: 4%;
   height: 7%;
-}
-
-/* Add a background color on hover */
-.global-icons button:hover {
-  background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
 }
 
 nav.navigation {
@@ -162,6 +157,7 @@ section.header h1 {
 
 section.header button {
   position: relative;
+
   /* right: 0; */
   margin-right: 4%;
   border: none;
@@ -170,7 +166,13 @@ section.header button {
   padding: 1%;
   margin-top: 1.8%;
   border-radius: 30px;
-  font-size: .8vw;
+  font-size: 0.8vw;
+}
+
+/* Add a background color on hover */
+.global-icons button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
 }
 
 section.header button:hover {
@@ -263,6 +265,7 @@ section.header button:hover {
   border: 2px solid black;
   border-radius: 30px;
   min-height: 30%;
+
   /* padding-top: 10px; */
   padding-left: 2%;
   padding-bottom: 1%;
@@ -279,8 +282,8 @@ section.header button:hover {
 }
 
 .new-bullet:hover {
-  background-color: rgb(241, 241, 241);;
-  color: #33cc33;
+  background-color: rgb(241, 241, 241);
+  color: #3c3;
 }
 
 [contenteditable] {
