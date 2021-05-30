@@ -132,6 +132,11 @@ div.daily {
   margin-right: 12%;
 }
 
+div.slider-div {
+  display: flex;
+  flex-direction: row;
+}
+
 /* This hides the monthly screen, so only the daily log is seen */
 
 div.monthly {

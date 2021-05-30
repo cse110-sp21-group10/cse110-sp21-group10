@@ -149,7 +149,33 @@ class DailyLog extends HTMLElement {
     if (Object.entries(jsonData).length === 0) {
       jsonData = {
         widgets: [],
-        trackers: [],
+        trackers: [
+          {
+            type: 'slider',
+            name: 'Mood',
+            value: -1
+          },
+          {
+            type: 'slider',
+            name: 'Sleep Quality',
+            value: -1
+          },
+          {
+            type: 'numInput',
+            name: 'Calorie Intake',
+            value: -1
+          },
+          {
+            type: 'checkbox',
+            name: 'Exercise',
+            value: -1
+          },
+          {
+            type: 'numInput',
+            name: 'Money Spent',
+            value: -1
+          }
+        ],
         sections: [
           {
             id: '00',
@@ -211,17 +237,47 @@ class DailyLog extends HTMLElement {
 
     // creates all trackers in one section
     if (jsonData.trackers && jsonData.trackers.length > 0) {
+      // construct tracker section element
       const trackerSection = document.createElement('section');
       trackerSection.className = 'trackers';
+
+      // optional tracker elements if we want to implement
+      // <button class="add" id="add-tracker">Add Tracker</button>
+      // <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
       trackerSection.innerHTML = `
         <h2>Trackers</h2>
-        <button class="add" id="add-tracker">Add Tracker</button >
-        <button class="minimize" id="minimize-trackers">Minimize Trackers</button>
       `;
 
       for (const tracker of jsonData.trackers) {
-        console.log(tracker);
-        // TODO: CONSTRUCT THE TRACKER HERE
+        // create a div for the tracker
+        const trackerDiv = document.createElement('div');
+        trackerDiv.className = 'tracker';
+
+        // construct the title of the tracker
+        const trackerTitle = document.createElement('h3');
+        trackerTitle.innerText = tracker.name;
+        trackerDiv.appendChild(trackerTitle);
+
+        // get the appropriate tracker element based on what type of tracker this is
+        let trackerEl;
+        switch (tracker.type) {
+          case 'slider':
+            trackerEl = this.createSlider(tracker);
+            break;
+          case 'checkbox':
+            trackerEl = this.createCheckbox(tracker);
+            break;
+          case 'numInput':
+            trackerEl = this.createNumInput(tracker);
+            break;
+          default:
+            console.log('No tracker implementation found: ' + tracker.type);
+            break;
+        }
+        trackerDiv.appendChild(trackerEl);
+
+        // add the tracker to the tracker section
+        trackerSection.appendChild(trackerDiv);
       }
 
       root.appendChild(trackerSection);
@@ -527,14 +583,166 @@ class DailyLog extends HTMLElement {
    * representation we use has a 0 in front of the number. For example a section number 1 would
    * have an ID of '01'.
    *
-   * @param {number} num - the integer that is being stringified
-   * @returns {string} a string representation of the number that can be used in object IDs
+   * @param {number} num - The integer that is being stringified
+   * @returns {string} A string representation of the number that can be used in object IDs
    */
   stringifyNum (num) {
     if (num < 10) {
       return `0${num}`;
     }
     return `${num}`;
+  }
+
+  /**
+   * This function is a helper function to create a slider for trackers that are to be presented
+   * in the slider format. The function first creates a div element to hold the 3 pieces of the
+   * slider element. The first two elements in the slider div are the frown and smile icons that
+   * are there to help the user see what each extreme of the slider means. The function then
+   * creates the html input element with the type 'range', and sets its value based on the value
+   * in the tracker object. Then, the function adds an event listener to the slider so that
+   * the JSON object data gets updated for the daily log object and in the database when the slider
+   * value gets changed. Finally, the slider div is returned so that it can be appended to the
+   * trackers section.
+   *
+   * @param {Object} tracker - The JSON object of the tracker being created
+   * @returns {HTMLElement} A div element containing the slider and the icons to show what each
+   * extreme of the slider signifies
+   */
+  createSlider (tracker) {
+    // slider overlay div creation
+    const sliderDiv = document.createElement('div');
+    sliderDiv.className = 'slider-div';
+
+    // frowny face and smiley face for the ends of the slider
+    sliderDiv.innerHTML = `
+      <i class="far fa-frown"></i>
+      <i class="far fa-smile"></i>
+    `;
+
+    // actual slider creation
+    const slider = document.createElement('input');
+    slider.id = tracker.name;
+    slider.className = 'slider';
+    slider.type = 'range';
+    slider.min = '1';
+    slider.max = '10';
+    slider.step = '1';
+    // set value of slider based on data
+    if (tracker.value !== -1) {
+      slider.value = `${tracker.value}`;
+    } else {
+      slider.value = '1';
+    }
+
+    // add change listener for updates
+    const dailyLog = this;
+    slider.addEventListener('change', (event) => {
+      const data = dailyLog.data;
+      // finds the tracker associated with this slider
+      // then changes it based on the new value
+      for (const trackerObj of data.trackers) {
+        if (trackerObj.name === tracker.name) {
+          trackerObj.value = Number(String(event.target.value));
+        }
+      }
+      dailyLog.setAttribute('data', JSON.stringify(data));
+      Database.store(dailyLog.id, data);
+    });
+
+    // get the icon that should be on the right of the slider, and insert the slider before it
+    const rightIcon = sliderDiv.querySelector('i:nth-child(2)');
+    sliderDiv.insertBefore(slider, rightIcon);
+
+    return sliderDiv;
+  }
+
+  /**
+   * This function is a helper function to create a checkbox for trackers that are to be presented
+   * in the checkbox format. The function first creates the html input element with the type 'checkbox',
+   * and sets its checked attribute based on the value in the tracker object. Then, the function adds
+   * an event listener to the checkbox so that the JSON object data gets updated for the daily log
+   * object and in the database when the checkbox gets checked or unchecked. Finally, the checkbox
+   * element is returned so that it can be appended to the trackers section.
+   *
+   * @param {Object} tracker - The JSON object of the tracker being created
+   * @returns {HTMLElement} The checkbox input element to be displayed as the tracker
+   */
+  createCheckbox (tracker) {
+    // checkbox element creation
+    const checkboxEl = document.createElement('input');
+    checkboxEl.id = tracker.name;
+    checkboxEl.className = 'checkbox';
+    checkboxEl.type = 'checkbox';
+    checkboxEl.value = tracker.name;
+    // set checked value based on data
+    checkboxEl.checked = tracker.value === 1;
+
+    // add change listener for updates
+    const dailyLog = this;
+    checkboxEl.addEventListener('change', (event) => {
+      const data = dailyLog.data;
+      for (const trackerObj of data.trackers) {
+        // check if this is the right tracker object
+        if (trackerObj.name === tracker.name) {
+          // if the tracker value is currently 1 (means it is checked), we want to uncheck it
+          // if the tracker object is 0 or -1 (means it is unchecked), we want to check it
+          if (trackerObj.value === 1) {
+            trackerObj.value = 0;
+          } else {
+            trackerObj.value = 1;
+          }
+        }
+      }
+      dailyLog.setAttribute('data', JSON.stringify(data));
+      Database.store(dailyLog.id, data);
+    });
+
+    return checkboxEl;
+  }
+
+  /**
+   * This function is a helper function to create a number input for trackers that are to be presented
+   * in the number input format. The function first creates the html input element with the type 'number',
+   * and sets its value based on the value in the tracker object. Then, the function adds an event listener
+   * to the input element so that the JSON object data gets updated for the daily log object and in the
+   * database when the number input gets changed (note that if the inputted number is negative, the data
+   * is not updated because a negative input does not make sense in the context of these trackers). Finally,
+   * the number input element is returned so that it can be appended to the trackers section.
+   *
+   * @param {Object} tracker - The JSON object of the tracker being created
+   * @returns {HTMLElement} The number input element to be displayed as the tracker
+   */
+  createNumInput (tracker) {
+    // number input element creation
+    const numInputEl = document.createElement('input');
+    numInputEl.id = tracker.name;
+    numInputEl.className = 'numInput';
+    numInputEl.type = 'number';
+    numInputEl.min = 0;
+    // set num input based on data
+    if (tracker.value !== -1) {
+      numInputEl.value = `${tracker.value}`;
+    }
+
+    // add change listener for updates
+    const dailyLog = this;
+    numInputEl.addEventListener('change', (event) => {
+      const inputVal = Number(String(event.target.value));
+      // only record if it is non-negative
+      if (inputVal >= 0) {
+        const data = dailyLog.data;
+        for (const trackerObj of data.trackers) {
+          // check that this is the right tracker object
+          if (trackerObj.name === tracker.name) {
+            trackerObj.value = inputVal;
+          }
+        }
+        dailyLog.setAttribute('data', JSON.stringify(data));
+        Database.store(dailyLog.id, data);
+      }
+    });
+
+    return numInputEl;
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------
