@@ -370,7 +370,7 @@ section.header button:hover {
   width: 10vw;
   height: 2vw;
   position: relative;
-  bottom: 1.3vw;
+  bottom: 1vw;
 }
 
 .temperature-description p{

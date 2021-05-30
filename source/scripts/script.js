@@ -252,6 +252,7 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
   // apend dayElem somewhere
   divDaily.remove();
   divDaily = dayElem;
+  divMonthly.style.display = 'none';
   document.getElementById('internal-content').appendChild(dayElem);
 }
 
