@@ -135,7 +135,7 @@ class BulletEntry extends HTMLElement {
         
         .dropdown-content {
           display: none;
-          position: realtive;
+          position: relative;
           top: 2vh;
           background-color: #f1f1f1;
           min-width: 160px;
