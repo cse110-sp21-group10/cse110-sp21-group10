@@ -127,29 +127,6 @@ class BulletEntry extends HTMLElement {
         [contenteditable] {
           outline: 0px solid transparent;
         }
-
-        .dropdown {
-          position: relative;
-          display: inline-block;
-        }
-        
-        .dropdown-content {
-          display: none;
-          position: relative;
-          top: 20px;
-          background-color: #f1f1f1;
-          min-width: 160px;
-          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        }
-        
-        .dropdown-content i:hover {
-          background-color: #ddd;
-        }
-        
-        .dropdown:hover .dropdown-content {
-          display: block; 
-          position: absolute;
-        }
         
       </style>
       
@@ -157,16 +134,7 @@ class BulletEntry extends HTMLElement {
 
       <div class="bullet">         
         <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>    
-        <div class="dropdown">
-          <button class="bullet-point"><i class="fas fa-circle"></i></button>
-          <div class="dropdown-content">
-            <button id="empty-checkbox" class="bullet-option"><i class="fas fa-square"></i></button> 
-            <button id="important" class="bullet-option"><i class="fas fa-exclamation bullet-option"></i></button> 
-            <button id="notes" class="bullet-option"><i class="fas fa-minus bullet-option"></i></button> 
-            <button id="tasks" class="bullet-option"><i class="fas fa-circle"></i></button>
-            <button id="events" class="bullet-option"><i class="far fa-circle"></i></button>
-          </div>
-        </div>
+        <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
         
         <p class="bullet-text" contenteditable="true">
@@ -272,7 +240,7 @@ class BulletEntry extends HTMLElement {
       let contextmenu = document.querySelector('#context-menu');
       contextmenu.classList.remove('active');
     });
-    
+
     /** Checklist toggle based off value
      * - Implemented using display: none
      */
