@@ -292,9 +292,9 @@ section.header button:hover {
 
 /* For the weather */
 
-.container{
-  width: 13vw;  
-  height: 5vw;  
+.container {
+  width: 13vw;
+  height: 5vw;
   background-color: transparent;
   display: block;
   margin: 0;
@@ -309,7 +309,7 @@ section.header button:hover {
   display: none;
 }
 
-.notification p{
+.notification p {
   color: #721c24;
   font-size: 1.2em;
   margin: 0;
@@ -317,36 +317,35 @@ section.header button:hover {
   height: 0;
 }
 
-.weather-container{
+.weather-container {
   width: 13vw;
   height: 5vw;
   background-color: transparent;
 }
 
-.weather-icon{
+.weather-icon {
   display: inline-block;
   width: 5vw;
   height: 5vw;
 }
 
-.weather-icon img{
+.weather-icon img {
   display: block;
   margin: 0;
   width: 7.2vw;
   height: 7.2vw;
-
   position: relative;
   bottom: 2vw;
   right: 1vw;
   z-index: -1;
 }
 
-.temperature-value{
+.temperature-value {
   display: inline-block;
   width: 7vw;
 }
 
-.temperature-value p{
+.temperature-value p {
   padding: .5vw;
   margin: 0;
   color: black;
@@ -362,13 +361,13 @@ section.header button:hover {
   
 } */
 
-.temperature-value span{
+.temperature-value span {
   color: black;
   font-size: 1.5vw;
 
 }
 
-.temperature-description{
+.temperature-description {
   width: 12vw;
   height: 2vw;
   position: relative;
@@ -411,6 +410,7 @@ section.header button:hover {
   box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.05);
   transform: scale(0);
   transform-origin: top left;
+  z-index: 2;
 }
 
 #context-menu.active {
@@ -425,7 +425,7 @@ section.header button:hover {
 #context-menu .bullet-select .bullet-option {
   position: relative;
   padding: 0.25vw;
-  padding-left: 0;
+  padding-left: 0px;
   font-size: 1vw;
   color: #555;
   cursor: pointer;
