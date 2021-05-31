@@ -258,6 +258,9 @@ class DailyLog extends HTMLElement {
         sectionElement.id = section.id;
         sectionElement.className = section.type;
 
+        // added a margin to the bottom of each section
+        sectionElement.style = "margin-bottom: 1vw";
+
         // construct section header element
         const sectionHeader = document.createElement('h2');
         sectionHeader.innerText = section.name;
@@ -777,6 +780,9 @@ class DailyLog extends HTMLElement {
     const section = document.createElement('section');
     section.id = sectionObj.id;
     section.className = sectionObj.type;
+
+    // added a margin to the bottom of each section
+    section.style = "margin-bottom: 1vw";
 
     // create the editable section title element
     const sectionTitle = document.createElement('h2');
