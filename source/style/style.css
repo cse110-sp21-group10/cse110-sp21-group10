@@ -373,7 +373,7 @@ section.header button:hover {
   width: 12vw;
   height: 2vw;
   position: relative;
-  bottom: .5vw;
+  bottom: 1vw;
   right: 1vw;
 }
 
