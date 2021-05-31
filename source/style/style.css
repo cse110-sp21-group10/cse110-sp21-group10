@@ -296,12 +296,11 @@ section.header button:hover {
   width: 13vw;  
   height: 5vw;  
   background-color: transparent;
-  
   display: block;
   margin: 0;
   margin-left: 1vw;
-
   padding-top: 0.2vw;
+
   /* padding-bottom : 50px; */
 }
 
@@ -359,9 +358,9 @@ section.header button:hover {
   right: .2vw;
 }
 
-.temperature-value p:hover{
+/* .temperature-value p:hover{
   
-}
+} */
 
 .temperature-value span{
   color: black;
@@ -420,3 +419,63 @@ section.header button:hover {
   text-align: center;
   font-size: 0.8em;
 } */
+
+/* All styling necessary for the conext menu start */
+
+#context-menu {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 1vh;
+  left: 1.2vw;
+  background: #fdfdfd;
+  width: 7.5vw;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.05);
+  transform: scale(0);
+  transform-origin: top left;
+}
+
+#context-menu.active {
+  transform: scale(1);
+  transition: transform 250ms ease-in-out;
+}
+
+#context-menu .bullet-select {
+  border-bottom: 0.5px solid #eee;
+}
+
+#context-menu .bullet-select .bullet-option {
+  position: relative;
+  padding: 0.25vw;
+  padding-left: 0;
+  font-size: 1vw;
+  color: #555;
+  cursor: pointer;
+}
+
+#context-menu .bullet-select .bullet-option i {
+  display: inline-block;
+  width: 1.5vw;
+  margin-right: 5px;
+  text-align: center;
+}
+
+#context-menu .bullet-select .bullet-option:before {
+  content: ""; 
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 0%;
+  height: 100%;
+  background: #eee;
+  z-index: -1;
+  transition: all 150ms ease-in-out;
+}
+
+#context-menu .bullet-select .bullet-option:hover:before {
+  width: 100%;
+}
+
+/* All styling necessary for the conext menu end */
