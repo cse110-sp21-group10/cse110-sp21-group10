@@ -215,19 +215,18 @@ class BulletEntry extends HTMLElement {
      *
      */
 
-    //adding an event listener to the bullet-point itself so we can have a custom contextmenu for custom bullet points
-    let bulletPoint = this.shadowRoot.querySelector('.bullet-point');
+    // adding an event listener to the bullet-point itself so we can have a custom contextmenu for custom bullet points
+    const bulletPoint = this.shadowRoot.querySelector('.bullet-point');
 
     /** Custom bullet menu toggle on
      * turns off default context menu
      * adds active class to custom context menu on right click to bullet-point
      */
-    bulletPoint.addEventListener('contextmenu', function(event) {
+    bulletPoint.addEventListener('contextmenu', (event) => {
       event.preventDefault();
-      let x = event.pageX + "px";
-      console.log("event.pagex is " + event.pageX);
-      let y = event.pageY + "px";
-      let contextmenu = document.querySelector('#context-menu');
+      const x = event.pageX + 'px';
+      const y = event.pageY + 'px';
+      const contextmenu = document.querySelector('#context-menu');
       contextmenu.style.top = y;
       contextmenu.style.left = x;
       contextmenu.classList.add('active');
@@ -236,7 +235,7 @@ class BulletEntry extends HTMLElement {
     /** Event Listener for any click on the window
      * This will remove the 'active' class from our contextmenu so it auto closes
      */
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', (event) => {
       let contextmenu = document.querySelector('#context-menu');
       contextmenu.classList.remove('active');
     });
