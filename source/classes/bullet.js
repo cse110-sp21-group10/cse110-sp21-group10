@@ -48,7 +48,7 @@ class BulletEntry extends HTMLElement {
           border: none;
           background: none;
           float: left;
-          padding-top: .6%;
+          padding-top: .8vh;
         }
 
         div < div.bullet-remove {
@@ -58,7 +58,7 @@ class BulletEntry extends HTMLElement {
         .bullet-point:hover {
           font-size: 12px;
           position: relative;
-          padding-top: .5%;
+          padding-top: .7vh;
           right: 1px;
           width: 22px;
         }
@@ -70,13 +70,13 @@ class BulletEntry extends HTMLElement {
           margin: 0;
           /* border: 5px solid black; */
         
-          padding-left: 1%;
+          padding-left: .5vw;
         }
         
         .bullet {
-          margin-left: 1.8%;
+          margin-left: 1vw;
         
-          padding-left: .5%;
+          padding-left: .5vw;
           // padding-top: .5%;
 
           background-color: white;
@@ -94,29 +94,29 @@ class BulletEntry extends HTMLElement {
         
         .child-add {
           float: left;
-          max-width: 1.5%;
+          max-width: 1vw;
         }
 
         .bullet-remove {
           float: right;
-          padding-right: 1%;
+          padding-right: .8vw;
         }
         
         .bullet-remove:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .35%;
+          padding-top: .5vh;
         }
         
         .child-add:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .35%;
+          padding-top: .5vh;
         }
 
         .child-add,
         .bullet-remove {
-          padding-top: .4%;
+          padding-top: .6vh;
 
           color: transparent;
         
@@ -136,11 +136,10 @@ class BulletEntry extends HTMLElement {
         .dropdown-content {
           display: none;
           position: relative;
-          top: 2vh;
+          top: 20px;
           background-color: #f1f1f1;
           min-width: 160px;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-          z-index: 2;
         }
         
         .dropdown-content i:hover {
