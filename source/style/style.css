@@ -346,25 +346,24 @@ section.header button:hover {
 }
 
 .temperature-value p {
-  padding: .5vw;
+  padding: 0.5vw;
   margin: 0;
   color: black;
   font-size: 2.5vw;
   font-family: cursive;
   cursor: pointer;
   position: relative;
-  top: .6vh;
-  right: .2vw;
+  top: 0.6vh;
+  right: 0.2vw;
 }
 
 /* .temperature-value p:hover{
-  
+
 } */
 
 .temperature-value span {
   color: black;
   font-size: 1.5vw;
-
 }
 
 .temperature-description {
@@ -384,7 +383,7 @@ section.header button:hover {
 }
 
 /* .location{
-  
+
 }
 
 .location p{
@@ -398,8 +397,8 @@ section.header button:hover {
 /* All styling necessary for the conext menu start */
 
 #context-menu {
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
   position: fixed;
   top: 1vh;
@@ -407,7 +406,7 @@ section.header button:hover {
   background: #fdfdfd;
   width: 7.5vw;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px 2px rgba(0,0,0,0.05);
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.05);
   transform: scale(0);
   transform-origin: top left;
   z-index: 2;
@@ -425,7 +424,7 @@ section.header button:hover {
 #context-menu .bullet-select .bullet-option {
   position: relative;
   padding: 0.25vw;
-  padding-left: 0px;
+  padding-left: 0;
   font-size: 1vw;
   color: #555;
   cursor: pointer;
@@ -438,11 +437,11 @@ section.header button:hover {
   text-align: center;
 }
 
-#context-menu .bullet-select .bullet-option:before {
-  content: ""; 
+#context-menu .bullet-select .bullet-option::before {
+  content: "";
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 0%;
   height: 100%;
   background: #eee;
@@ -450,7 +449,7 @@ section.header button:hover {
   transition: all 150ms ease-in-out;
 }
 
-#context-menu .bullet-select .bullet-option:hover:before {
+#context-menu .bullet-select .bullet-option:hover::before {
   width: 100%;
 }
 
