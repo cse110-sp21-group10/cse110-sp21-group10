@@ -217,8 +217,7 @@ export class Database {
   static fetch (id, callback = null, ...varArgs) {
     this.openDatabase(function (db) {
       if (db != null) {
-        // call helper function to identify what type of object we are looking for, which determines what object
-        // store the object should be in
+        // call helper function to identify what type of object we are looking for, which determines what object store the object should be in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a get request for the object with the given ID
@@ -265,8 +264,7 @@ export class Database {
   static store (id, dataObject, callback = null, ...varArgs) {
     this.openDatabase(function (db) {
       if (db != null) {
-        // call helper function to identify what type of object we are storing, which determines what object store
-        // the object should be stored in
+        // call helper function to identify what type of object we are storing, which determines what object store the object should be stored in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a put request for the object
@@ -312,8 +310,7 @@ export class Database {
   static delete (id, callback = null, ...varArgs) {
     this.openDatabase(function (db) {
       if (db != null) {
-        // call helper function to identify what type of object we are deleting, which determines what object store
-        // the object should be in
+        // call helper function to identify what type of object we are deleting, which determines what object store the object should be in
         const storeName = Database.getStoreFromID(id);
 
         // starts a transaction to create a get request for the object with the given ID
@@ -332,6 +329,47 @@ export class Database {
         delRequest.onerror = function (event) {
           if (callback != null) {
             callback(false, ...varArgs);
+          }
+        };
+      } else {
+        console.log('ERROR: DATABASE COULD NOT BE OPENED');
+      }
+    });
+  }
+
+  /**
+   * This function retrieves the keys of all the daily JSON objects in the database. The function makes an
+   * asynchronous call to IndexedDB's getAllKeys function on the daily object store to retrieve all the keys
+   * of the daily objects in the database, and then passes the retrieved object to the given callback function
+   * if the retrieval operation succeeded, or passes null to the given callback if the retrieval operation
+   * failed. In addition to the retrieved object, any other given parameters (specified by varArgs) are also
+   * passed to the callback function.
+   *
+   * @static
+   * @param {?fetchCallback} [callback=null] - Callback function that is run after the database transaction
+   * completes (if no callback is provided, nothing is run after the transaction is complete)
+   * @param {...*} varArgs - Additional arguments that are passed into callback function (in order) along with
+   * the retrieved object (which is passed as the first argument to the callback)
+   */
+  static getEntryKeys (callback = null, ...varArgs) {
+    this.openDatabase(function (db) {
+      if (db != null) {
+        // starts a transaction to create a get request for the object with the given ID
+        const transaction = db.transaction([Database.Stores.DAILY], 'readwrite');
+        const store = transaction.objectStore(Database.Stores.DAILY);
+        const getKeysRequest = store.getAllKeys();
+
+        // on success, call the callback function with the retrieved list of keys and the varArgs if any were provided
+        getKeysRequest.onsuccess = function (event) {
+          if (callback != null) {
+            callback(event.target.result, ...varArgs);
+          }
+        };
+
+        // on error, call the callback function with null and the varArgs if any were provided
+        getKeysRequest.onerror = function (event) {
+          if (callback != null) {
+            callback(null, ...varArgs);
           }
         };
       } else {

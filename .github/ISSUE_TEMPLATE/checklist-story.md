@@ -7,13 +7,26 @@ labels: Story
 assignees: ''
 
 ---
+## User can <feature goes here described in a high level - in a way that the user can undetstand>
 
-<Point estimate> pts
+### Prereqs
+- [x] Already have YYY from Team X
+  - Design note to consider regarding Team X's code
+- [ ] Need YYY from Team Z
 
-User story description here, of the form: 
-User can <feature goes here described in a high level - in a way that the user can undetstand>
+### Workflow
+1. Button/some other element gets clicked and triggers callback that
+  - does this
+  - and does that
+    - which is broken down into
+    - smaller steps
+2. `function` called in step 1 does:
+  - this
+3. `function` called in step 2 does:
+  - that
 
-- [ ] Bullet points for whatever tasks needed to achieve said feature 
-- [ ] Tasks would generally be writing, reviewing, or fixing code 
-  - [ ] * high level description of task could be written as a sub-bullet in italics *
-  - [ ] Sub bullet points could also be used to divide tasks into subtasks if needed
+### Tasks
+- [x] Write this Issue :)
+  - [ ] Request prereqs from other Teams
+  - [ ] Decide on a workflow (helpful in planning and can be re-used in documentation)
+  - [ ] Write Tasks to subdivide big features into manageable parts (for organization)

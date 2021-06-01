@@ -22,10 +22,8 @@ h1 {
   width: 85%;
   top: 10%;
   left: 7.5%;
-
   max-height: 80vh;
   overflow: auto;
-
   font-size: larger;
 }
 
@@ -38,7 +36,7 @@ h1 {
    Gets rid of the border and background on them.
    Adding gey out hover feature. */
 
-.global-icons button{
+.global-icons button {
   border: none;
   background: none;
 }
@@ -47,46 +45,43 @@ h1 {
   left: 2.4%;
   top: 4%;
 }
-  
+
 #zoom-out-button {
   right: 2.4%;
   top: 4%;
 }
-  
+
 #last-entry-back {
   left: 2.4%;
   bottom: 4%;
 }
-  
+
 #prev-day {
   left: 33%;
   bottom: 1.5%;
 }
-  
+
 #next-day {
   right: 33%;
   bottom: 1.5%;
 }
-  
+
 #last-entry-forward {
   right: 2.4%;
   bottom: 4%;
 }
 
+#menu-button,
 #zoom-out-button,
-#last-entry-back, #prev-day,
-#next-day, #last-entry-forward {
+#last-entry-back,
+#prev-day,
+#next-day,
+#last-entry-forward {
   position: absolute;
-  font-size: medium;
+  font-size: 0.8vw;
   border-radius: 30px;
   width: 4%;
   height: 7%;
-}
-
-/* Add a background color on hover */
-.global-icons button:hover {
-  background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
 }
 
 nav.navigation {
@@ -117,7 +112,8 @@ div.daily {
   display: block;
   margin-left: 7.5%;
   margin-top: 2%;
-  margin-right: 12%;
+  margin-right: 7.5%;
+  margin-bottom: 2%;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
@@ -151,6 +147,7 @@ Primarily keeps the header and buttons in the same line */
 
 section.header {
   display: flex;
+  margin-bottom: 2%;
 }
 
 section.header h1 {
@@ -160,14 +157,22 @@ section.header h1 {
 
 section.header button {
   position: relative;
+
   /* right: 0; */
   margin-right: 4%;
   border: none;
   background: none;
   height: 0%;
   padding: 1%;
-  margin-top: 2.8%;
+  margin-top: 1.8%;
   border-radius: 30px;
+  font-size: 0.8vw;
+}
+
+/* Add a background color on hover */
+.global-icons button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
 }
 
 section.header button:hover {
@@ -260,6 +265,7 @@ section.header button:hover {
   border: 2px solid black;
   border-radius: 30px;
   min-height: 30%;
+
   /* padding-top: 10px; */
   padding-left: 2%;
   padding-bottom: 1%;
@@ -277,7 +283,7 @@ section.header button:hover {
 
 .new-bullet:hover {
   background-color: rgb(241, 241, 241);
-  color: #33cc33;
+  color: #3c3;
 }
 
 [contenteditable] {
@@ -317,18 +323,11 @@ section.header button:hover {
   cursor: pointer;
   color: #bf0606;
 }
+
 #index.active {
-  left: 0vw;
+  left: 0;
   opacity: 100%;
   background: white;
-}
-
-#index.active #menu-button {
-  visibility: hidden;
-}
-
-#index.active #close-index {
-  visibility: visible;
 }
 
 #index #menu-button {
@@ -342,15 +341,24 @@ section.header button:hover {
   background: none;
 }
 
+#index.active #menu-button {
+  visibility: hidden;
+}
+
+#index.active #close-index {
+  visibility: visible;
+}
+
 #index #menu-button:hover {
   background-color: lightgray;
   cursor: pointer; /* Pointer/hand icon */
 }
 
 #search-bar {
-  /* position: relative; 
+  /* position: relative;
   top:5%;  */
   display: inline-block;
+
   /* font-size: 5vw; */
   margin: 0;
   width: 100%;
@@ -399,11 +407,12 @@ button[id$='setting']:active {
   outline: none;
 }
 
-.active, .collapsible:hover {
+.active,
+.collapsible:hover {
   background-color: rgb(219, 219, 219);
 }
 
-.collapsible:after {
+.collapsible::after {
   position: relative;
   top: 0.4vh;
   content: '\002B';
@@ -413,7 +422,7 @@ button[id$='setting']:active {
   margin-left: 5px;
 }
 
-.active:after {
+.active::after {
   content: "\2212";
   position: relative;
   top: 0.4vh;
@@ -427,6 +436,18 @@ button[id$='setting']:active {
   background-color: white;
   border-radius: 15px;
   width: 95%;
+}
+
+.setting-option {
+  font-size: 1.25vw;
+  text-align: left;
+  background: none;
+  border: none;
+  width: inherit;
+}
+
+.setting-option:hover {
+  cursor: pointer;
 }
 
 .content .setting-option:hover {
@@ -454,14 +475,167 @@ button[id$='setting']:active {
   font-family: 'Helvetica', sans-serif;
 }
 
-.setting-option {
-  font-size: 1.25vw;
-  text-align: left;
-  background: none;
-  border: none;
-  width: inherit;
+/* For the weather */
+
+.container {
+  width: 13vw;
+  height: 5vw;
+  background-color: transparent;
+  display: block;
+  margin: 0;
+  margin-left: 1vw;
+  padding-top: 0.2vw;
+
+  /* padding-bottom : 50px; */
 }
 
-.setting-option:hover {
+.notification {
+  background-color: transparent;
+  display: none;
+}
+
+.notification p {
+  color: #721c24;
+  font-size: 1.2em;
+  margin: 0;
+  text-align: center;
+  height: 0;
+}
+
+.weather-container {
+  width: 13vw;
+  height: 5vw;
+  background-color: transparent;
+}
+
+.weather-icon {
+  display: inline-block;
+  width: 5vw;
+  height: 5vw;
+}
+
+.weather-icon img {
+  display: block;
+  margin: 0;
+  width: 7.2vw;
+  height: 7.2vw;
+  position: relative;
+  bottom: 2vw;
+  right: 1vw;
+  z-index: -1;
+}
+
+.temperature-value {
+  display: inline-block;
+  width: 7vw;
+}
+
+.temperature-value p {
+  padding: 0.5vw;
+  margin: 0;
+  color: black;
+  font-size: 2.5vw;
+  font-family: cursive;
+  cursor: pointer;
+  position: relative;
+  top: 0.6vh;
+  right: 0.2vw;
+}
+
+/* .temperature-value p:hover{
+
+} */
+
+.temperature-value span {
+  color: black;
+  font-size: 1.5vw;
+}
+
+.temperature-description {
+  width: 12vw;
+  height: 2vw;
+  position: relative;
+  bottom: 1vw;
+  right: 1vw;
+}
+
+.temperature-description p {
+  margin: 0;
+  color: black;
+  text-align: center;
+  font-size: 1.5vw;
+  font-family: cursive;
+}
+
+/* .location{
+
+}
+
+.location p{
+  margin: 0;
+  padding: 0;
+  color: black;
+  text-align: center;
+  font-size: 0.8em;
+} */
+
+/* All styling necessary for the conext menu start */
+
+#context-menu {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  position: fixed;
+  top: 1vh;
+  left: 1.2vw;
+  background: #fdfdfd;
+  width: 7.5vw;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.05);
+  transform: scale(0);
+  transform-origin: top left;
+  z-index: 2;
+}
+
+#context-menu.active {
+  transform: scale(1);
+  transition: transform 250ms ease-in-out;
+}
+
+#context-menu .bullet-select {
+  border-bottom: 0.5px solid #eee;
+}
+
+#context-menu .bullet-select .bullet-option {
+  position: relative;
+  padding: 0.25vw;
+  padding-left: 0;
+  font-size: 1vw;
+  color: #555;
   cursor: pointer;
 }
+
+#context-menu .bullet-select .bullet-option i {
+  display: inline-block;
+  width: 1.5vw;
+  margin-right: 5px;
+  text-align: center;
+}
+
+#context-menu .bullet-select .bullet-option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #eee;
+  z-index: -1;
+  transition: all 150ms ease-in-out;
+}
+
+#context-menu .bullet-select .bullet-option:hover::before {
+  width: 100%;
+}
+
+/* All styling necessary for the conext menu end */
