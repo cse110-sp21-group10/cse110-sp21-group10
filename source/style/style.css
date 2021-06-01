@@ -6,7 +6,7 @@
 */
 
 h1 {
-  font-size: 350%;
+  font-size: 4vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -42,60 +42,43 @@ h1 {
 }
 
 #menu-button {
-  position: absolute;
   left: 2.4%;
   top: 4%;
-  font-size: medium;
-  border-radius: 10px;
-  width: 4%;
-  height: 7%;
 }
 
 #zoom-out-button {
-  position: absolute;
   right: 2.4%;
   top: 4%;
-  font-size: medium;
-  border-radius: 20px;
-  width: 4%;
-  height: 7%;
 }
 
 #last-entry-back {
-  position: absolute;
   left: 2.4%;
   bottom: 4%;
-  font-size: medium;
-  border-radius: 30px;
-  width: 4%;
-  height: 7%;
 }
 
 #prev-day {
-  position: absolute;
   left: 33%;
   bottom: 1.5%;
-  font-size: medium;
-  border-radius: 30px;
-  width: 4%;
-  height: 7%;
 }
 
 #next-day {
-  position: absolute;
   right: 33%;
   bottom: 1.5%;
-  font-size: medium;
-  border-radius: 30px;
-  width: 4%;
-  height: 7%;
 }
 
 #last-entry-forward {
-  position: absolute;
   right: 2.4%;
   bottom: 4%;
-  font-size: medium;
+}
+
+#menu-button,
+#zoom-out-button,
+#last-entry-back,
+#prev-day,
+#next-day,
+#last-entry-forward {
+  position: absolute;
+  font-size: 0.8vw;
   border-radius: 30px;
   width: 4%;
   height: 7%;
@@ -129,7 +112,8 @@ div.daily {
   display: block;
   margin-left: 7.5%;
   margin-top: 2%;
-  margin-right: 12%;
+  margin-right: 7.5%;
+  margin-bottom: 2%;
 }
 
 /* This hides the monthly screen, so only the daily log is seen */
@@ -163,6 +147,7 @@ Primarily keeps the header and buttons in the same line */
 
 section.header {
   display: flex;
+  margin-bottom: 2%;
 }
 
 section.header h1 {
@@ -172,14 +157,25 @@ section.header h1 {
 
 section.header button {
   position: relative;
-  right: 0;
+
+  /* right: 0; */
   margin-right: 4%;
-  border: 0;
+  border: none;
   background: none;
+  height: 0%;
+  padding: 1%;
+  margin-top: 1.8%;
+  border-radius: 30px;
+  font-size: 0.8vw;
 }
 
 /* Add a background color on hover */
 .global-icons button:hover {
+  background-color: lightgray;
+  cursor: pointer; /* Pointer/hand icon */
+}
+
+section.header button:hover {
   background-color: lightgray;
   cursor: pointer; /* Pointer/hand icon */
 }
@@ -264,6 +260,197 @@ section.header button {
   display: inline-block;
 }
 
+.log {
+  display: inline-block;
+  border: 2px solid black;
+  border-radius: 30px;
+  min-height: 30%;
+
+  /* padding-top: 10px; */
+  padding-left: 2%;
+  padding-bottom: 1%;
+  width: 97.5%;
+}
+
+.new-bullet {
+  size: 10px;
+  position: relative;
+  left: 1.29%;
+  border-radius: 25%;
+  background: none;
+  border: none;
+}
+
+.new-bullet:hover {
+  background-color: rgb(241, 241, 241);
+  color: #3c3;
+}
+
 [contenteditable] {
   outline: 0 solid transparent;
 }
+
+/* For the weather */
+
+.container {
+  width: 13vw;
+  height: 5vw;
+  background-color: transparent;
+  display: block;
+  margin: 0;
+  margin-left: 1vw;
+  padding-top: 0.2vw;
+
+  /* padding-bottom : 50px; */
+}
+
+.notification {
+  background-color: transparent;
+  display: none;
+}
+
+.notification p {
+  color: #721c24;
+  font-size: 1.2em;
+  margin: 0;
+  text-align: center;
+  height: 0;
+}
+
+.weather-container {
+  width: 13vw;
+  height: 5vw;
+  background-color: transparent;
+}
+
+.weather-icon {
+  display: inline-block;
+  width: 5vw;
+  height: 5vw;
+}
+
+.weather-icon img {
+  display: block;
+  margin: 0;
+  width: 7.2vw;
+  height: 7.2vw;
+  position: relative;
+  bottom: 2vw;
+  right: 1vw;
+  z-index: -1;
+}
+
+.temperature-value {
+  display: inline-block;
+  width: 7vw;
+}
+
+.temperature-value p {
+  padding: 0.5vw;
+  margin: 0;
+  color: black;
+  font-size: 2.5vw;
+  font-family: cursive;
+  cursor: pointer;
+  position: relative;
+  top: 0.6vh;
+  right: 0.2vw;
+}
+
+/* .temperature-value p:hover{
+
+} */
+
+.temperature-value span {
+  color: black;
+  font-size: 1.5vw;
+}
+
+.temperature-description {
+  width: 12vw;
+  height: 2vw;
+  position: relative;
+  bottom: 1vw;
+  right: 1vw;
+}
+
+.temperature-description p {
+  margin: 0;
+  color: black;
+  text-align: center;
+  font-size: 1.5vw;
+  font-family: cursive;
+}
+
+/* .location{
+
+}
+
+.location p{
+  margin: 0;
+  padding: 0;
+  color: black;
+  text-align: center;
+  font-size: 0.8em;
+} */
+
+/* All styling necessary for the conext menu start */
+
+#context-menu {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  position: fixed;
+  top: 1vh;
+  left: 1.2vw;
+  background: #fdfdfd;
+  width: 7.5vw;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.05);
+  transform: scale(0);
+  transform-origin: top left;
+  z-index: 2;
+}
+
+#context-menu.active {
+  transform: scale(1);
+  transition: transform 250ms ease-in-out;
+}
+
+#context-menu .bullet-select {
+  border-bottom: 0.5px solid #eee;
+}
+
+#context-menu .bullet-select .bullet-option {
+  position: relative;
+  padding: 0.25vw;
+  padding-left: 0;
+  font-size: 1vw;
+  color: #555;
+  cursor: pointer;
+}
+
+#context-menu .bullet-select .bullet-option i {
+  display: inline-block;
+  width: 1.5vw;
+  margin-right: 5px;
+  text-align: center;
+}
+
+#context-menu .bullet-select .bullet-option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #eee;
+  z-index: -1;
+  transition: all 150ms ease-in-out;
+}
+
+#context-menu .bullet-select .bullet-option:hover::before {
+  width: 100%;
+}
+
+/* All styling necessary for the conext menu end */

@@ -20,6 +20,24 @@
             </nav>
             
         </header>
+
+        <!-- <div class="container">
+            <div class="notification"></div>
+            <div class="weather-container">
+                <div class="weather-icon">
+                    <img src="../assets/icons/unknown.png" alt="">
+                </div>
+                <div class="temperature-value">
+                    <p>- °<span>C</span></p>
+                </div>
+                <div class="temperature-description">
+                    <p>-</p>
+                </div>
+                <div class="location">
+                    <p>-</p>
+                </div>
+            </div>
+        </div> -->
         
             <main>
                 <!--
@@ -66,7 +84,27 @@
                     <div class="daily">
                         <section class="header" id="daily-header">
                             <h1 id="date">Sunday, May 2nd</h1>
-                            <button class="main-buttons" id="weather-icon"><i class="fas fa-cloud-sun icon-size"></i></button>
+
+
+                            <div class="container">
+                                <div class="notification"></div>
+                                <div class="weather-container">
+                                    <div class="weather-icon">
+                                        <img src="../assets/icons/unknown.png" alt="">
+                                    </div>
+                                    <div class="temperature-value">
+                                        <p>- °<span>C</span></p>
+                                    </div>
+                                    <div class="temperature-description">
+                                        <p>-</p>
+                                    </div>
+                                    <div class="location">
+                                        <p>-</p>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></button>
                             <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
                         </section>
@@ -301,6 +339,33 @@
                             </ul>
                         </section>
                     
+                    </div>
+
+                    <div id="context-menu">
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="empty-checkbox-bullet" class="far fa-square"></i>
+                                Task  
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="important-bullet" class="fas fa-exclamation"></i>
+                                Important
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="notes-bullet" class="fas fa-minus"></i>
+                                Note  
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="events-bullet" class="far fa-circle"></i>
+                                Event
+                            </div>
+                        </div>
                     </div>
 
                 </div>
