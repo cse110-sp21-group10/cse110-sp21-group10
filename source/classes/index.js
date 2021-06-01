@@ -1,45 +1,46 @@
 /* Getter for the Hamburger menu button */
-let indexBtn = document.getElementById('menu-button');
+const indexBtn = document.getElementById('menu-button');
 
 /* Getter for the Index div */
-let indexEl = document.getElementById('index');
+const indexEl = document.getElementById('index');
 
 /* Getter for the 'Font' div */
-let fontBtn = document.getElementById('font-setting');
+// eslint-disable-next-line no-unused-vars
+const fontBtn = document.getElementById('font-setting');
 
 /* Getter for the 'Theme' div */
-let themeBtn = document.getElementById('theme-setting');
+// eslint-disable-next-line no-unused-vars
+const themeBtn = document.getElementById('theme-setting');
 
 /* Getter for the 'X' button */
-let indexCloseBtn = document.getElementById('close-index');
+const indexCloseBtn = document.getElementById('close-index');
 
 // TODO: Figure out how to change header font
 //       Customize font sizes
 
 /* Adds functionality to the hamburger menu icon to open the index */
 indexBtn.addEventListener('click', (event) => {
-    indexEl.classList.toggle('active');
+  indexEl.classList.toggle('active');
 });
 
 /* Adds functionality to the 'X' icon to close the index */
 indexCloseBtn.addEventListener('click', (event) => {
-    indexEl.classList.toggle('active');
+  indexEl.classList.toggle('active');
 });
 
-
 // This is what creates the collapsible menus for Font and Themes
-let coll = document.getElementsByClassName("collapsible");
+const coll = document.getElementsByClassName('collapsible');
 let i;
 
 for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    let content = this.nextElementSibling;
-    if (content.style.maxHeight){
+  coll[i].addEventListener('click', function () {
+    this.classList.toggle('active');
+    const content = this.nextElementSibling;
+    if (content.style.maxHeight) {
       content.style.maxHeight = null;
     } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
+      content.style.maxHeight = content.scrollHeight + 'px';
+    }
   });
 };
 
@@ -49,31 +50,30 @@ const fonts = document.getElementsByClassName('font-style');
 /** This loop adds an event listener for changing the font
  * If statements are used to determine which font to switch to
  */
-for(let i = 0; i < fonts.length; i++) {
-  fonts[i].addEventListener('click' , (event) => {
-    
-    let idName = fonts[i].id;
+for (let i = 0; i < fonts.length; i++) {
+  fonts[i].addEventListener('click', (event) => {
+    const idName = fonts[i].id;
     // console.log(i + ": " + fonts[i].id);
     let fontType, headerType;
-    
-    if(idName =='verdana'){
+
+    if (idName === 'verdana') {
       headerType = fontType = 'Verdana, sans-serif';
     }
 
-    if(idName == 'default-font'){
+    if (idName === 'default-font') {
       fontType = 'Times New Roman, serif';
       headerType = 'Kaushan Script, cursive';
     }
 
-    if(idName == 'garamond'){
+    if (idName === 'garamond') {
       headerType = fontType = 'Garamond, serif';
     }
 
-    if(idName == 'courier-new'){
+    if (idName === 'courier-new') {
       headerType = fontType = 'Courier New, serif';
     }
 
-    if(idName == 'helvetica'){
+    if (idName === 'helvetica') {
       headerType = fontType = 'Helvetica, sans-serif';
     }
 
@@ -81,8 +81,8 @@ for(let i = 0; i < fonts.length; i++) {
     const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
     dailyHeader.style.fontFamily = headerType;
 
-    /** eventually won't need this loop because we'll 
-     * need to access the monthly and yearly elements thru 
+    /** eventually won't need this loop because we'll
+     * need to access the monthly and yearly elements thru
      * their shadow roots
      */
 
@@ -101,12 +101,12 @@ for(let i = 0; i < fonts.length; i++) {
   */
 const darkModeBtn = document.getElementById('dark-mode');
 darkModeBtn.addEventListener('click', (event) => {
-    console.log("theme changing? - isn't done yet");
-    document.body.style.color = "white";
-    document.body.style.backgroundColor = "black";
+  console.log("theme changing? - isn't done yet");
+  document.body.style.color = 'white';
+  document.body.style.backgroundColor = 'black';
 
-    const icons = document.querySelectorAll('button');
-    for (let i = 0; i < icons.length; i++) {
-        icons[i].style.color = "white";
-    }
-})
+  const icons = document.querySelectorAll('button');
+  for (let i = 0; i < icons.length; i++) {
+    icons[i].style.color = 'white';
+  }
+});
