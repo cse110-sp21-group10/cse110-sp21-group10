@@ -259,7 +259,7 @@ class DailyLog extends HTMLElement {
         sectionElement.className = section.type;
 
         // added a margin to the bottom of each section
-        sectionElement.style = "margin-bottom: 1vw";
+        sectionElement.style = 'margin-bottom: 1vw';
 
         // construct section header element
         const sectionHeader = document.createElement('h2');
@@ -349,9 +349,9 @@ class DailyLog extends HTMLElement {
     // The scipt for the weather
 
     // Select Elements
-    const iconElement = this.shadowRoot.querySelector(".weather-icon");
-    const tempElement = this.shadowRoot.querySelector(".temperature-value p");
-    const descElement = this.shadowRoot.querySelector(".temperature-description p");
+    const iconElement = this.shadowRoot.querySelector('.weather-icon');
+    const tempElement = this.shadowRoot.querySelector('.temperature-value p');
+    const descElement = this.shadowRoot.querySelector('.temperature-description p');
     // const locationElement = this.shadowRoot.querySelector(".location p");
     // const notificationElement = this.shadowRoot.querySelector(".notification");
 
@@ -359,85 +359,85 @@ class DailyLog extends HTMLElement {
     const weather = {};
 
     weather.temperature = {
-        unit: "celsius"
-    }
+      unit: 'celsius'
+    };
 
     // Constants and variables
     const KELVIN = 273;
     // API key
-    const key = "3f70f77aa960728d939b3bee01d7bbda"
+    const key = '3f70f77aa960728d939b3bee01d7bbda';
 
     // Check if browser supports geolocation
     if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(setPosition, showError);
+      navigator.geolocation.getCurrentPosition(setPosition, showError);
     } else {
-        console.error("Browser Doesn't Support Geolocation");
+      console.error("Browser Doesn't Support Geolocation");
     }
 
     // Set user's position
-    function setPosition(position) {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
+    function setPosition (position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
 
-        getWeather(latitude, longitude);
+      getWeather(latitude, longitude);
     }
 
     // Show error when there is an issue with geolocation service
-    function showError(error) {
-        console.error(error.message);
+    function showError (error) {
+      console.error(error.message);
     }
 
     // Get weather from API provider
-    function getWeather(latitude, longitude) {
-        let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
+    function getWeather (latitude, longitude) {
+      const api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
 
-        console.log(api); // FIXME
+      console.log(api); // FIXME
 
-        fetch(api)
-            .then (function(response) {
-                let data = response.json();
-                return data;
-            })
-            .then(function(data) {
-                weather.temperature.value = Math.floor(data.main.temp - KELVIN);
-                weather.description = data.weather[0].description;
-                weather.iconId = data.weather[0].icon;
-                weather.city = data.name;
-                weather.country = data.sys.country;
-            })
-            .then(function() {
-                displayWeather();
-            })
+      fetch(api)
+        .then(function (response) {
+          const data = response.json();
+          return data;
+        })
+        .then(function (data) {
+          weather.temperature.value = Math.floor(data.main.temp - KELVIN);
+          weather.description = data.weather[0].description;
+          weather.iconId = data.weather[0].icon;
+          weather.city = data.name;
+          weather.country = data.sys.country;
+        })
+        .then(function () {
+          displayWeather();
+        });
     }
 
     // Display weather to UI
-    function displayWeather() {
-        iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
-        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-        descElement.innerHTML = weather.description;
-        // locationElement.innerHTML = `${weather.city}, ${weather.country}`;
+    function displayWeather () {
+      iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+      descElement.innerHTML = weather.description;
+      // locationElement.innerHTML = `${weather.city}, ${weather.country}`;
     }
 
     // C to F conversion
-    function celsiusToFahrenheit(temperature) {
-        return (temperature * 9/5) + 32;
+    function celsiusToFahrenheit (temperature) {
+      return (temperature * 9 / 5) + 32;
     }
 
     // When the user clicks on the temperature element
-    tempElement.addEventListener("click", function() {
-        if (weather.temperature.value === undefined) return;
+    tempElement.addEventListener('click', function () {
+      if (weather.temperature.value === undefined) return;
 
-        if (weather.temperature.unit == "celsius") {
-            let fahrenheit = celsiusToFahrenheit(weather.temperature.value) ;
-            fahrenheit = Math.floor(fahrenheit);
+      if (weather.temperature.unit === 'celsius') {
+        let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
+        fahrenheit = Math.floor(fahrenheit);
 
-            tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
-            weather.temperature.unit = "fahrenheit"
-        } else {
-            tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-            weather.temperature.unit = "celsius"
-        }
-    })
+        tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
+        weather.temperature.unit = 'fahrenheit';
+      } else {
+        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+        weather.temperature.unit = 'celsius';
+      }
+    });
   }
 
   // ----------------------------------- End Get/Set Functions ------------------------------------
@@ -782,7 +782,7 @@ class DailyLog extends HTMLElement {
     section.className = sectionObj.type;
 
     // added a margin to the bottom of each section
-    section.style = "margin-bottom: 1vw";
+    section.style = 'margin-bottom: 1vw';
 
     // create the editable section title element
     const sectionTitle = document.createElement('h2');
