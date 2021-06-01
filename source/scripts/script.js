@@ -1,4 +1,5 @@
 import { Database } from '../classes/database.js';
+import { IDConverter } from './IDConverter.js';
 
 /*
  * Workflow (to be implemented):
@@ -13,17 +14,11 @@ import { Database } from '../classes/database.js';
 // Define variables used throughout all code here
 // ----------------------------------------------
 
-/**
- * Workflow (to be implemented):
- *    When DOC loads, get id of current day and load in current day's dailyObj from database
- *        or create new blank dailyObj
- *    Make HTML element from dailyObj and displays it
- *    forward backward buttons:
- *    backward loads the latest available dailyObj entry;
- *    forward creates a blank entry with the correct date, or reads in if it already exists:
- */
 // Elements and buttons found on all pages
-let btnZoomOut, btnNextUnit, btnPrevUnit; //, btnNextEntry, btnPrevEntry;
+let btnZoomOut, btnNextUnit, btnPrevUnit, btnNextEntry, btnPrevEntry;
+
+// Vars used to setup entry indexing
+let index, entries;
 
 // currentDate - based on entry, the actual currentDate will be generated whenever needed)
 let currDate = new Date();
@@ -46,13 +41,12 @@ let divYearly;
 document.addEventListener('DOMContentLoaded', setupScript);
 
 /**
- * Handles url navigation via the back/forward buttons <p>
+ * Handles history navigation <p>
  *
- * Will finalize any user input through the use of a finalizeInputs,
- * determines which log to load into view based off current view and calls the appropriate transition function
+ * Determines which log to load into view based off current view and calls the appropriate transition function
  * (transitionDaily, transitionMonthly, transitionYearly.) <p>
  *
- * Edit: Will also check if history state stored a date, indicating movement to another Unit/Entry occurred. <p>
+ * Will also check if history state stored a date, indicating movement to another Unit/Entry occurred. <p>
  *
  * If this is the case, the old date is loaded into currDate and the appropriate load function is called
  * (loadDay, loadMonth, loadYear)
@@ -62,27 +56,24 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
+      transitionDaily();
       if (event.state.date) {
         currDate = event.state.date;
         loadDay();
-      } else {
-        transitionDaily();
       }
       break;
     case 'month':
+      transitionMonthly();
       if (event.state.date) {
         currDate = event.state.date;
         // loadMonth();
-      } else {
-        transitionMonthly();
       }
       break;
     case 'year':
+      transitionYearly();
       if (event.state.date) {
         currDate = event.state.date;
         // loadYear();
-      } else {
-        transitionYearly();
       }
       break;
   }
@@ -99,17 +90,12 @@ window.onpopstate = function (event) {
  * @callback setupScript
  */
 function setupScript () {
-  window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#daily');
+  window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
 
   loadVars();
   setupButtons();
 
   loadDay();
-  /* For testing purposes /
-  createBullet();
-  createBullet();
-  createBullet();
-  /* For quickly commenting out */
 }
 
 /**
@@ -127,10 +113,17 @@ function loadVars () {
   divYearly = document.getElementsByClassName('yearly')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
+
   btnNextUnit = document.getElementById('next-day');
   btnPrevUnit = document.getElementById('prev-day');
-  // btnNextEntry = document.getElementById('last-entry-forward');
-  // btnPrevEntry = document.getElementById('last-entry-back');
+
+  btnNextEntry = document.getElementById('last-entry-forward');
+  btnPrevEntry = document.getElementById('last-entry-back');
+
+  Database.getEntryKeys((data) => {
+    entries = data;
+    updateIndex();
+  });
 }
 
 /**
@@ -148,8 +141,12 @@ function loadVars () {
  */
 function setupButtons () {
   btnZoomOut.addEventListener('click', zoomOut);
-  btnNextUnit.addEventListener('click', onNextUnit);
-  btnPrevUnit.addEventListener('click', onPrevUnit);
+
+  btnNextUnit.addEventListener('click', () => { navigateUnit(1); });
+  btnPrevUnit.addEventListener('click', () => { navigateUnit(-1); });
+
+  btnNextEntry.addEventListener('click', () => { navigateEntry(1); });
+  btnPrevEntry.addEventListener('click', () => { navigateEntry(-1); });
 }
 
 /**
@@ -221,19 +218,6 @@ function transitionYearly () {
   btnZoomOut.style.disabled = 1;
 }
 
-/**
- * TODO <p>
- *
- * Will be implemented later once we create a custom html element for sections <p>
- *
- * Triggered by the (+) section button near top of daily log <p>
- *
- *
-function createSection () {
-  console.log('You clicked on the create section button');
-}
-/* For quick commenting out of code */
-
 // New & unprocessed code -----------------------------------------------------------------------
 
 /**
@@ -249,16 +233,16 @@ function createSection () {
  *
  * In both cases, the day element is appended to appropriate location in document (TODO)
  *
+ * @param {string} ID - Day ID used to load current date, defaults to generation if not provided
  */
-function loadDay () {
-  const ID = generateID('day');
+function loadDay (ID = IDConverter.generateID('day', currDate)) {
   const dayElem = document.createElement('daily-log');
   Database.fetch(ID, (data) => {
     if (data) {
-      dayElem.data = [ID, data];
+      dayElem.data = [ID, data, updateEntries];
     } else {
       console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new (template) Day ._.");
-      dayElem.data = [ID, {}];
+      dayElem.data = [ID, {}, updateEntries];
     }
   });
   // apend dayElem somewhere
@@ -268,125 +252,135 @@ function loadDay () {
 }
 
 /**
- * Uses currDate to generate the correct ID for the given object type <p>
+ * Handles the actual navigation of units by incre/decrements of one <p>
  *
- * Creates 2-digit YY, MM, and DD from currDate variables to use in ID generation <p>
+ * Used to provide functionality to next/prev Unit buttons <p>
  *
- * Figures out which ID format to generate based off type and generates correct ID
- * (refer to Design Notes and data models for examples of ID formats)
+ * Updates currentDate, records date and view to history state, then loads the next Entry
+ * (loadDay, loadMonth, loadYear) <p>
  *
- * @param {string} type - Type of data object to generate ID for
- * @returns {string} The objects ID
+ * Performs a toggleCheck afterwards to update index and entries (dayID[]) as well as
+ * propertly disable prev/next buttons if navigation results in indexing to extremes (0 or length-1)
  *
+ * @param {Number} amount - of Units to move (+/- 1)
  */
-export function generateID (type) {
-  let day = currDate.getDate();
-  day = (day < 10 ? '0' : '') + day;
-  let month = currDate.getMonth() + 1;
-  month = (month < 10 ? '0' : '') + month;
-  const year = currDate.getFullYear() % 100;
-
-  switch (type) {
-    case 'day':
-      return `D ${year}${month}${day}`;
-    default:
-      console.log(`No implementation yet for generating ${type} IDs`);
-  }
-}
-/* For quick commenting out of code */
-
-/**
- * Adds functionality to 'Next Unit' button <p>
- *
- * Calls finalizeInputs to ensure no bullets are currently being modified <p>
- *
- * Records currentDate in history state, then navigates to the next unit with appropriate load function
- * (loadDay, loadMonth, loadYear)
- *
- */
-function onNextUnit () {
+function navigateUnit (amount) {
   switch (history.state.view) {
     case 'day':
-      currDate.setDate(currDate.getDate() + 1);
+      currDate.setDate(currDate.getDate() + amount);
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
+      updateIndex();
       break;
     case 'month':
-      currDate.setMonth(currDate.getMonth() + 1, 1);
+      currDate.setMonth(currDate.getMonth() + amount, 1);
       window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       // loadMonth();
+      updateIndex();
       break;
     case 'year':
-      currDate.setFullYear(currDate.getFullYear() + 1);
+      currDate.setFullYear(currDate.getFullYear() + amount);
       window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
       // loadYear();
+      updateIndex();
       break;
   }
 }
-/* For quick commenting out of code */
 
 /**
- * Adds functionality to 'Prev Unit' button <p>
+ * Handles the navigation of entries by incre/decrements of one <p>
  *
- * Calls finalizeInputs to ensure no bullets are currently being modified <p>
+ * Used to provide functionality to next/prev Entry buttons (only in daily view) <p>
  *
- * Records currentDate in history state, then navigates to the previous unit with appropriate load function
- * (loadDay, loadMonth, loadYear)
+ * Relies on Unit movement being correctly disabled by the 'toggleCheck' function
+ * to avoid moving beyond the bounds of entries (dayID[])
+ * and to only allow Entry movement under the daily view <p>
  *
+ * Uses index after navigation to load target Day's ID and set's current Date with an ID conversion <p>
+ *
+ * Records date and view to history state, then loads the next/prev Entry using the dayID retrieved from entries (dayID[]) <p>
+ *
+ * Performs a toggleCheck afterwards to update index and entries (dayID[]) as well as
+ * propertly disable prev/next buttons if navigation results in indexing to extremes (0 or length-1)
+ *
+ * @param {Number} amount - of Entries to move (+/- 1)
  */
-function onPrevUnit () {
-  switch (history.state.view) {
-    case 'day':
-      currDate.setDate(currDate.getDate() - 1);
-      window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
-      loadDay();
-      break;
-    case 'month':
-      currDate.setMonth(currDate.getMonth() - 1, 1);
-      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      loadDay();
-      break;
-    case 'year':
-      currDate.setYear(currDate.getFullYear() - 1);
-      window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
-      break;
+function navigateEntry (amount) {
+  /* Generate the index to navigate to by either incrementing of decrementing by 1
+   * - handle the case of traversing from right before end entry (index would be ON the last entry and attempt to move right)
+   */
+  index = index + amount;
+  if (index >= entries.length) {
+    // avoid index out of bounds retrieval attempts and crashes, do the checks against end first
+    if (IDConverter.generateID('day', currDate) < entries[index - 1]) {
+      index = entries.length - 1;
+    }
+  }
+  const targetID = entries[index];
+  currDate = IDConverter.getDateFromId(targetID);
+  window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
+  loadDay(targetID);
+  updateIndex(targetID);
+}
+/* For quick commenting out of code */
+
+/**
+ * Performs updates to index and entries, then decides which buttons need to be disabled <p>
+ *
+ * A lookup is done on today's ID to determine index (using a binary search on entries since it's a sorted array),
+ * if the day hasn't been recorded yet, the day object will handle deciding whether or not to add the day to entries <p>
+ *
+ * Calls function to toggle buttons based off updated Index
+ * @param {string} [currID = IDConverter.generateID('day', currDate)] - current Day's ID used to update indexing and decide whether to toggle buttons
+ */
+function updateIndex (currID = IDConverter.generateID('day', currDate)) {
+  // Generate the ID and determine index
+  index = IDConverter.generateIndex(entries, currID);
+
+  toggleCheck(currID < entries[index]);
+}
+
+/**
+ * Handles additions to entries (dayID[]), which can occur in 2 ways: <p>
+ *
+ * - Insertion at end of array, which requires expansion of the array (checked first) <p>
+ *
+ * - Taking up an existing index and 'pushing' all other entries afterwards (using splice) <p>
+ *
+ * Otherwise, logs an error indicating function was called unnecsarilly
+ */
+export function updateEntries (currID = IDConverter.generateID('day', currDate), index = IDConverter.generateIndex(entries, currID)) {
+  if (index === entries.length) {
+    entries.push(currID);
+  } else if (entries[index] !== currID) {
+    entries.splice(index, 0, currID);
+  } else {
+    console.error(`updateEntries unnecsarilly called for ID ${currID} at index ${index}`);
   }
 }
 /* For quick commenting out of code */
 
 /**
- * TODO
+ * Toggles relavant Entry navigation buttons based on: <p>
  *
- * Provides functionality to the 'Next Entry' button <p>
+ * - Whether or not currently in daily view <p>
  *
- * Function only runs in daily view <p>
+ * - Whether or not index navigation in entries (dayID[]) would result in out of bounds
  *
- * Calls finalizeInputs to ensure no bullets are currently being modified <p>
- *
- * Records currentDate in history state, then navigates to the next Entry
- *
- *
-function onNextEntry(forward) {
-  if (window.history.state.view === 'day') {
-    finalizeInputs();
+ * @param {bool} inBounds - whether or not the current day is within the list
+ * (to avoid disabling >> for days right before the last entry)
+ */
+function toggleCheck (inBounds = false) {
+  // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
+  if (index <= 0 || history.state.view !== 'day') {
+    btnPrevEntry.disabled = true;
+  } else {
+    btnPrevEntry.disabled = false;
   }
-}
-/* For quick commenting out of code */
-
-/**
- * TODO
- *
- * Provides functionality to the 'Prev Entry' button <p>
- *
- * Function only runs in daily view <p>
- *
- * Calls finalizeInputs to ensure no bullets are currently being modified <p>
- *
- * Records currentDate in history state, then navigates to the previous Entry
- *
-function onPrevEntry(forward) {
-  if (window.history.state.view === 'day') {
-    finalizeInputs();
+  if ((index >= entries.length - 1 && !inBounds) || history.state.view !== 'day') {
+    btnNextEntry.disabled = true;
+  } else {
+    btnNextEntry.disabled = false;
   }
 }
 /* For quick commenting out of code */
@@ -413,15 +407,6 @@ function zoomIn (event) {
 /* For quick commenting out of code */
 
 // Notes and old code -------------------------------------------------------------------------------
-
-/** Working with Local Storage
- * ----------------------------
- * 1. Check localstorage
- * 2. load global variables
- * 3. onChange, update global variables
- * 4. when exiting, write to localstorage
- */
-
 /*
 $(document).click(function(event) {
   var $target = $(event.target);
@@ -431,28 +416,3 @@ $(document).click(function(event) {
   }
 });
 */
-
-// Old code for adding evenListeners to all 'li' items
-/*
-document.querySelectorAll('li').forEach((listItem)=>{
-    listItem.addEventListener('click', (event) => {
-        let target = event.target;
-        let input = document.createElement('input');
-        input.value = target.innerText.split('\n')[0];
-
-        input.addEventListener('submit', () => {
-            let result = document.querySelector('')
-            savedText.textContent = input;
-        });
-
-        target.innerHTML = '<input>'+target.innerHTML.split('\n').slice(1).join('');
-        target.replaceChild(input, target.children[0]);
-    })
-})
-*/
-
-// sctLogs.addEventListener('click', ()=> {
-//     let inputBox = document.createElement('input');
-//     inputBox.type = 'text';
-//     document.getElementById('daily-log').appendChild(inputBox);
-// });
