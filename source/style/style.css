@@ -6,7 +6,7 @@
 */
 
 h1 {
-  font-size: 350%;
+  font-size: 4vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -426,11 +426,32 @@ button[id$='setting']:active {
   transition: max-height 0.2s ease-out;
   background-color: white;
   border-radius: 15px;
-  width: 90%;
+  width: 95%;
+}
+
+.content .setting-option:hover {
+  background-color: rgba(236, 236, 236, 0.911);
+  border-radius: 15px;
 }
 
 #verdana {
-  font-family: Verdana, sans-serif;
+  font-family: 'Verdana', sans-serif;
+}
+
+#default-font {
+  font-family: 'Times New Roman', serif;
+}
+
+#garamond {
+  font-family: 'Garamond', serif;
+}
+
+#courier-new {
+  font-family: 'Courier New', monospace;
+}
+
+#helvetica {
+  font-family: 'Helvetica', sans-serif;
 }
 
 .setting-option {

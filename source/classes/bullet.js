@@ -71,15 +71,12 @@ class BulletEntry extends HTMLElement {
           margin: 0;
           /* border: 5px solid black; */
         
-          padding-left: 1%;
+          padding-left: 0.5vw;
         }
         
         .bullet {
-          margin-left: 1.8%;
-
-          padding-left: .5%;
-          padding-top: .5%;
-
+          margin-left: 1vw;
+          padding-left: .5vw;
           background-color: white;
         }
 

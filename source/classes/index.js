@@ -41,30 +41,71 @@ for (i = 0; i < coll.length; i++) {
       content.style.maxHeight = content.scrollHeight + "px";
     } 
   });
-}
+};
 
-/** Changing the text of the body element
-  * TODO: Figure out why the header isn't changing as well
-  */
-let verdanaBtn = document.getElementById('verdana');
-verdanaBtn.addEventListener('click', (event) => {
-    console.log("font changing?");
-    document.body.style.fontFamily = "verdana, sans-serif";
-    document.getElementsByTagName('h1').style.fontFamily = "verdana, sans-serif";
-})
+// Getting all of the possible font selections
+const fonts = document.getElementsByClassName('font-style');
+
+/** This loop adds an event listener for changing the font
+ * If statements are used to determine which font to switch to
+ */
+for(let i = 0; i < fonts.length; i++) {
+  fonts[i].addEventListener('click' , (event) => {
+    
+    let idName = fonts[i].id;
+    // console.log(i + ": " + fonts[i].id);
+    let fontType, headerType;
+    
+    if(idName =='verdana'){
+      headerType = fontType = 'Verdana, sans-serif';
+    }
+
+    if(idName == 'default-font'){
+      fontType = 'Times New Roman, serif';
+      headerType = 'Kaushan Script, cursive';
+    }
+
+    if(idName == 'garamond'){
+      headerType = fontType = 'Garamond, serif';
+    }
+
+    if(idName == 'courier-new'){
+      headerType = fontType = 'Courier New, serif';
+    }
+
+    if(idName == 'helvetica'){
+      headerType = fontType = 'Helvetica, sans-serif';
+    }
+
+    document.body.style.fontFamily = fontType;
+    const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
+    dailyHeader.style.fontFamily = headerType;
+
+    /** eventually won't need this loop because we'll 
+     * need to access the monthly and yearly elements thru 
+     * their shadow roots
+     */
+
+    const headers = document.querySelectorAll('h1');
+    for (let i = 0; i < headers.length; i++) {
+      headers[i].style.fontFamily = headerType;
+      console.log(headers[i].content);
+    };
+  });
+};
 
 /** Changing the display to be in dark mode
   * TODO: Figure out why the header color will change, but not the contents of bullets
   * TODO: Only change the necessary icons:
   *       might need to add another class to the icons that will change
   */
-let darkModeBtn = document.getElementById('dark-mode');
+const darkModeBtn = document.getElementById('dark-mode');
 darkModeBtn.addEventListener('click', (event) => {
     console.log("theme changing? - isn't done yet");
     document.body.style.color = "white";
     document.body.style.backgroundColor = "black";
 
-    let icons = document.querySelectorAll('button');
+    const icons = document.querySelectorAll('button');
     for (let i = 0; i < icons.length; i++) {
         icons[i].style.color = "white";
     }
