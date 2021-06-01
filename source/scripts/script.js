@@ -279,7 +279,7 @@ function loadDay () {
  * @returns {string} The objects ID
  *
  */
-function generateID (type) {
+export function generateID (type) {
   let day = currDate.getDate();
   day = (day < 10 ? '0' : '') + day;
   let month = currDate.getMonth() + 1;

@@ -4,11 +4,11 @@ describe('Basic user flow for SPA ', () => {
     await page.waitForTimeout(500);
   });
 
-  it('Test 1: The daily page header should read May 24, 2021', async () => {
+  it('Test 1: The daily page header should read May 31, 2021', async () => {
     const header = await page.$eval('daily-log', (elem) => {
-      return elem.shadowRoot.querySelector('#date').textContent;
+      return elem.shadowRoot.querySelector('h1').textContent;
     });
-    expect(header).toBe('Monday, May 24th');
+    expect(header).toBe('Monday, May 31st');
   });
 
   it('Test 2: Clicking zoom out button should change page url to /#month', async () => {
