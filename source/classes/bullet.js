@@ -211,18 +211,15 @@ class BulletEntry extends HTMLElement {
      */
     this.setChildren();
 
-    /** Iterate through labels
-     *
+    /** TODO: Iterate and apply labels
      */
 
-    // adding an event listener to the bullet-point itself so we can have a custom contextmenu for custom bullet points
-    const bulletPoint = this.shadowRoot.querySelector('.bullet-point');
-
-    /** Custom bullet menu toggle on
+    /** Adding an Event Listener to the bullet-point itself for custom contextmenu (dropdown) for selecting type of bullet
+     * Custom bullet menu toggle on
      * turns off default context menu
      * adds active class to custom context menu on right click to bullet-point
      */
-    bulletPoint.addEventListener('contextmenu', (event) => {
+    this.shadowRoot.querySelector('.bullet-point').addEventListener('contextmenu', (event) => {
       event.preventDefault();
       const x = event.pageX + 'px';
       const y = event.pageY + 'px';
@@ -236,8 +233,7 @@ class BulletEntry extends HTMLElement {
      * This will remove the 'active' class from our contextmenu so it auto closes
      */
     window.addEventListener('click', (event) => {
-      let contextmenu = document.querySelector('#context-menu');
-      contextmenu.classList.remove('active');
+      document.querySelector('#context-menu').classList.remove('active');
     });
 
     /** Checklist toggle based off value
