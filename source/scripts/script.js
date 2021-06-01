@@ -41,13 +41,12 @@ let divYearly;
 document.addEventListener('DOMContentLoaded', setupScript);
 
 /**
- * Handles url navigation via the back/forward buttons <p>
+ * Handles history navigation <p>
  *
- * Will finalize any user input through the use of a finalizeInputs,
- * determines which log to load into view based off current view and calls the appropriate transition function
+ * Determines which log to load into view based off current view and calls the appropriate transition function
  * (transitionDaily, transitionMonthly, transitionYearly.) <p>
  *
- * Edit: Will also check if history state stored a date, indicating movement to another Unit/Entry occurred. <p>
+ * Will also check if history state stored a date, indicating movement to another Unit/Entry occurred. <p>
  *
  * If this is the case, the old date is loaded into currDate and the appropriate load function is called
  * (loadDay, loadMonth, loadYear)
@@ -57,27 +56,24 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
+      transitionDaily();
       if (event.state.date) {
         currDate = event.state.date;
         loadDay();
-      } else {
-        transitionDaily();
       }
       break;
     case 'month':
+      transitionMonthly();
       if (event.state.date) {
         currDate = event.state.date;
         // loadMonth();
-      } else {
-        transitionMonthly();
       }
       break;
     case 'year':
+      transitionYearly();
       if (event.state.date) {
         currDate = event.state.date;
         // loadYear();
-      } else {
-        transitionYearly();
       }
       break;
   }
@@ -252,7 +248,6 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
   // apend dayElem somewhere
   divDaily.remove();
   divDaily = dayElem;
-  divMonthly.style.display = 'none';
   document.getElementById('internal-content').appendChild(dayElem);
 }
 
