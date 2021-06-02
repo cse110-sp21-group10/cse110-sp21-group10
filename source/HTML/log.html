@@ -9,6 +9,11 @@
         <link rel="stylesheet" href="../style/style.css">
         <link rel="stylesheet" href="../assets/css/all.css">
         <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+        <script type="module" src="../classes/daily-log.js"></script>
+        <script type="module" src="../classes/monthly-log.js"></script>
+        <script type="module" src="../classes/yearly-log.js"></script>
+        <script type="module" src="../classes/bullet.js"></script>
+        <script type="module" src="../scripts/script.js"></script>
     </head>
     <body>
         <header>
@@ -81,265 +86,21 @@
                     a class the body of the html with js that will trigger the css class features of showing
                     and hiding the other log pages, along with some styling perhaps. 
                     -->
-                    <div class="daily">
-                        <section class="header" id="daily-header">
-                            <h1 id="date">Sunday, May 2nd</h1>
-
-
-                            <div class="container">
-                                <div class="notification"></div>
-                                <div class="weather-container">
-                                    <div class="weather-icon">
-                                        <img src="../assets/icons/unknown.png" alt="">
-                                    </div>
-                                    <div class="temperature-value">
-                                        <p>- °<span>C</span></p>
-                                    </div>
-                                    <div class="temperature-description">
-                                        <p>-</p>
-                                    </div>
-                                    <div class="location">
-                                        <p>-</p>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></button>
-                            <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
-                        </section>
-                
-                        <!-- Widget example:
-                            This would be what a reminders widget would look like. This would obviously 
-                            have to scaled and styled accordingly, mainly to half the page per widget.
-                        -->
-
-                        <section id="reminders" >
-                            <h2>Reminders</h2>
-
-                            <ul class="reminders notes" id="daily-reminders">
-                                <li>Doctor's Appointment</li>
-                                <li>Get food for Max</li>
-                                <li>Pick up Jeff</li>
-                                <li>Tell Ryan to move closer to the mic</li>
-                            </ul>
-                            
-                        </section>
-
-                        <!-- Another widget example:
-                            This would be what the trackers widget would look like. Also should be scaled
-                            and styled accordingly to half the page. 
-                            TODO: Add images for buttons
-                        -->
-
-                        <section id="trackers" >
-                            <h2>Trackers</h2>
-                            <button class= "add" id="add-tracker">Add tracker</button>
-                            <button class= "minimize" id="minimize-tracker">Minimize Tracker</button> 
-                            <div id="mood-tracker"></div>
-                            <div id="sleep-tracker"></div>
-                        </section>
-
-                        <!-- Daily Log
-                            This would be where the daily log notes would start. As an example there
-                            are some basic notes in the form of bullet points. To add items to the log, 
-                            user should just be able to type in that section (like microsoft word)
-                        -->
-
-                        <section id="daily-log">
-                            <h2>Daily Log</h2>
-                    
-                            <ul id="daily-tasks" class="notes">
-                                <li>Finish Lab 5</li>
-                                <li>Take out the trash</li>
-                                <li>Javascript is cool</li>
-                                <li>Played Tennis at 2PM
-                                    <ul>
-                                        <li>Need new strings</li>
-                                    </ul>
-                                </li>
-                            </ul>
-
-                        </section>
-
-                        <!-- Related sections
-                            This section is for the related sections when the user want to add a 
-                            'new realated section'. This will appear at the bottom of all the other
-                            related section in a similar form to the daily log at first, but can then
-                            be later customized.
-                        -->
-
-                        <section id="related-sections">
-                            <h2>Related Sections (eg. Shopping List)</h2>
-                            <button class= "minimize" id="minimize-section"> Minimize Section</button>
-                    
-                            <ol class="notes">
-                                <li>Milk</li>
-                                <li>Eggs</li>
-                                <li>Sugar
-                                    <ul>
-                                        <li>White Sugar</li>
-                                        <li>Light Brown Sugar</li>
-                                    </ul>
-                                </li>    
-                            </ol>
-                        </section>
-
-                    </div>
+                    <daily-log></daily-log>
 
                     <!-- Monthly section
                     This is the div that encloses the monthly html page. When the 'zoom out' button
                     is clicked from the daily log the js adds a class that will trigger the css
                     monthly class to show this class and remove the other pages.
                     -->
-                    <div class="monthly">
-                        
-                        <section class="header">
-                            <h1 class="monthly-header">May 2021</h1>
-                            <button class="plus-right"><i class="fas fa-plus icon-size"></i></button>
-                        </section>
-                        <!-- Section for calendar -->
-                        <section id="monthly-calendar">
-                        
-                        </section>
-                        <!-- Add Notes for Month-->
-                        <section id="monthly-notes">
-                            <ul class="notes">
-                                <li> Item 1</li>
-                                <li> Item 2</li>
-                                <li> Item 3</li>
-                            </ul>
-                        
-                        </section>
-                        <!-- Add Trackers for Month-->
-                        <section id="monthly-trackers">
-                            <form>
-                                <fieldset>
-                                    <!-- Track Medidation for every day of the month-->
-                                    <legend>Meditation?</legend>
-                                    <input type="checkbox" id="day-1" name="Day1" value="Day1">
-                                    <input type="checkbox" id="day-2" name="Day2" value="Day2">
-                                    <input type="checkbox" id="day-3" name="Day3" value="Day3">
-                                    <input type="checkbox" id="day-4" name="Day4" value="Day4">
-                                    <input type="checkbox" id="day-5" name="Day5" value="Day5">
-                                    <input type="checkbox" id="day-6" name="Day6" value="Day6">
-                                    <input type="checkbox" id="day-7" name="Day7" value="Day7">
-                                    <input type="checkbox" id="day-8" name="Day8" value="Day8">
-                                    <input type="checkbox" id="day-9" name="Day9" value="Day9">
-                                    <input type="checkbox" id="day-10" name="Day10" value="Day10">
-                                    <input type="checkbox" id="day-11" name="Day11" value="Day11">
-                                    <input type="checkbox" id="day-12" name="Day12" value="Day12">
-                                    <input type="checkbox" id="day-13" name="Day13" value="Day13">
-                                    <input type="checkbox" id="day-14" name="Day14" value="Day14">
-                                    <input type="checkbox" id="day-15" name="Day15" value="Day15">
-                                    <input type="checkbox" id="day-16" name="Day16" value="Day16">
-                                    <input type="checkbox" id="day-17" name="Day17" value="Day17">
-                                    <input type="checkbox" id="day-18" name="Day18" value="Day18">
-                                    <input type="checkbox" id="day-19" name="Day19" value="Day19">
-                                    <input type="checkbox" id="day-20" name="Day20" value="Day20">
-                                    <input type="checkbox" id="day-21" name="Day21" value="Day21">
-                                    <input type="checkbox" id="day-22" name="Day22" value="Day22">
-                                    <input type="checkbox" id="day-23" name="Day23" value="Day23">
-                                    <input type="checkbox" id="day-24" name="Day24" value="Day24">
-                                    <input type="checkbox" id="day-25" name="Day25" value="Day25">
-                                    <input type="checkbox" id="day-26" name="Day26" value="Day26">
-                                    <input type="checkbox" id="day-27" name="Day27" value="Day27">
-                                    <input type="checkbox" id="day-28" name="Day28" value="Day28">
-                                    <input type="checkbox" id="day-29" name="Day29" value="Day29">
-                                    <input type="checkbox" id="day-30" name="Day30" value="Day30">
-                                    <input type="checkbox" id="day-31" name="Day31" value="Day31">
-                                </fieldset>
-                            </form>         
-                        </section>
-                    </div>
+                    <monthly-log></monthly-log>
                 
                     <!-- Yearly section
                     This is the div that encloses the yearly html page. When the 'zoom out' button
                     is clicked from the monthly log the js adds a class that will trigger the css 
                     yearly class to show this class and remove the other pages.
                     -->
-                    <div class="yearly">
-                        <section class="header">
-                            <h1 id="year">2021</h1>
-                            <button class="plus-right"><i class="fas fa-plus icon-size"></i></button>
-                        </section>
-            
-                        <!-- Months Section
-                            Each month is a button so that when we add functionality later we can click
-                            on a month to go to the corresponding monthly log. Also, all the buttons are
-                            part of the same "month-button" class so that the same style can easily be
-                            applied to all of them.
-                        -->
-                        <section id="months">
-                            <button class="month-button" id="jan">
-                                Jan
-                            </button>
-                            <button class="month-button" id="feb">
-                                Feb
-                            </button>
-                            <button class="month-button" id="mar">
-                                Mar
-                            </button>
-                            <button class="month-button" id="apr">
-                                Apr
-                            </button>
-                            <button class="month-button" id="may">
-                                May
-                            </button>
-                            <button class="month-button" id="jun">
-                                Jun
-                            </button>
-                            <button class="month-button" id="jul">
-                                Jul
-                            </button>
-                            <button class="month-button" id="aug">
-                                Aug
-                            </button>
-                            <button class="month-button" id="sep">
-                                Sep
-                            </button>
-                            <button class="month-button" id="oct">
-                                Oct
-                            </button>
-                            <button class="month-button" id="nov">
-                                Nov
-                            </button>
-                            <button class="month-button" id="dec">
-                                Dec
-                            </button>
-                        </section>
-
-                        <!-- Yearly Goals Section (Checklist Style)
-                            Each item is a checkbox so that the user can check them off when they have
-                            accomplished the goal. Items will be added to the list using JavaScript.
-                        -->
-                        <section id="yearly-goals">
-                            <h3>Yearly Goals</h3>
-                            <button class="add" id="add-note">Add goal</button>
-                            <div>
-                                <input type="checkbox" id="item-1">
-                                <label for="item-1">Become fluent in French</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="item-2">
-                                <label for="item-2">Learn how to play guitar</label>
-                            </div>
-                        </section>
-
-                        <!-- Notes Section (Logging Format)
-                            Unordered list to hold yearly notes. Notes will be added to the list using
-                            JavaScript.
-                        -->
-                    
-                        <section id="yearly-notes">
-                            <h3>Notes</h3>
-                            <ul id="notes" class="notes">
-                                <li>Turned 21</li>
-                                <li>Finished junior year</li>
-                            </ul>
-                        </section>
-                    
-                    </div>
+                    <yearly-log></yearly-log>
 
                     <div id="context-menu">
                         <div class="bullet-select">
@@ -372,8 +133,5 @@
 
             </main>
             <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-            <script type="module" src="../classes/daily-log.js"></script>
-            <script type="module" src="../classes/bullet.js"></script>
-            <script type="module" src="../scripts/script.js"></script>
     </body> 
 </html>
