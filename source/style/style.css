@@ -5,6 +5,10 @@
     Asya: "Need to make it not fixed sizes. :)"
 */
 
+* {
+  font-family: cursive;
+}
+
 h1 {
   font-size: 4vw;
   position: relative;
