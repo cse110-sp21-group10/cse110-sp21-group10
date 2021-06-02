@@ -201,7 +201,7 @@ function transitionMonthly () {
   divYearly.style.display = 'none';
 
   // divEntryNav.style.display = 'none';
-  btnZoomOut.style.disabled = 0;
+  btnZoomOut.disabled = 0;
 }
 
 /**
@@ -215,7 +215,7 @@ function transitionYearly () {
   divMonthly.style.display = 'none';
   divYearly.style.display = 'block';
 
-  btnZoomOut.style.disabled = 1;
+  btnZoomOut.disabled = 1;
 }
 
 // New & unprocessed code -----------------------------------------------------------------------
