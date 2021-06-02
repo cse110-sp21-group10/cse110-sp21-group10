@@ -226,7 +226,7 @@ class DailyLog extends HTMLElement {
     });
 
     // get all information about the date that is needed for the header display
-    const dateObj = IDConverter.getDateFromID(id);
+    const dateObj = IDConverter.getDateFromID(id, 'day');
     const day = IDConverter.getDayFromDate(dateObj);
     const month = IDConverter.getMonthFromDate(dateObj);
     const date = dateObj.getDate();

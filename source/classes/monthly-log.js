@@ -131,7 +131,7 @@ class MonthlyLog extends HTMLElement {
     root.id = id;
 
     // get all information about the date that is needed for the header display
-    const dateObj = this.getDateFromID(id);
+    const dateObj = IDConverter.getDateFromID(id, 'month');
     const month = IDConverter.getMonthFromDate(dateObj);
     const year = dateObj.getFullYear();
     const dateString = `${month} ${year}`;
@@ -139,7 +139,10 @@ class MonthlyLog extends HTMLElement {
     // get the header text of this custom HTML element and set its contents to the constructed date string
     const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
+
+    // IDs to use for the charts
     const canvasIDs = ['mood-tracker', 'sleepq-tracker', 'calorie-tracker', 'money-tracker'];
+    const charts = []; // array of all the charts
 
     // Make this cleaner (hopefully without hard-coding) if we have time
     // creates the canvas elements/charts for each tracker
@@ -222,6 +225,7 @@ class MonthlyLog extends HTMLElement {
         }
       });
       chart.render(); // render the initial chart (will get updated when data is updated)
+      charts.push(chart);
     }
 
     // 1: create buttons for each date in the monthly calendar
@@ -241,16 +245,12 @@ class MonthlyLog extends HTMLElement {
       calendar.appendChild(dateButton);
 
       // after pulling tracker data, adjust the charts with the new data
-      const charts = []; // array of all the charts
-      for (let j = 0; j <= 3; j++) {
-        charts.push(Chart.getChart(this.shadowRoot.querySelector(`#${canvasIDs[j]}`)));
-      }
-
       // add the x-axis date labels to each chart
       for (const chart of charts) {
         chart.data.labels.push(i);
       }
 
+      // get the data for the chart
       Database.fetch(dateID, function (data) {
         // if data is present
         if (data) {
@@ -286,7 +286,6 @@ class MonthlyLog extends HTMLElement {
         // update chart by the last day of the month
         if (i === numDays) {
           for (const chart of charts) {
-            console.log(chart.data.datasets[0].data);
             chart.update();
           }
         }
@@ -352,21 +351,6 @@ class MonthlyLog extends HTMLElement {
   // ----------------------------------- End Get/Set Functions ------------------------------------
 
   // ----------------------------------- Start Helper Functions -----------------------------------
-
-  /**
-   * This function is a helper function that is used to determine the date for a given ID. The function
-   * parses the given ID to determine the year, and month, and returns a corresponding Date object.
-   *
-   * @param {string} id - The monthly ID (with the format 'M YYMM') to parse
-   * @returns {Date} A Date object representing the date determined by the ID
-   */
-  getDateFromID (id) {
-    // parse year, month
-    const year = Number(id.substring(2, 4)) + 2000;
-    const month = Number(id.substring(4, 6));
-
-    return new Date(year, month, 0);
-  }
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
