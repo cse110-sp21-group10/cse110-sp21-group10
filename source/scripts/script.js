@@ -1,5 +1,5 @@
 import { Database } from '../classes/database.js';
-import { IDConverter } from './IDConverter.js';
+import { IDConverter } from '../classes/IDConverter.js';
 
 /*
  * Workflow (to be implemented):
@@ -316,7 +316,7 @@ function navigateEntry (amount) {
     }
   }
   const targetID = entries[index];
-  currDate = IDConverter.getDateFromId(targetID);
+  currDate = IDConverter.getDateFromID(targetID);
   window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
   loadDay(targetID);
   updateIndex(targetID);
@@ -354,7 +354,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
   } else if (entries[index] !== currID) {
     entries.splice(index, 0, currID);
   } else {
-    console.error(`updateEntries unnecsarilly called for ID ${currID} at index ${index}`);
+    console.error(`updateEntries unnecessarily called for ID ${currID} at index ${index}`);
   }
 }
 /* For quick commenting out of code */
@@ -385,23 +385,30 @@ function toggleCheck (inBounds = false) {
 /* For quick commenting out of code */
 
 /**
- * TODO
- *
  * Provides functionality to calendar view in yearly/monthly logs <p>
  *
- * Access to contents (and therefor target date) in the element that was triggered through event param <p>
+ * Access to contents (and therefor target date via ID) in the element that was triggered through event param <p>
  *
- * Set's currDate accordingly <p>
+ * Converts stored ID to date with IDConverter and loads into currDate <p>
  *
  * Reads history state's current view to decide whether to transition to Monthly or Daily view,
- * then calls appropriate load function (loadDay, loadMonth)
+ * then calls appropriate transition + load function (loadDay, loadMonth)
  *
- * @param {OnClickEvent} event
+ * @param {OnClickEvent} event - that triggered this function, provides access to target ID
  *
-function zoomIn (event) {
-  // When user click on a button in yearly or monthly
-  // zoom into the correct month or date
-  // sets day, month, year to correct date.
+export function zoomIn (event) {
+  currDate = IDConverter.getDateFromID(event.target.id);
+
+  switch (history.state.view) {
+    case 'month':
+      transitionDaily();
+      loadDay();
+      break;
+    case 'year':
+      transitionMonthly();
+      // loadMonth();
+      break;
+  }
 }
 /* For quick commenting out of code */
 

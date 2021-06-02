@@ -1,4 +1,5 @@
 import { Database } from './database.js';
+import { IDConverter } from './IDConverter.js';
 
 /**
  * This class contains functions to construct and edit the daily log custom HTML element.
@@ -7,12 +8,6 @@ import { Database } from './database.js';
  * @example <caption>Daily Log class</caption>
  * // Example of a daily JSON object used to generate a daily-log element
  * const exampleDailyJSON = {
- *   widgets: [
- *     {
- *       id: '00'
- *       type: 'weather'
- *     }
- *   ],
  *   trackers: [
  *     {
  *       type: 'slider',
@@ -27,17 +22,17 @@ import { Database } from './database.js';
  *     {
  *       type: 'numInput',
  *       name: 'Calorie Intake',
- *       value: 0
- *     },
- *     {
- *       type: 'checkbox',
- *       name: 'Exercise',
- *       value: 0
+ *       value: 2500
  *     },
  *     {
  *       type: 'numInput',
  *       name: 'Money Spent',
  *       value: 25
+ *     },
+ *     {
+ *       type: 'checkbox',
+ *       name: 'Exercise',
+ *       value: 0
  *     }
  *   ],
  *   sections: [
@@ -151,17 +146,17 @@ class DailyLog extends HTMLElement {
   /**
    * This function constructs the daily log HTML element using the given ID and daily log
    * object data. It starts by constructing and setting the header text for the element, then
-   * goes through each attribute of the daily log object to construct the widgets, trackers, and
-   * notes sections of the element. Each notes section is constructed by fetching the data of
+   * goes through each attribute of the daily log object to construct the trackers and notes
+   * sections of the element. Each notes section is constructed by fetching the data of
    * each bullet in the section from the database, and creating a custom bullet-entry HTML
    * element that is appended to the section. Finally, the setAttribute function is called
    * on this element to set the 'data' attribute of the element to be the given JSON data,
    * so that the data can be retrieved from the element later if needed.
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - Array of three elements (first element
-   * is the string ID of the object, second element is the JSON object data, third element is a callback
-   * used to update the dayID[] "entries" for jumping between entries) that is used
-   * to construct and set the data in this HTML element
+   * @param {Array.<{id: string, jsonData: Object, callback: function}>} data - Array of three
+   * elements (first element is the string ID of the object, second element is the JSON object
+   * data, third element is a callback to update the dayID[] "entries" for jumping between
+   * entries) that is used to construct and set the data in this HTML element
    */
   set data ([id, jsonData, callback]) {
     // store this object in a variable so it can be passed to handlers later
@@ -173,7 +168,6 @@ class DailyLog extends HTMLElement {
     // if the jsonData is an empty object, then we should create an empty daily element
     if (Object.entries(jsonData).length === 0) {
       jsonData = {
-        widgets: [],
         trackers: [
           {
             type: 'slider',
@@ -191,13 +185,13 @@ class DailyLog extends HTMLElement {
             value: 0
           },
           {
-            type: 'checkbox',
-            name: 'Exercise',
+            type: 'numInput',
+            name: 'Money Spent',
             value: 0
           },
           {
-            type: 'numInput',
-            name: 'Money Spent',
+            type: 'checkbox',
+            name: 'Exercise',
             value: 0
           }
         ],
@@ -232,34 +226,16 @@ class DailyLog extends HTMLElement {
     });
 
     // get all information about the date that is needed for the header display
-    const dateObj = this.getDateFromID(id);
-    const day = this.getDayFromDate(dateObj);
-    const month = this.getMonthFromDate(dateObj);
+    const dateObj = IDConverter.getDateFromID(id);
+    const day = IDConverter.getDayFromDate(dateObj);
+    const month = IDConverter.getMonthFromDate(dateObj);
     const date = dateObj.getDate();
-    const suffix = this.getSuffixOfDate(dateObj);
+    const suffix = IDConverter.getSuffixOfDate(dateObj);
     const dateString = `${day}, ${month} ${date}${suffix}`;
 
     // get the header text of this custom HTML element and set its contents to the constructed date string
     const headerText = root.querySelector('#daily-header > h1');
     headerText.innerText = dateString;
-
-    // creates all widgets in one section
-    if (jsonData.widgets && jsonData.widgets.length > 0) {
-      const widgetSection = document.createElement('section');
-      widgetSection.className = 'widgets';
-      widgetSection.innerHTML = `
-        <h2>Widgets</h2>
-        <button class="add" id="add-widget">Add Widget</button >
-        <button class="minimize" id="minimize-widgets">Minimize Widgets</button>
-      `;
-
-      for (const widget of jsonData.widgets) {
-        console.log(widget);
-        // TODO: CONSTRUCT THE WIDGET HERE
-      }
-
-      root.appendChild(widgetSection);
-    }
 
     // creates all trackers in one section
     if (jsonData.trackers && jsonData.trackers.length > 0) {
@@ -511,136 +487,6 @@ class DailyLog extends HTMLElement {
   // ----------------------------------- Start Helper Functions -----------------------------------
 
   /**
-   * This function is a helper function that is used to determine the date for a given ID. The function
-   * parses the given ID to determine the year, month, and date, and returns a corresponding Date object.
-   *
-   * @param {string} id - The daily ID (with the format 'D YYMMDD') to parse
-   * @returns {Date} a Date object representing the date determined by the ID
-   */
-  getDateFromID (id) {
-    // parse year, month, date
-    const year = Number(id.substring(2, 4)) + 2000;
-    const month = Number(id.substring(4, 6)) - 1;
-    const date = Number(id.substring(6, 8));
-
-    return new Date(year, month, date);
-  }
-
-  /**
-   * This function is a helper function that is used to determine the day of the week for a given date.
-   * The function takes a Date object, then retrieves and converts the day-of-week integer representation
-   * into the corresponding string (English) format.
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve day-of-week
-   * @returns {string} The day of the week, as a string
-   */
-  getDayFromDate (dateObj) {
-    const dayIndex = dateObj.getDay();
-    // convert 0-6 to Sunday-Saturday
-    switch (dayIndex) {
-      case 0:
-        return 'Sunday';
-      case 1:
-        return 'Monday';
-      case 2:
-        return 'Tuesday';
-      case 3:
-        return 'Wednesday';
-      case 4:
-        return 'Thursday';
-      case 5:
-        return 'Friday';
-      case 6:
-        return 'Saturday';
-    }
-  }
-
-  /**
-   * This function is a helper function that is used to determine the month for a given date.
-   * The function takes a Date object, then retrieves and converts the month integer
-   * representation into the corresponding string (English) format.
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve month
-   * @returns {string} The month, as a string
-   */
-  getMonthFromDate (dateObj) {
-    const monthIndex = dateObj.getMonth();
-    // convert 0-11 to January-December
-    switch (monthIndex) {
-      case 0:
-        return 'January';
-      case 1:
-        return 'February';
-      case 2:
-        return 'March';
-      case 3:
-        return 'April';
-      case 4:
-        return 'May';
-      case 5:
-        return 'June';
-      case 6:
-        return 'July';
-      case 7:
-        return 'August';
-      case 8:
-        return 'September';
-      case 9:
-        return 'October';
-      case 10:
-        return 'November';
-      case 11:
-        return 'December';
-    }
-  }
-
-  /**
-   * This function is a helper function that is used to determine the suffix for a given
-   * date based on how it would be read. The function takes a Date object, then retrieves
-   * the date integer and determines the suffix for the date integer that should be
-   * displayed. <p>
-   *
-   * date integer ending in 1 -> suffix 'st' <p>
-   * date integer ending in 2 -> suffix 'nd' <p>
-   * date integer ending in 3 -> suffix 'rd' <p>
-   * date integer ending in 0 or 4-9 -> suffix 'th' <p>
-   * special cases: date integers 11, 12, and 13 -> suffix 'th'
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve the date and determine its suffix
-   * @returns {string} The suffix ('st', 'nd', 'rd', 'th') corresponding to the date integer
-   */
-  getSuffixOfDate (dateObj) {
-    const date = dateObj.getDate();
-
-    // possible suffixes
-    const ST = 'st';
-    const ND = 'nd';
-    const RD = 'rd';
-    const TH = 'th';
-
-    /*
-      11, 12, 13 are special 'th'
-      for all other ones digits:
-      1 -> 'st'
-      2 -> 'nd'
-      3 -> 'rd'
-      0, 4-9 -> 'th'
-      (no need to address any number greater than 31 because there are at most 31 days in a month)
-    */
-    if (date === 11 || date === 12 || date === 13) {
-      return TH;
-    } else if (date % 10 === 1) {
-      return ST;
-    } else if (date % 10 === 2) {
-      return ND;
-    } else if (date % 10 === 3) {
-      return RD;
-    } else {
-      return TH;
-    }
-  }
-
-  /**
    * This function is a helper function that is used as the callback for when we fetch bullet
    * data from the database or when we are creating a new bullet. The function first creates a
    * function that will be used by the created bullet object to update the bullet count in
@@ -694,26 +540,10 @@ class DailyLog extends HTMLElement {
     Database.store(this.id, data);
 
     // generate the new bullet ID
-    const bulletCount = this.stringifyNum(newBulNum);
+    const bulletCount = IDConverter.stringifyNum(newBulNum);
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
 
     return `B ${dailyID.substring(2)} ${sectionID} ${bulletCount}`;
-  }
-
-  /**
-   * This function is a helper function to convert an ID number into the right string format.
-   * IDs for our objects are stored as strings, and if the number is less than 10, the string
-   * representation we use has a 0 in front of the number. For example a section number 1 would
-   * have an ID of '01'.
-   *
-   * @param {number} num - The integer that is being stringified
-   * @returns {string} A string representation of the number that can be used in object IDs
-   */
-  stringifyNum (num) {
-    if (num < 10) {
-      return `0${num}`;
-    }
-    return `${num}`;
   }
 
   /**
@@ -968,7 +798,7 @@ class DailyLog extends HTMLElement {
   newSectionHandler (divElement) {
     const dailyLog = this;
     const dailyID = divElement.id;
-    const sectionID = this.stringifyNum(this.nextSectionNum);
+    const sectionID = IDConverter.stringifyNum(this.nextSectionNum);
     this.nextSectionNum++;
 
     // create new section object

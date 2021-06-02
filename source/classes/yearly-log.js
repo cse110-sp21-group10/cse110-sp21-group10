@@ -1,4 +1,5 @@
 import { Database } from '../classes/database.js';
+import { IDConverter } from './IDConverter.js';
 
 /**
  * This class contains functions to construct and edit the yearly log custom HTML element.
@@ -87,9 +88,10 @@ class YearlyLog extends HTMLElement {
    * 'data' attribute of the element to be the given JSON data, so that the data can be retrieved
    * from the element later if needed.
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
-   * is the string ID of the object, and the second element is the JSON object data) that is used
-   * to construct and set the data in this HTML element
+   * @param {Array.<{id: string, jsonData: Object, callback: function}>} data - Array of three
+   * elements (first element is the string ID of the object, second element is the JSON object
+   * data, and the third element is the callback function for zooming into a certain date) that is
+   * used to construct and set the data in this HTML element
    */
   set data ([id, jsonData]) {
     // store this object in a variable so it can be passed to handlers later
@@ -112,7 +114,7 @@ class YearlyLog extends HTMLElement {
           {
             id: '01',
             name: 'Yearly Notes',
-            type: 'checklist',
+            type: 'log',
             bulletIDs: [],
             nextBulNum: 0
           }
@@ -125,7 +127,7 @@ class YearlyLog extends HTMLElement {
     root.id = id;
 
     // get all information about the date that is needed for the header display
-    const dateObj = this.getDateFromID(id);
+    const dateObj = IDConverter.getDateFromID(id);
     const year = dateObj.getFullYear();
     const dateString = `${year}`;
 
@@ -138,8 +140,8 @@ class YearlyLog extends HTMLElement {
     for (let i = 0; i <= 11; i++) {
       const monthButton = document.createElement('button');
       monthButton.className = 'yearly-calendar-button';
-      monthButton.id = `M ${id.substring(2)}${this.stringifyNum(i + 1)}`;
-      monthButton.innerText = String(this.getMonthFromDate(new Date(year, i)));
+      monthButton.id = `M ${id.substring(2)}${IDConverter.stringifyNum(i + 1)}`;
+      monthButton.innerText = String(IDConverter.getMonthFromDate(new Date(year, i)));
       calendar.appendChild(monthButton);
     }
 
@@ -204,59 +206,6 @@ class YearlyLog extends HTMLElement {
   // ----------------------------------- Start Helper Functions -----------------------------------
 
   /**
-   * This function is a helper function that is used to determine the date for a given ID. The function
-   * parses the given ID to determine the year, and returns a corresponding Date object.
-   *
-   * @param {string} id - The yearly ID (with the format 'Y YY') to parse
-   * @returns {Date} A Date object representing the date determined by the ID
-   */
-  getDateFromID (id) {
-    // parse year
-    const year = Number(id.substring(2, 4)) + 2000;
-
-    return new Date(year, 0, 1);
-  }
-
-  /**
-   * This function is a helper function that is used to determine the month for a given date.
-   * The function takes a Date object, then retrieves and converts the month integer
-   * representation into the corresponding string (English) format.
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve month
-   * @returns {string} The month, as a string
-   */
-  getMonthFromDate (dateObj) {
-    const monthIndex = dateObj.getMonth();
-    // convert 0-11 to January-December
-    switch (monthIndex) {
-      case 0:
-        return 'January';
-      case 1:
-        return 'February';
-      case 2:
-        return 'March';
-      case 3:
-        return 'April';
-      case 4:
-        return 'May';
-      case 5:
-        return 'June';
-      case 6:
-        return 'July';
-      case 7:
-        return 'August';
-      case 8:
-        return 'September';
-      case 9:
-        return 'October';
-      case 10:
-        return 'November';
-      case 11:
-        return 'December';
-    }
-  }
-
-  /**
    * This function is a helper function that is used as the callback for when we fetch bullet
    * data from the database or when we are creating a new bullet. The function first creates a
    * function that will be used by the created bullet object to update the bullet count in
@@ -310,26 +259,10 @@ class YearlyLog extends HTMLElement {
     Database.store(this.id, data);
 
     // generate the new bullet ID
-    const bulletCount = this.stringifyNum(newBulNum);
+    const bulletCount = IDConverter.stringifyNum(newBulNum);
     const yearlyID = this.shadowRoot.querySelector('div.yearly').id;
 
     return `B ${yearlyID.substring(2)} ${sectionID} ${bulletCount}`;
-  }
-
-  /**
-   * This function is a helper function to convert an ID number into the right string format.
-   * IDs for our objects are stored as strings, and if the number is less than 10, the string
-   * representation we use has a 0 in front of the number. For example a section number 1 would
-   * have an ID of '01'.
-   *
-   * @param {number} num - The integer that is being stringified
-   * @returns {string} A string representation of the number that can be used in object IDs
-   */
-  stringifyNum (num) {
-    if (num < 10) {
-      return `0${num}`;
-    }
-    return `${num}`;
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------

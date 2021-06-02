@@ -6,7 +6,7 @@ export class IDConverter {
    * @param {string} id - the daily id (with the format 'd yymmdd') to parse
    * @returns {date} a date object representing the date determined by the id
    */
-  static getDateFromId (id) {
+  static getDateFromID (id) {
     // parse year, month, date
     const year = Number(id.substring(2, 4)) + 2000;
     const month = Number(id.substring(4, 6)) - 1;
