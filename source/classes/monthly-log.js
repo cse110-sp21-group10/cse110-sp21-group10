@@ -232,6 +232,7 @@ class MonthlyLog extends HTMLElement {
     // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
+    let numExerciseDays = 0;
     for (let i = 1; i <= numDays; i++) {
       // date button creation
       const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
@@ -270,6 +271,9 @@ class MonthlyLog extends HTMLElement {
               case 'Money Spent':
                 trackerChart = charts[3];
                 break;
+              case 'Exercise':
+                numExerciseDays = numExerciseDays + tracker.value;
+                break;
             }
 
             // update chart data with tracker data
@@ -288,6 +292,9 @@ class MonthlyLog extends HTMLElement {
           for (const chart of charts) {
             chart.update();
           }
+          const exerciseTracker = document.createElement('p');
+          exerciseTracker.innerText = `Exercise: ${numExerciseDays}/${numDays} days (${Math.round(numExerciseDays / numDays * 100)}%)`;
+          root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
       });
     }
