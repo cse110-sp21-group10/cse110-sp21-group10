@@ -468,6 +468,11 @@ section.header button:hover {
 
 #context-menu i {
   font-size: 0.75vw;
+
+}
+
+.irrelevant {
+  text-decoration: line-through;
 }
 
 /* All styling necessary for the conext menu end */
