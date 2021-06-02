@@ -116,12 +116,25 @@ div.daily {
   margin-bottom: 2%;
 }
 
+div.slider-div {
+  display: flex;
+  flex-direction: row;
+}
+
 /* This hides the monthly screen, so only the daily log is seen */
 
 div.monthly {
   display: none;
   margin-left: 7.5%;
   margin-top: 2%;
+}
+
+/* This sets the size of the canvas elements that hold the tracker charts in the monthly log */
+div.monthly .chart {
+  min-height: 400px;
+  max-height: 400px;
+  min-width: 400px;
+  max-width: 400px;
 }
 
 fieldset {

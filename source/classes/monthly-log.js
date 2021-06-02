@@ -1,4 +1,8 @@
 import { Database } from '../classes/database.js';
+import { IDConverter } from './IDConverter.js';
+
+// tell the linter that Chart is defined by a previous script
+/* global Chart */
 
 /**
  * This class contains functions to construct and edit the monthly log custom HTML element.
@@ -56,6 +60,7 @@ class MonthlyLog extends HTMLElement {
           <h1></h1>
         </section>
         <section id="monthly-calendar"></section>
+        <section id="monthly-charts"></section>
       </div>
     `;
 
@@ -78,19 +83,21 @@ class MonthlyLog extends HTMLElement {
 
   /**
    * This function constructs the monthly log HTML element using the given ID and monthly log
-   * object data. It starts by constructing and setting the header text for the element, then
-   * goes through each attribute of the monthly log object to construct the notes sections of
-   * the element. Each notes section is constructed by fetching the data of each bullet in the
-   * section from the database, and creating a custom bullet-entry HTML element that is appended
-   * to the section. Finally, the setAttribute function is called on this element to set the
-   * 'data' attribute of the element to be the given JSON data, so that the data can be retrieved
-   * from the element later if needed.
+   * object data. It starts by constructing and setting the header text for the element. It then
+   * creates the buttons for the monthly calendar, and constructs the charts for the different
+   * trackers (mood, sleep, etc). Next it goes through each attribute of the monthly log object
+   * to construct the notes sections of the element. Each notes section is constructed by fetching
+   * the data of each bullet in the section from the database, and creating a custom bullet-entry
+   * HTML element that is appended to the section. Finally, the setAttribute function is called on
+   * this element to set the 'data' attribute of the element to be the given JSON data, so that
+   * the data can be retrieved from the element later if needed.
    *
-   * @param {Array.<{id: string, jsonData: Object}>} data - Array of two elements (first element
-   * is the string ID of the object, and the second element is the JSON object data) that is used
-   * to construct and set the data in this HTML element
+   * @param {Array.<{id: string, jsonData: Object, callback: function}>} data - Array of three
+   * elements (first element is the string ID of the object, second element is the JSON object
+   * data, and the third element is the callback function for zooming into a certain date) that
+   * is used to construct and set the data in this HTML element
    */
-  set data ([id, jsonData]) {
+  set data ([id, jsonData, callback]) {
     // store this object in a variable so it can be passed to handlers later
     const monthlyLog = this;
 
@@ -125,23 +132,165 @@ class MonthlyLog extends HTMLElement {
 
     // get all information about the date that is needed for the header display
     const dateObj = this.getDateFromID(id);
-    const month = this.getMonthFromDate(dateObj);
+    const month = IDConverter.getMonthFromDate(dateObj);
     const year = dateObj.getFullYear();
     const dateString = `${month} ${year}`;
 
     // get the header text of this custom HTML element and set its contents to the constructed date string
     const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
+    const canvasIDs = ['mood-tracker', 'sleepq-tracker', 'calorie-tracker', 'money-tracker'];
 
-    // create buttons for each date in the monthly calendar
+    // Make this cleaner (hopefully without hard-coding) if we have time
+    // creates the canvas elements/charts for each tracker
+    for (let i = 0; i <= 3; i++) {
+      // create the canvas element and append it to the charts section
+      const canvas = document.createElement('canvas');
+      canvas.className = 'chart';
+      canvas.id = canvasIDs[i];
+      root.querySelector('#monthly-charts').appendChild(canvas);
+
+      // set the label of the y-axis of the chart based on what kind of tracker this is
+      let yAxisLabel = '';
+      switch (i) {
+        case 0:
+          yAxisLabel = 'Mood';
+          break;
+        case 1:
+          yAxisLabel = 'Sleep Quality';
+          break;
+        case 2:
+          yAxisLabel = 'Calorie Intake';
+          break;
+        case 3:
+          yAxisLabel = 'Money Spent';
+          break;
+      }
+
+      // construct the chart and apply to canvas
+      // get the canvas context and create the new chart
+      // the chart starts off empty, but gets populated with each fetch call for daily data
+      const ctx = canvas.getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'line', // line chart
+        data: {
+          labels: [], // x-axis labels
+          datasets: [{
+            data: [], // data points
+            borderCapStyle: 'round',
+            fill: false,
+            borderColor: 'black',
+            borderWidth: 2,
+            pointBackgroundColor: 'black',
+            pointRadius: 2,
+            pointHoverRadius: 2,
+            tension: 0.25
+          }]
+        },
+        options: {
+          scales: {
+            x: { // x-axis contents
+              axis: 'x',
+              position: 'bottom',
+              title: {
+                display: true,
+                text: 'Date'
+              },
+              grid: {
+                display: false
+              }
+            },
+            y: { // y-axis contents
+              axis: 'y',
+              position: 'left',
+              title: {
+                display: true,
+                text: yAxisLabel
+              },
+              grid: {
+                display: false
+              },
+              min: 0 // min-value of y-axis
+              // potential max-value can be added here
+            }
+          },
+          plugins: {
+            legend: {
+              display: false // don't show the legend
+            }
+          }
+        }
+      });
+      chart.render(); // render the initial chart (will get updated when data is updated)
+    }
+
+    // 1: create buttons for each date in the monthly calendar
+    // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
     for (let i = 1; i <= numDays; i++) {
+      // date button creation
+      const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
       const dateButton = document.createElement('button');
       dateButton.className = 'monthly-calendar-button';
-      dateButton.id = `D ${id.substring(2)}${this.stringifyNum(i)}`;
+      dateButton.id = dateID;
       dateButton.innerText = String(i);
+      dateButton.addEventListener('click', function (event) {
+        callback(event);
+      });
       calendar.appendChild(dateButton);
+
+      // after pulling tracker data, adjust the charts with the new data
+      const charts = []; // array of all the charts
+      for (let j = 0; j <= 3; j++) {
+        charts.push(Chart.getChart(this.shadowRoot.querySelector(`#${canvasIDs[j]}`)));
+      }
+
+      // add the x-axis date labels to each chart
+      for (const chart of charts) {
+        chart.data.labels.push(i);
+      }
+
+      Database.fetch(dateID, function (data) {
+        // if data is present
+        if (data) {
+          for (const tracker of data.trackers) {
+            // get chart for the tracker
+            let trackerChart = null;
+            switch (tracker.name) {
+              case 'Mood':
+                trackerChart = charts[0];
+                break;
+              case 'Sleep Quality':
+                trackerChart = charts[1];
+                break;
+              case 'Calorie Intake':
+                trackerChart = charts[2];
+                break;
+              case 'Money Spent':
+                trackerChart = charts[3];
+                break;
+            }
+
+            // update chart data with tracker data
+            if (trackerChart) {
+              trackerChart.data.datasets[0].data[i - 1] = tracker.value;
+            }
+          }
+        } else {
+          for (const chart of charts) {
+            chart.data.datasets[0].data[i - 1] = undefined;
+          }
+        }
+
+        // update chart by the last day of the month
+        if (i === numDays) {
+          for (const chart of charts) {
+            console.log(chart.data.datasets[0].data);
+            chart.update();
+          }
+        }
+      });
     }
 
     // loop through all sections in JSON data and construct and populate them
@@ -185,7 +334,7 @@ class MonthlyLog extends HTMLElement {
         const newNoteButton = document.createElement('button');
         newNoteButton.className = 'new-bullet';
         newNoteButton.innerHTML = `
-          <i class="fas fa-plus icon-size"></i>
+          <i class="fas fa-plus"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
           monthlyLog.newNoteHandler(event.target.closest('section'));
@@ -217,45 +366,6 @@ class MonthlyLog extends HTMLElement {
     const month = Number(id.substring(4, 6));
 
     return new Date(year, month, 0);
-  }
-
-  /**
-   * This function is a helper function that is used to determine the month for a given date.
-   * The function takes a Date object, then retrieves and converts the month integer
-   * representation into the corresponding string (English) format.
-   *
-   * @param {Date} dateObj - The Date object from which to retrieve month
-   * @returns {string} The month, as a string
-   */
-  getMonthFromDate (dateObj) {
-    const monthIndex = dateObj.getMonth();
-    // convert 0-11 to January-December
-    switch (monthIndex) {
-      case 0:
-        return 'January';
-      case 1:
-        return 'February';
-      case 2:
-        return 'March';
-      case 3:
-        return 'April';
-      case 4:
-        return 'May';
-      case 5:
-        return 'June';
-      case 6:
-        return 'July';
-      case 7:
-        return 'August';
-      case 8:
-        return 'September';
-      case 9:
-        return 'October';
-      case 10:
-        return 'November';
-      case 11:
-        return 'December';
-    }
   }
 
   /**
@@ -312,26 +422,10 @@ class MonthlyLog extends HTMLElement {
     Database.store(this.id, data);
 
     // generate the new bullet ID
-    const bulletCount = this.stringifyNum(newBulNum);
+    const bulletCount = IDConverter.stringifyNum(newBulNum);
     const monthlyID = this.shadowRoot.querySelector('div.monthly').id;
 
     return `B ${monthlyID.substring(2)} ${sectionID} ${bulletCount}`;
-  }
-
-  /**
-   * This function is a helper function to convert an ID number into the right string format.
-   * IDs for our objects are stored as strings, and if the number is less than 10, the string
-   * representation we use has a 0 in front of the number. For example a section number 1 would
-   * have an ID of '01'.
-   *
-   * @param {number} num - The integer that is being stringified
-   * @returns {string} A string representation of the number that can be used in object IDs
-   */
-  stringifyNum (num) {
-    if (num < 10) {
-      return `0${num}`;
-    }
-    return `${num}`;
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------

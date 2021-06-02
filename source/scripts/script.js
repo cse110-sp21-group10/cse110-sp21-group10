@@ -1,5 +1,5 @@
 import { Database } from '../classes/database.js';
-import { IDConverter } from './IDConverter.js';
+import { IDConverter } from '../classes/IDConverter.js';
 
 /*
  * Workflow (to be implemented):
@@ -414,7 +414,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
   } else if (entries[index] !== currID) {
     entries.splice(index, 0, currID);
   } else {
-    console.error(`updateEntries unnecsarilly called for ID ${currID} at index ${index}`);
+    console.error(`updateEntries unnecessarily called for ID ${currID} at index ${index}`);
   }
 }
 /* For quick commenting out of code */
