@@ -172,8 +172,8 @@ section.header button {
 /* Add a background color on hover */
 .global-icons button:hover {
   background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
-}
+  cursor: pointer; 
+} 
 
 section.header button:hover {
   background-color: lightgray;
