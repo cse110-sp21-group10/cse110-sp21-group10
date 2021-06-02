@@ -42,7 +42,7 @@ for (i = 0; i < coll.length; i++) {
       content.style.maxHeight = content.scrollHeight + 'px';
     }
   });
-};
+}
 
 // Getting all of the possible font selections
 const fonts = document.getElementsByClassName('font-style');
@@ -90,9 +90,9 @@ for (let i = 0; i < fonts.length; i++) {
     for (let i = 0; i < headers.length; i++) {
       headers[i].style.fontFamily = headerType;
       console.log(headers[i].content);
-    };
+    }
   });
-};
+}
 
 /** Changing the display to be in dark mode
   * TODO: Figure out why the header color will change, but not the contents of bullets
