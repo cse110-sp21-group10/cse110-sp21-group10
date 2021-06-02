@@ -27,7 +27,7 @@ import { Database } from './database.js';
  *     {
  *       type: 'numInput',
  *       name: 'Calorie Intake',
- *       value: -1 // signifies unused tracker
+ *       value: 0
  *     },
  *     {
  *       type: 'checkbox',
@@ -163,17 +163,17 @@ class DailyLog extends HTMLElement {
           {
             type: 'slider',
             name: 'Mood',
-            value: -1
+            value: 1
           },
           {
             type: 'slider',
             name: 'Sleep Quality',
-            value: -1
+            value: 1
           },
           {
             type: 'numInput',
             name: 'Calorie Intake',
-            value: -1
+            value: 0
           },
           {
             type: 'checkbox',
@@ -183,7 +183,7 @@ class DailyLog extends HTMLElement {
           {
             type: 'numInput',
             name: 'Money Spent',
-            value: -1
+            value: 0
           }
         ],
         sections: [
@@ -638,11 +638,7 @@ class DailyLog extends HTMLElement {
     slider.max = '10';
     slider.step = '1';
     // set value of slider based on data
-    if (tracker.value !== -1) {
-      slider.value = `${tracker.value}`;
-    } else {
-      slider.value = '1';
-    }
+    slider.value = `${tracker.value}`;
 
     // add change listener for updates
     const dailyLog = this;
@@ -730,9 +726,7 @@ class DailyLog extends HTMLElement {
     numInputEl.type = 'number';
     numInputEl.min = 0;
     // set num input based on data
-    if (tracker.value !== -1) {
-      numInputEl.value = `${tracker.value}`;
-    }
+    numInputEl.value = `${tracker.value}`;
 
     // add change listener for updates
     const dailyLog = this;
