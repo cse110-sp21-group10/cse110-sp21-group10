@@ -131,7 +131,7 @@ class MonthlyLog extends HTMLElement {
     root.id = id;
 
     // get all information about the date that is needed for the header display
-    const dateObj = this.getDateFromID(id);
+    const dateObj = IDConverter.getDateFromID(id, 'month');
     const month = IDConverter.getMonthFromDate(dateObj);
     const year = dateObj.getFullYear();
     const dateString = `${month} ${year}`;
@@ -351,21 +351,6 @@ class MonthlyLog extends HTMLElement {
   // ----------------------------------- End Get/Set Functions ------------------------------------
 
   // ----------------------------------- Start Helper Functions -----------------------------------
-
-  /**
-   * This function is a helper function that is used to determine the date for a given ID. The function
-   * parses the given ID to determine the year, and month, and returns a corresponding Date object.
-   *
-   * @param {string} id - The monthly ID (with the format 'M YYMM') to parse
-   * @returns {Date} A Date object representing the date determined by the ID
-   */
-  getDateFromID (id) {
-    // parse year, month
-    const year = Number(id.substring(2, 4)) + 2000;
-    const month = Number(id.substring(4, 6));
-
-    return new Date(year, month, 0);
-  }
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
