@@ -13,13 +13,31 @@
     <body>
         <header>
             <nav class="navigation">
-                <a href="daily.html" style="padding-right: 10%;" data-link> Daily Log </a>
-                <a href="monthly.html" style="padding-right: 10%;" data-link> Monthly Log </a>
-                <a href="yearly.html" style="padding-right: 10%;" data-link> Yearly Log </a>
+                <a href="daily.html" data-link> Daily Log </a>
+                <a href="monthly.html" data-link> Monthly Log </a>
+                <a href="yearly.html" data-link> Yearly Log </a>
                 <a href="menu.html" data-link> Index </a>
             </nav>
             
         </header>
+
+        <!-- <div class="container">
+            <div class="notification"></div>
+            <div class="weather-container">
+                <div class="weather-icon">
+                    <img src="../assets/icons/unknown.png" alt="">
+                </div>
+                <div class="temperature-value">
+                    <p>- °<span>C</span></p>
+                </div>
+                <div class="temperature-description">
+                    <p>-</p>
+                </div>
+                <div class="location">
+                    <p>-</p>
+                </div>
+            </div>
+        </div> -->
         
             <main>
                 <!--
@@ -64,6 +82,33 @@
                     and hiding the other log pages, along with some styling perhaps. 
                     -->
                     <daily-log></daily-log>
+
+                    <div id="context-menu">
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="empty-checkbox-bullet" class="far fa-square"></i>
+                                Task  
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="important-bullet" class="fas fa-exclamation"></i>
+                                Important
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="notes-bullet" class="fas fa-minus"></i>
+                                Note  
+                            </div>
+                        </div>
+                        <div class="bullet-select">
+                            <div class="bullet-option">
+                                <i id="events-bullet" class="far fa-circle"></i>
+                                Event
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 

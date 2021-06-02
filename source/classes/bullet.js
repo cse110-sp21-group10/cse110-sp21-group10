@@ -48,7 +48,7 @@ class BulletEntry extends HTMLElement {
           border: none;
           background: none;
           float: left;
-          padding-top: .4%;
+          padding-top: .8vh;
         }
 
         div < div.bullet-remove {
@@ -58,7 +58,7 @@ class BulletEntry extends HTMLElement {
         .bullet-point:hover {
           font-size: 12px;
           position: relative;
-          padding-top: .35%;
+          padding-top: .7vh;
           right: 1px;
           width: 22px;
         }
@@ -70,21 +70,21 @@ class BulletEntry extends HTMLElement {
           margin: 0;
           /* border: 5px solid black; */
         
-          padding-left: 1%;
+          padding-left: .5vw;
         }
         
         .bullet {
-          margin-left: 1.8%;
+          margin-left: 1vw;
         
-          padding-left: .5%;
-          padding-top: .5%;
+          padding-left: .5vw;
+          // padding-top: .5%;
 
           background-color: white;
         }
         
         .bullet:hover {
-          filter: brightness(95%);
-          border-radius: 20px;  
+          filter: brightness(96%);
+          border-radius: 20px;
         }
         
         .bullet:hover .bullet-remove,
@@ -94,29 +94,29 @@ class BulletEntry extends HTMLElement {
         
         .child-add {
           float: left;
-          max-width: 1.5%;
+          max-width: 1vw;
         }
 
         .bullet-remove {
           float: right;
-          padding-right: 1%;
+          padding-right: .8vw;
         }
         
         .bullet-remove:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .1%;
+          padding-top: .5vh;
         }
         
         .child-add:hover {
           font-size: 15px;
           position: relative;
-          padding-top: .1%;
+          padding-top: .5vh;
         }
 
         .child-add,
         .bullet-remove {
-          padding-top: .2%;
+          padding-top: .6vh;
 
           color: transparent;
         
@@ -127,12 +127,13 @@ class BulletEntry extends HTMLElement {
         [contenteditable] {
           outline: 0px solid transparent;
         }
+        
       </style>
       
       <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
 
       <div class="bullet">         
-        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>      
+        <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>    
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
         
@@ -210,9 +211,30 @@ class BulletEntry extends HTMLElement {
      */
     this.setChildren();
 
-    /** Iterate through labels
-     *
+    /** TODO: Iterate and apply labels
      */
+
+    /** Adding an Event Listener to the bullet-point itself for custom contextmenu (dropdown) for selecting type of bullet
+     * Custom bullet menu toggle on
+     * turns off default context menu
+     * adds active class to custom context menu on right click to bullet-point
+     */
+    this.shadowRoot.querySelector('.bullet-point').addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      const x = event.pageX + 'px';
+      const y = event.pageY + 'px';
+      const contextmenu = document.querySelector('#context-menu');
+      contextmenu.style.top = y;
+      contextmenu.style.left = x;
+      contextmenu.classList.add('active');
+    });
+
+    /** Event Listener for any click on the window
+     * This will remove the 'active' class from our contextmenu so it auto closes
+     */
+    window.addEventListener('click', (event) => {
+      document.querySelector('#context-menu').classList.remove('active');
+    });
 
     /** Checklist toggle based off value
      * - Implemented using display: none
