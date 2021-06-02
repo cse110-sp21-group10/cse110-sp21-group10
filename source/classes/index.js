@@ -19,12 +19,12 @@ const indexCloseBtn = document.getElementById('close-index');
 //       Customize font sizes
 
 /* Adds functionality to the hamburger menu icon to open the index */
-indexBtn.addEventListener('click', (event) => {
+indexBtn.addEventListener('click', () => {
   indexEl.classList.toggle('active');
 });
 
 /* Adds functionality to the 'X' icon to close the index */
-indexCloseBtn.addEventListener('click', (event) => {
+indexCloseBtn.addEventListener('click', () => {
   indexEl.classList.toggle('active');
 });
 
@@ -51,7 +51,7 @@ const fonts = document.getElementsByClassName('font-style');
  * If statements are used to determine which font to switch to
  */
 for (let i = 0; i < fonts.length; i++) {
-  fonts[i].addEventListener('click', (event) => {
+  fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
     // console.log(i + ": " + fonts[i].id);
     let fontType, headerType;
@@ -99,14 +99,14 @@ for (let i = 0; i < fonts.length; i++) {
   * TODO: Only change the necessary icons:
   *       might need to add another class to the icons that will change
   */
-const darkModeBtn = document.getElementById('dark-mode');
-darkModeBtn.addEventListener('click', (event) => {
-  console.log("theme changing? - isn't done yet");
-  document.body.style.color = 'white';
-  document.body.style.backgroundColor = 'black';
+// const darkModeBtn = document.getElementById('dark-mode');
+// darkModeBtn.addEventListener('click', () => {
+//   console.log("theme changing? - isn't done yet");
+//   document.body.style.color = 'white';
+//   document.body.style.backgroundColor = 'black';
 
-  const icons = document.querySelectorAll('button');
-  for (let i = 0; i < icons.length; i++) {
-    icons[i].style.color = 'white';
-  }
-});
+//   const icons = document.querySelectorAll('button');
+//   for (let i = 0; i < icons.length; i++) {
+//     icons[i].style.color = 'white';
+//   }
+// });
