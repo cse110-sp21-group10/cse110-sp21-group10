@@ -29,7 +29,7 @@ let btnZoomOut, btnNextUnit, btnPrevUnit; //, btnNextEntry, btnPrevEntry;
 let currDate = new Date();
 
 // Elements for the daily logs page
-let divDaily;
+let dailyLog;
 
 // Elements for the monthly logs page
 let divMonthly;
@@ -122,7 +122,7 @@ function setupScript () {
  * IDs used to load button elements
  */
 function loadVars () {
-  divDaily = document.getElementsByClassName('daily')[0];
+  dailyLog = document.getElementsByTagName('daily-log')[0];
   divMonthly = document.getElementsByClassName('monthly')[0];
   divYearly = document.getElementsByClassName('yearly')[0];
 
@@ -184,7 +184,7 @@ function zoomOut () {
  * Icon groups for entry jumping are made available to Daily view
  */
 function transitionDaily () {
-  divDaily.style.display = 'block';
+  dailyLog.style.display = 'block';
   divMonthly.style.display = 'none';
   // divEntryNav.style.display = 'block';
 }
@@ -199,7 +199,7 @@ function transitionDaily () {
  * Zoom out icon is enabled in Monthly and Daily view
  */
 function transitionMonthly () {
-  divDaily.style.display = 'none';
+  dailyLog.style.display = 'none';
   divMonthly.style.display = 'block';
   divYearly.style.display = 'none';
 
@@ -262,9 +262,8 @@ function loadDay () {
     }
   });
   // apend dayElem somewhere
-  divDaily.remove();
-  divDaily = dayElem;
-  document.getElementById('internal-content').appendChild(dayElem);
+  document.getElementById('internal-content').replaceChild(dayElem, dailyLog);
+  dailyLog = dayElem;
 }
 
 /**
