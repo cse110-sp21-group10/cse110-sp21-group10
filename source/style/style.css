@@ -109,7 +109,7 @@ This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
 div.daily {
-  display: none;
+  display: block;
   margin-left: 7.5%;
   margin-top: 2%;
   margin-right: 7.5%;
@@ -124,7 +124,7 @@ div.slider-div {
 /* This hides the monthly screen, so only the daily log is seen */
 
 div.monthly {
-  display: block;
+  display: none;
   margin-left: 7.5%;
   margin-top: 2%;
 }

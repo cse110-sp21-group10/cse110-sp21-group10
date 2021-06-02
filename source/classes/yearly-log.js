@@ -93,7 +93,7 @@ class YearlyLog extends HTMLElement {
    * data, and the third element is the callback function for zooming into a certain date) that is
    * used to construct and set the data in this HTML element
    */
-  set data ([id, jsonData]) {
+  set data ([id, jsonData, callback]) {
     // store this object in a variable so it can be passed to handlers later
     const yearlyLog = this;
 
@@ -186,7 +186,7 @@ class YearlyLog extends HTMLElement {
         const newNoteButton = document.createElement('button');
         newNoteButton.className = 'new-bullet';
         newNoteButton.innerHTML = `
-          <i class="fas fa-plus icon-size"></i>
+          <i class="fas fa-plus"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
           yearlyLog.newNoteHandler(event.target.closest('section'));

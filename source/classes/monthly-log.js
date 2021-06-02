@@ -131,7 +131,7 @@ class MonthlyLog extends HTMLElement {
     root.id = id;
 
     // get all information about the date that is needed for the header display
-    const dateObj = IDConverter.getDateFromID(id);
+    const dateObj = this.getDateFromID(id);
     const month = IDConverter.getMonthFromDate(dateObj);
     const year = dateObj.getFullYear();
     const dateString = `${month} ${year}`;
@@ -180,14 +180,18 @@ class MonthlyLog extends HTMLElement {
             borderCapStyle: 'round',
             fill: false,
             borderColor: 'black',
-            pointRadius: 0,
-            pointHoverRadius: 0,
+            borderWidth: 2,
+            pointBackgroundColor: 'black',
+            pointRadius: 2,
+            pointHoverRadius: 2,
             tension: 0.25
           }]
         },
         options: {
           scales: {
             x: { // x-axis contents
+              axis: 'x',
+              position: 'bottom',
               title: {
                 display: true,
                 text: 'Date'
@@ -197,6 +201,8 @@ class MonthlyLog extends HTMLElement {
               }
             },
             y: { // y-axis contents
+              axis: 'y',
+              position: 'left',
               title: {
                 display: true,
                 text: yAxisLabel
@@ -239,12 +245,13 @@ class MonthlyLog extends HTMLElement {
       for (let j = 0; j <= 3; j++) {
         charts.push(Chart.getChart(this.shadowRoot.querySelector(`#${canvasIDs[j]}`)));
       }
-      Database.fetch(dateID, function (data) {
-        // add the x-axis date labels to each chart
-        for (const chart of charts) {
-          chart.data.labels.push(i);
-        }
 
+      // add the x-axis date labels to each chart
+      for (const chart of charts) {
+        chart.data.labels.push(i);
+      }
+
+      Database.fetch(dateID, function (data) {
         // if data is present
         if (data) {
           for (const tracker of data.trackers) {
@@ -267,18 +274,19 @@ class MonthlyLog extends HTMLElement {
 
             // update chart data with tracker data
             if (trackerChart) {
-              trackerChart.data.datasets[0].data.push(tracker.value);
+              trackerChart.data.datasets[0].data[i - 1] = tracker.value;
             }
           }
         } else {
           for (const chart of charts) {
-            chart.data.datasets[0].data.push(undefined);
+            chart.data.datasets[0].data[i - 1] = undefined;
           }
         }
 
         // update chart by the last day of the month
         if (i === numDays) {
           for (const chart of charts) {
+            console.log(chart.data.datasets[0].data);
             chart.update();
           }
         }
@@ -326,7 +334,7 @@ class MonthlyLog extends HTMLElement {
         const newNoteButton = document.createElement('button');
         newNoteButton.className = 'new-bullet';
         newNoteButton.innerHTML = `
-          <i class="fas fa-plus icon-size"></i>
+          <i class="fas fa-plus"></i>
         `;
         newNoteButton.addEventListener('click', function (event) {
           monthlyLog.newNoteHandler(event.target.closest('section'));
@@ -344,6 +352,21 @@ class MonthlyLog extends HTMLElement {
   // ----------------------------------- End Get/Set Functions ------------------------------------
 
   // ----------------------------------- Start Helper Functions -----------------------------------
+
+  /**
+   * This function is a helper function that is used to determine the date for a given ID. The function
+   * parses the given ID to determine the year, and month, and returns a corresponding Date object.
+   *
+   * @param {string} id - The monthly ID (with the format 'M YYMM') to parse
+   * @returns {Date} A Date object representing the date determined by the ID
+   */
+  getDateFromID (id) {
+    // parse year, month
+    const year = Number(id.substring(2, 4)) + 2000;
+    const month = Number(id.substring(4, 6));
+
+    return new Date(year, month, 0);
+  }
 
   /**
    * This function is a helper function that is used as the callback for when we fetch bullet
