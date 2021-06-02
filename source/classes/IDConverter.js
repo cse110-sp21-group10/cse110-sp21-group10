@@ -171,7 +171,7 @@ export class IDConverter {
       case 'month':
         return `M ${year}${month}`;
       case 'year':
-        return `M ${year}`;
+        return `Y ${year}`;
       default:
         console.error(`No implementation yet for generating ${type} IDs`);
     }

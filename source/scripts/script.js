@@ -27,10 +27,10 @@ let currDate = new Date();
 let dailyLog;
 
 // Elements for the monthly logs page
-let divMonthly;
+let monthlyLog;
 
 // Elements for the yearly logs page
-let divYearly;
+let yearlyLog;
 // -----------------------------------------------
 // End of variable definition
 
@@ -56,25 +56,25 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
-      transitionDaily();
       if (event.state.date) {
         currDate = event.state.date;
         loadDay();
       }
+      transitionDaily();
       break;
     case 'month':
-      transitionMonthly();
       if (event.state.date) {
         currDate = event.state.date;
-        // loadMonth();
+        loadMonth();
       }
+      transitionMonthly();
       break;
     case 'year':
-      transitionYearly();
       if (event.state.date) {
         currDate = event.state.date;
-        // loadYear();
+        loadYear();
       }
+      transitionYearly();
       break;
   }
 };
@@ -109,8 +109,8 @@ function setupScript () {
  */
 function loadVars () {
   dailyLog = document.getElementsByTagName('daily-log')[0];
-  divMonthly = document.getElementsByClassName('monthly')[0];
-  divYearly = document.getElementsByClassName('yearly')[0];
+  monthlyLog = document.getElementsByTagName('monthly-log')[0];
+  yearlyLog = document.getElementsByTagName('yearly-log')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
 
@@ -164,10 +164,12 @@ function zoomOut () {
   switch (history.state.view) {
     case 'day':
       window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
+      loadMonth();
       transitionMonthly();
       break;
     case 'month':
       window.history.pushState({ view: 'year' }, 'Yearly Log', '#year');
+      loadYear();
       transitionYearly();
       break;
   }
@@ -182,8 +184,10 @@ function zoomOut () {
  */
 function transitionDaily () {
   dailyLog.style.display = 'block';
-  divMonthly.style.display = 'none';
-  // divEntryNav.style.display = 'block';
+  monthlyLog.style.display = 'none';
+
+  btnPrevEntry.disabled = 0;
+  btnNextEntry.disabled = 0;
 }
 
 /**
@@ -197,11 +201,12 @@ function transitionDaily () {
  */
 function transitionMonthly () {
   dailyLog.style.display = 'none';
-  divMonthly.style.display = 'block';
-  divYearly.style.display = 'none';
+  monthlyLog.style.display = 'block';
+  yearlyLog.style.display = 'none';
 
-  // divEntryNav.style.display = 'none';
-  btnZoomOut.style.disabled = 0;
+  btnZoomOut.disabled = 0;
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
 }
 
 /**
@@ -212,10 +217,10 @@ function transitionMonthly () {
  * Zoom out icon is disabled in Yearly View
  */
 function transitionYearly () {
-  divMonthly.style.display = 'none';
-  divYearly.style.display = 'block';
+  monthlyLog.style.display = 'none';
+  yearlyLog.style.display = 'block';
 
-  btnZoomOut.style.disabled = 1;
+  btnZoomOut.disabled = 1;
 }
 
 // New & unprocessed code -----------------------------------------------------------------------
@@ -241,13 +246,57 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
     if (data) {
       dayElem.data = [ID, data, updateEntries];
     } else {
-      console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new (template) Day ._.");
+      console.log('Creating a new template daily-log element');
       dayElem.data = [ID, {}, updateEntries];
     }
   });
-  // apend dayElem somewhere
+  // apend dayElem to internal content
+  dailyLog.shadowRoot.querySelector('div.daily').style.display = 'block';
   document.getElementById('internal-content').replaceChild(dayElem, dailyLog);
   dailyLog = dayElem;
+  dailyLog.style.display = 'block';
+}
+
+/**
+ * Description here
+ *
+ */
+function loadMonth (ID = IDConverter.generateID('month', currDate)) {
+  const monthElem = document.createElement('monthly-log');
+  Database.fetch(ID, (data) => {
+    if (data) {
+      monthElem.data = [ID, data];
+    } else {
+      console.log('Creating a new template monthly-log element');
+      monthElem.data = [ID, {}];
+    }
+  });
+  // apend monthElem to internal content
+  monthElem.shadowRoot.querySelector('div.monthly').style.display = 'block';
+  document.getElementById('internal-content').replaceChild(monthElem, monthlyLog);
+  monthlyLog = monthElem;
+  monthlyLog.style.display = 'block';
+}
+
+/**
+ * Description here
+ *
+ */
+function loadYear (ID = IDConverter.generateID('year', currDate)) {
+  const yearElem = document.createElement('yearly-log');
+  Database.fetch(ID, (data) => {
+    if (data) {
+      yearElem.data = [ID, data];
+    } else {
+      console.log('Creationg a new template yearly-log element');
+      yearElem.data = [ID, {}];
+    }
+  });
+  // append yearElem to internal content
+  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'block';
+  document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
+  yearlyLog = yearElem;
+  yearlyLog.style.display = 'block';
 }
 
 /**
@@ -274,14 +323,12 @@ function navigateUnit (amount) {
     case 'month':
       currDate.setMonth(currDate.getMonth() + amount, 1);
       window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      // loadMonth();
-      updateIndex();
+      loadMonth();
       break;
     case 'year':
       currDate.setFullYear(currDate.getFullYear() + amount);
-      window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
-      // loadYear();
-      updateIndex();
+      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
+      loadYear();
       break;
   }
 }
@@ -395,18 +442,18 @@ function toggleCheck (inBounds = false) {
  * then calls appropriate transition + load function (loadDay, loadMonth)
  *
  * @param {OnClickEvent} event - that triggered this function, provides access to target ID
- *
+ */
 export function zoomIn (event) {
   currDate = IDConverter.getDateFromID(event.target.id);
 
   switch (history.state.view) {
     case 'month':
-      transitionDaily();
       loadDay();
+      transitionDaily();
       break;
     case 'year':
+      loadMonth();
       transitionMonthly();
-      // loadMonth();
       break;
   }
 }

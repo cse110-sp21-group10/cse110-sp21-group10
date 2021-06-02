@@ -9,6 +9,11 @@
         <link rel="stylesheet" href="../style/style.css">
         <link rel="stylesheet" href="../assets/css/all.css">
         <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+        <script type="module" src="../classes/daily-log.js"></script>
+        <script type="module" src="../classes/monthly-log.js"></script>
+        <script type="module" src="../classes/yearly-log.js"></script>
+        <script type="module" src="../classes/bullet.js"></script>
+        <script type="module" src="../scripts/script.js"></script>
     </head>
     <body>
         <header>
@@ -83,6 +88,20 @@
                     -->
                     <daily-log></daily-log>
 
+                    <!-- Monthly section
+                    This is the div that encloses the monthly html page. When the 'zoom out' button
+                    is clicked from the daily log the js adds a class that will trigger the css
+                    monthly class to show this class and remove the other pages.
+                    -->
+                    <monthly-log></monthly-log>
+                
+                    <!-- Yearly section
+                    This is the div that encloses the yearly html page. When the 'zoom out' button
+                    is clicked from the monthly log the js adds a class that will trigger the css 
+                    yearly class to show this class and remove the other pages.
+                    -->
+                    <yearly-log></yearly-log>
+
                     <div id="context-menu">
                         <div class="bullet-select">
                             <div class="bullet-option">
@@ -114,10 +133,5 @@
 
             </main>
             <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-            <script src="../scripts/chart.min.js"></script>
-            <script type="module" src="../classes/daily-log.js"></script>
-            <script type="module" src="../classes/monthly-log.js"></script>
-            <script type="module" src="../classes/bullet.js"></script>
-            <script type="module" src="../scripts/script.js"></script>
     </body> 
 </html>
