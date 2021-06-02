@@ -453,4 +453,8 @@ section.header button:hover {
   width: 100%;
 }
 
+#context-menu i {
+  font-size: 0.75vw;
+}
+
 /* All styling necessary for the conext menu end */
