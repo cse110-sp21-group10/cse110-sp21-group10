@@ -49,8 +49,6 @@ class MonthlyLog extends HTMLElement {
   constructor () {
     super();
 
-    this.dates = [];
-
     const template = document.createElement('template');
 
     template.innerHTML = `
@@ -176,7 +174,13 @@ class MonthlyLog extends HTMLElement {
         data: {
           labels: [], // x-axis labels
           datasets: [{
-            data: [] // data points
+            data: [], // data points
+            borderCapStyle: 'round',
+            fill: false,
+            borderColor: 'black',
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            tension: 0.25
           }]
         },
         options: {
@@ -185,12 +189,18 @@ class MonthlyLog extends HTMLElement {
               title: {
                 display: true,
                 text: 'Date'
+              },
+              grid: {
+                display: false
               }
             },
             y: { // y-axis contents
               title: {
                 display: true,
                 text: yAxisLabel
+              },
+              grid: {
+                display: false
               },
               min: 0 // min-value of y-axis
               // potential max-value can be added here
@@ -221,8 +231,8 @@ class MonthlyLog extends HTMLElement {
 
       // after pulling tracker data, adjust the charts with the new data
       const charts = []; // array of all the charts
-      for (let i = 0; i <= 3; i++) {
-        charts.push(Chart.getChart(this.shadowRoot.querySelector(`#${canvasIDs[i]}`)));
+      for (let j = 0; j <= 3; j++) {
+        charts.push(Chart.getChart(this.shadowRoot.querySelector(`#${canvasIDs[j]}`)));
       }
       Database.fetch(dateID, function (data) {
         // add the x-axis date labels to each chart
@@ -252,12 +262,12 @@ class MonthlyLog extends HTMLElement {
 
             // update chart data with tracker data
             if (trackerChart) {
-              if (tracker.value !== -1) {
-                trackerChart.data.datasets[0].data[i - 1] = tracker.value;
-              } else {
-                trackerChart.data.datasets[0].data[i - 1] = undefined;
-              }
+              trackerChart.data.datasets[0].data.push(tracker.value);
             }
+          }
+        } else {
+          for (const chart of charts) {
+            chart.data.datasets[0].data.push(undefined);
           }
         }
 
@@ -557,29 +567,3 @@ class MonthlyLog extends HTMLElement {
 
 // define a custom element for the MonthlyLog web component
 customElements.define('monthly-log', MonthlyLog);
-
-Database.store('M 2105', {
-  sections: [
-    {
-      id: '00',
-      name: 'Monthly Goals',
-      type: 'log',
-      bulletIDs: [],
-      nextBulNum: 0
-    },
-    {
-      id: '01',
-      name: 'Monthly Notes',
-      type: 'log',
-      bulletIDs: [],
-      nextBulNum: 0
-    }
-  ]
-});
-
-const ID = 'M 2105';
-Database.fetch(ID, function (data, id) {
-  const log = document.createElement('monthly-log');
-  log.data = [id, data];
-  document.querySelector('#internal-content').appendChild(log);
-}, ID);
