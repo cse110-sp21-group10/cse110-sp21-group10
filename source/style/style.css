@@ -5,6 +5,10 @@
     Asya: "Need to make it not fixed sizes. :)"
 */
 
+* {
+  font-family: cursive;
+}
+
 h1 {
   font-size: 4vw;
   position: relative;
@@ -185,8 +189,8 @@ section.header button {
 /* Add a background color on hover */
 .global-icons button:hover {
   background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
-}
+  cursor: pointer; 
+} 
 
 section.header button:hover {
   background-color: lightgray;
@@ -649,6 +653,15 @@ button[id$='setting']:active {
 
 #context-menu .bullet-select .bullet-option:hover::before {
   width: 100%;
+}
+
+#context-menu i {
+  font-size: 0.75vw;
+
+}
+
+.irrelevant {
+  text-decoration: line-through;
 }
 
 /* All styling necessary for the conext menu end */

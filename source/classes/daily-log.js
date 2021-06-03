@@ -455,8 +455,9 @@ class DailyLog extends HTMLElement {
     // Display weather to UI
     function displayWeather () {
       iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
-      tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+      tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
       descElement.innerHTML = weather.description;
+      weather.temperature.unit = 'fahrenheit';
       // locationElement.innerHTML = `${weather.city}, ${weather.country}`;
     }
 
@@ -469,15 +470,15 @@ class DailyLog extends HTMLElement {
     tempElement.addEventListener('click', function () {
       if (weather.temperature.value === undefined) return;
 
-      if (weather.temperature.unit === 'celsius') {
+      if (weather.temperature.unit === 'fahrenheit') {
+        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+        weather.temperature.unit = 'celsius';
+      } else {
         let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
         fahrenheit = Math.floor(fahrenheit);
 
         tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
         weather.temperature.unit = 'fahrenheit';
-      } else {
-        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-        weather.temperature.unit = 'celsius';
       }
     });
   }
