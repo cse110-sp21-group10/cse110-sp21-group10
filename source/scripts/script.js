@@ -206,18 +206,16 @@ function transitionMonthly () {
 
   // divEntryNav.style.display = 'none';
   btnZoomOut.disabled = 0;
-  btnZoomOut.style.cursor = "pointer";
+  btnZoomOut.style.cursor = 'pointer';
 
-  btnZoomOut.addEventListener("mouseover", function() {
-    btnZoomOut.style.background = "lightgrey";
-  })
+  btnZoomOut.addEventListener('mouseover', function () {
+    btnZoomOut.style.background = 'lightgrey';
+  });
 
-  btnZoomOut.addEventListener("mouseout", function() {
-    btnZoomOut.style.background = "transparent";
+  btnZoomOut.addEventListener('mouseout', function () {
+    btnZoomOut.style.background = 'transparent';
   });
 }
-
-
 
 /**
  * Handles transitioning from Monthly view to Yearly view <p>
@@ -231,9 +229,9 @@ function transitionYearly () {
   yearlyLog.style.display = 'block';
 
   btnZoomOut.disabled = 1;
-  btnZoomOut.style.cursor = "default";
-  
-  btnZoomOut.style.backgroundColor= "transparent";
+  btnZoomOut.style.cursor = 'default';
+
+  btnZoomOut.style.backgroundColor = 'transparent';
 }
 
 // New & unprocessed code -----------------------------------------------------------------------
@@ -433,36 +431,36 @@ function toggleCheck (inBounds = false) {
   // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
   if (index <= 0 || history.state.view !== 'day') {
     btnPrevEntry.disabled = true;
-    btnPrevEntry.style.cursor = "default";
+    btnPrevEntry.style.cursor = 'default';
 
-    btnPrevEntry.style.backgroundColor = "transparent";
+    btnPrevEntry.style.backgroundColor = 'transparent';
   } else {
     btnPrevEntry.disabled = false;
-    btnPrevEntry.style.cursor = "pointer";
+    btnPrevEntry.style.cursor = 'pointer';
 
-    btnPrevEntry.addEventListener("mouseover", function() {
-      btnPrevEntry.style.background = "lightgrey";
-    })
-  
-    btnPrevEntry.addEventListener("mouseout", function() {
-      btnPrevEntry.style.background = "transparent";
+    btnPrevEntry.addEventListener('mouseover', function () {
+      btnPrevEntry.style.background = 'lightgrey';
+    });
+
+    btnPrevEntry.addEventListener('mouseout', function () {
+      btnPrevEntry.style.background = 'transparent';
     });
   }
   if ((index >= entries.length - 1 && !inBounds) || history.state.view !== 'day') {
     btnNextEntry.disabled = true;
-    btnNextEntry.style.cursor = "default";
+    btnNextEntry.style.cursor = 'default';
 
-    btnNextEntry.style.background = "transparent";
+    btnNextEntry.style.background = 'transparent';
   } else {
     btnNextEntry.disabled = false;
-    btnNextEntry.style.cursor = "pointer";
+    btnNextEntry.style.cursor = 'pointer';
 
-    btnNextEntry.addEventListener("mouseover", function() {
-      btnNextEntry.style.background = "lightgrey";
-    })
-  
-    btnNextEntry.addEventListener("mouseout", function() {
-      btnNextEntry.style.background = "transparent";
+    btnNextEntry.addEventListener('mouseover', function () {
+      btnNextEntry.style.background = 'lightgrey';
+    });
+
+    btnNextEntry.addEventListener('mouseout', function () {
+      btnNextEntry.style.background = 'transparent';
     });
   }
 }
