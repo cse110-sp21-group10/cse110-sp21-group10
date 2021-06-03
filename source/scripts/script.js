@@ -335,6 +335,9 @@ function transitionMonthly () {
   btnZoomOut.disabled = 0;
   btnZoomOut.style.cursor = 'pointer';
 
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
+
   btnZoomOut.addEventListener('mouseover', function () {
     btnZoomOut.style.background = 'lightgrey';
   });
@@ -357,6 +360,9 @@ function transitionYearly () {
 
   btnZoomOut.disabled = 1;
   btnZoomOut.style.cursor = 'default';
+
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
 
   btnZoomOut.style.backgroundColor = 'transparent';
 }
@@ -539,7 +545,12 @@ function updateIndex (currID = IDConverter.generateID('day', currDate)) {
  *
  * Otherwise, logs an error indicating function was called unnecsarilly
  */
-export function updateEntries (currID = IDConverter.generateID('day', currDate), index = IDConverter.generateIndex(entries, currID)) {
+export function updateEntries (currID = IDConverter.generateID('day', currDate), targetIndex) {
+  if (targetIndex) {
+    index = targetIndex;
+  } else {
+    index = IDConverter.generateIndex(entries, currID);
+  }
   if (index === entries.length) {
     entries.push(currID);
   } else if (entries[index] !== currID) {
