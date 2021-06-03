@@ -1,6 +1,0 @@
-/** 
- * TODO:
- * getDateFromID
- * getMonthFromDate
- * stringifyNum
-*/
