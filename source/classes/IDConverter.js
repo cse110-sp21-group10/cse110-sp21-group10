@@ -4,13 +4,30 @@ export class IDConverter {
    * parses the given id to determine the year, month, and date, and returns a corresponding date object.
    *
    * @param {string} id - the daily id (with the format 'd yymmdd') to parse
+   * @param {string} view - the view to generate the ID for
    * @returns {date} a date object representing the date determined by the id
    */
-  static getDateFromID (id) {
+  static getDateFromID (id, view) {
     // parse year, month, date
-    const year = Number(id.substring(2, 4)) + 2000;
-    const month = Number(id.substring(4, 6)) - 1;
-    const date = Number(id.substring(6, 8));
+    let date, month, year;
+
+    switch (view) {
+      case 'day':
+        year = Number(id.substring(2, 4)) + 2000;
+        month = Number(id.substring(4, 6)) - 1;
+        date = Number(id.substring(6, 8));
+        break;
+      case 'month':
+        year = Number(id.substring(2, 4)) + 2000;
+        month = Number(id.substring(4, 6));
+        date = 0;
+        break;
+      case 'year':
+        year = Number(id.substring(2, 4)) + 2000;
+        month = 0;
+        date = 1;
+        break;
+    }
 
     return new Date(year, month, date);
   }

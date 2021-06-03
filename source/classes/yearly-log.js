@@ -127,7 +127,7 @@ class YearlyLog extends HTMLElement {
     root.id = id;
 
     // get all information about the date that is needed for the header display
-    const dateObj = IDConverter.getDateFromID(id);
+    const dateObj = IDConverter.getDateFromID(id, 'year');
     const year = dateObj.getFullYear();
     const dateString = `${year}`;
 
@@ -142,6 +142,9 @@ class YearlyLog extends HTMLElement {
       monthButton.className = 'yearly-calendar-button';
       monthButton.id = `M ${id.substring(2)}${IDConverter.stringifyNum(i + 1)}`;
       monthButton.innerText = String(IDConverter.getMonthFromDate(new Date(year, i)));
+      monthButton.addEventListener('click', function (event) {
+        callback(event);
+      });
       calendar.appendChild(monthButton);
     }
 

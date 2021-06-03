@@ -20,7 +20,7 @@ let btnZoomOut, btnNextUnit, btnPrevUnit, btnNextEntry, btnPrevEntry;
 // Vars used to setup entry indexing
 let index, entries;
 
-// currentDate - based on entry, the actual currentDate will be generated whenever needed)
+// currentDate  based on entry, the actual currentDate will be generated whenever needed)
 let currDate = new Date();
 
 // Elements for the daily logs page
@@ -265,10 +265,10 @@ function loadMonth (ID = IDConverter.generateID('month', currDate)) {
   const monthElem = document.createElement('monthly-log');
   Database.fetch(ID, (data) => {
     if (data) {
-      monthElem.data = [ID, data];
+      monthElem.data = [ID, data, zoomIn];
     } else {
       console.log('Creating a new template monthly-log element');
-      monthElem.data = [ID, {}];
+      monthElem.data = [ID, {}, zoomIn];
     }
   });
   // apend monthElem to internal content
@@ -286,10 +286,10 @@ function loadYear (ID = IDConverter.generateID('year', currDate)) {
   const yearElem = document.createElement('yearly-log');
   Database.fetch(ID, (data) => {
     if (data) {
-      yearElem.data = [ID, data];
+      yearElem.data = [ID, data, zoomIn];
     } else {
       console.log('Creationg a new template yearly-log element');
-      yearElem.data = [ID, {}];
+      yearElem.data = [ID, {}, zoomIn];
     }
   });
   // append yearElem to internal content
@@ -363,7 +363,7 @@ function navigateEntry (amount) {
     }
   }
   const targetID = entries[index];
-  currDate = IDConverter.getDateFromID(targetID);
+  currDate = IDConverter.getDateFromID(targetID, 'day');
   window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
   loadDay(targetID);
   updateIndex(targetID);
@@ -444,14 +444,16 @@ function toggleCheck (inBounds = false) {
  * @param {OnClickEvent} event - that triggered this function, provides access to target ID
  */
 export function zoomIn (event) {
-  currDate = IDConverter.getDateFromID(event.target.id);
-
   switch (history.state.view) {
     case 'month':
+      currDate = IDConverter.getDateFromID(event.target.id, 'day');
+      window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       transitionDaily();
       break;
     case 'year':
+      currDate = IDConverter.getDateFromID(event.target.id, 'month');
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       loadMonth();
       transitionMonthly();
       break;
