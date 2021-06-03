@@ -376,14 +376,19 @@ function navigateEntry (amount) {
  * A lookup is done on today's ID to determine index (using a binary search on entries since it's a sorted array),
  * if the day hasn't been recorded yet, the day object will handle deciding whether or not to add the day to entries <p>
  *
- * Calls function to toggle buttons based off updated Index
+ * Calls function to toggle buttons based off updated Index and whether or not currentID is 'inBounds'
  * @param {string} [currID = IDConverter.generateID('day', currDate)] - current Day's ID used to update indexing and decide whether to toggle buttons
  */
 function updateIndex (currID = IDConverter.generateID('day', currDate)) {
   // Generate the ID and determine index
   index = IDConverter.generateIndex(entries, currID);
 
-  toggleCheck(currID < entries[index]);
+  if (index === 0 && currID < entries[index]) {
+    index -= 1;
+  }
+
+  // Boundedness is being between the start (index === 0) and end (entries >= entries[index])
+  toggleCheck(index > 0 && currID < entries[index]);
 }
 
 /**
@@ -418,7 +423,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
  */
 function toggleCheck (inBounds = false) {
   // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
-  if (index <= 0 || history.state.view !== 'day') {
+  if ((index <= 0 && !inBounds) || history.state.view !== 'day') {
     btnPrevEntry.disabled = true;
   } else {
     btnPrevEntry.disabled = false;
@@ -450,6 +455,7 @@ export function zoomIn (event) {
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       transitionDaily();
+      updateIndex();
       break;
     case 'year':
       currDate = IDConverter.getDateFromID(event.target.id, 'month');
