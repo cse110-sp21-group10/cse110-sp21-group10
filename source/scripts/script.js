@@ -1,5 +1,5 @@
 import { Database } from '../classes/database.js';
-import { IDConverter } from './IDConverter.js';
+import { IDConverter } from '../classes/IDConverter.js';
 
 /*
  * Workflow (to be implemented):
@@ -20,17 +20,17 @@ let btnZoomOut, btnNextUnit, btnPrevUnit, btnNextEntry, btnPrevEntry;
 // Vars used to setup entry indexing
 let index, entries;
 
-// currentDate - based on entry, the actual currentDate will be generated whenever needed)
+// currentDate  based on entry, the actual currentDate will be generated whenever needed)
 let currDate = new Date();
 
 // Elements for the daily logs page
-let divDaily;
+let dailyLog;
 
 // Elements for the monthly logs page
-let divMonthly;
+let monthlyLog;
 
 // Elements for the yearly logs page
-let divYearly;
+let yearlyLog;
 // -----------------------------------------------
 // End of variable definition
 
@@ -56,25 +56,25 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
-      transitionDaily();
       if (event.state.date) {
         currDate = event.state.date;
         loadDay();
       }
+      transitionDaily();
       break;
     case 'month':
-      transitionMonthly();
       if (event.state.date) {
         currDate = event.state.date;
-        // loadMonth();
+        loadMonth();
       }
+      transitionMonthly();
       break;
     case 'year':
-      transitionYearly();
       if (event.state.date) {
         currDate = event.state.date;
-        // loadYear();
+        loadYear();
       }
+      transitionYearly();
       break;
   }
 };
@@ -108,9 +108,9 @@ function setupScript () {
  * IDs used to load button elements
  */
 function loadVars () {
-  divDaily = document.getElementsByClassName('daily')[0];
-  divMonthly = document.getElementsByClassName('monthly')[0];
-  divYearly = document.getElementsByClassName('yearly')[0];
+  dailyLog = document.getElementsByTagName('daily-log')[0];
+  monthlyLog = document.getElementsByTagName('monthly-log')[0];
+  yearlyLog = document.getElementsByTagName('yearly-log')[0];
 
   btnZoomOut = document.getElementById('zoom-out-button');
 
@@ -164,10 +164,12 @@ function zoomOut () {
   switch (history.state.view) {
     case 'day':
       window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
+      loadMonth();
       transitionMonthly();
       break;
     case 'month':
       window.history.pushState({ view: 'year' }, 'Yearly Log', '#year');
+      loadYear();
       transitionYearly();
       break;
   }
@@ -181,9 +183,11 @@ function zoomOut () {
  * Icon groups for entry jumping are made available to Daily view
  */
 function transitionDaily () {
-  divDaily.style.display = 'block';
-  divMonthly.style.display = 'none';
-  // divEntryNav.style.display = 'block';
+  dailyLog.style.display = 'block';
+  monthlyLog.style.display = 'none';
+
+  btnPrevEntry.disabled = 0;
+  btnNextEntry.disabled = 0;
 }
 
 /**
@@ -196,13 +200,24 @@ function transitionDaily () {
  * Zoom out icon is enabled in Monthly and Daily view
  */
 function transitionMonthly () {
-  divDaily.style.display = 'none';
-  divMonthly.style.display = 'block';
-  divYearly.style.display = 'none';
+  dailyLog.style.display = 'none';
+  monthlyLog.style.display = 'block';
+  yearlyLog.style.display = 'none';
 
   // divEntryNav.style.display = 'none';
-  btnZoomOut.style.disabled = 0;
+  btnZoomOut.disabled = 0;
+  btnZoomOut.style.cursor = "pointer";
+
+  btnZoomOut.addEventListener("mouseover", function() {
+    btnZoomOut.style.background = "lightgrey";
+  })
+
+  btnZoomOut.addEventListener("mouseout", function() {
+    btnZoomOut.style.background = "transparent";
+  });
 }
+
+
 
 /**
  * Handles transitioning from Monthly view to Yearly view <p>
@@ -212,10 +227,13 @@ function transitionMonthly () {
  * Zoom out icon is disabled in Yearly View
  */
 function transitionYearly () {
-  divMonthly.style.display = 'none';
-  divYearly.style.display = 'block';
+  monthlyLog.style.display = 'none';
+  yearlyLog.style.display = 'block';
 
-  btnZoomOut.style.disabled = 1;
+  btnZoomOut.disabled = 1;
+  btnZoomOut.style.cursor = "default";
+  
+  btnZoomOut.style.backgroundColor= "transparent";
 }
 
 // New & unprocessed code -----------------------------------------------------------------------
@@ -241,14 +259,57 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
     if (data) {
       dayElem.data = [ID, data, updateEntries];
     } else {
-      console.log("Dunno if this is an error or if the ID just wan't found so we'll just make a new (template) Day ._.");
+      console.log('Creating a new template daily-log element');
       dayElem.data = [ID, {}, updateEntries];
     }
   });
-  // apend dayElem somewhere
-  divDaily.remove();
-  divDaily = dayElem;
-  document.getElementById('internal-content').appendChild(dayElem);
+  // apend dayElem to internal content
+  dailyLog.shadowRoot.querySelector('div.daily').style.display = 'block';
+  document.getElementById('internal-content').replaceChild(dayElem, dailyLog);
+  dailyLog = dayElem;
+  dailyLog.style.display = 'block';
+}
+
+/**
+ * Description here
+ *
+ */
+function loadMonth (ID = IDConverter.generateID('month', currDate)) {
+  const monthElem = document.createElement('monthly-log');
+  Database.fetch(ID, (data) => {
+    if (data) {
+      monthElem.data = [ID, data, zoomIn];
+    } else {
+      console.log('Creating a new template monthly-log element');
+      monthElem.data = [ID, {}, zoomIn];
+    }
+  });
+  // apend monthElem to internal content
+  monthElem.shadowRoot.querySelector('div.monthly').style.display = 'block';
+  document.getElementById('internal-content').replaceChild(monthElem, monthlyLog);
+  monthlyLog = monthElem;
+  monthlyLog.style.display = 'block';
+}
+
+/**
+ * Description here
+ *
+ */
+function loadYear (ID = IDConverter.generateID('year', currDate)) {
+  const yearElem = document.createElement('yearly-log');
+  Database.fetch(ID, (data) => {
+    if (data) {
+      yearElem.data = [ID, data, zoomIn];
+    } else {
+      console.log('Creationg a new template yearly-log element');
+      yearElem.data = [ID, {}, zoomIn];
+    }
+  });
+  // append yearElem to internal content
+  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'block';
+  document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
+  yearlyLog = yearElem;
+  yearlyLog.style.display = 'block';
 }
 
 /**
@@ -275,14 +336,12 @@ function navigateUnit (amount) {
     case 'month':
       currDate.setMonth(currDate.getMonth() + amount, 1);
       window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      // loadMonth();
-      updateIndex();
+      loadMonth();
       break;
     case 'year':
       currDate.setFullYear(currDate.getFullYear() + amount);
-      window.history.pushState({ view: 'year,', date: currDate }, 'Yearly Log', '#year');
-      // loadYear();
-      updateIndex();
+      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
+      loadYear();
       break;
   }
 }
@@ -317,7 +376,7 @@ function navigateEntry (amount) {
     }
   }
   const targetID = entries[index];
-  currDate = IDConverter.getDateFromId(targetID);
+  currDate = IDConverter.getDateFromID(targetID, 'day');
   window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
   loadDay(targetID);
   updateIndex(targetID);
@@ -355,7 +414,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
   } else if (entries[index] !== currID) {
     entries.splice(index, 0, currID);
   } else {
-    console.error(`updateEntries unnecsarilly called for ID ${currID} at index ${index}`);
+    console.error(`updateEntries unnecessarily called for ID ${currID} at index ${index}`);
   }
 }
 /* For quick commenting out of code */
@@ -374,35 +433,69 @@ function toggleCheck (inBounds = false) {
   // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
   if (index <= 0 || history.state.view !== 'day') {
     btnPrevEntry.disabled = true;
+    btnPrevEntry.style.cursor = "default";
+
+    btnPrevEntry.style.backgroundColor = "transparent";
   } else {
     btnPrevEntry.disabled = false;
+    btnPrevEntry.style.cursor = "pointer";
+
+    btnPrevEntry.addEventListener("mouseover", function() {
+      btnPrevEntry.style.background = "lightgrey";
+    })
+  
+    btnPrevEntry.addEventListener("mouseout", function() {
+      btnPrevEntry.style.background = "transparent";
+    });
   }
   if ((index >= entries.length - 1 && !inBounds) || history.state.view !== 'day') {
     btnNextEntry.disabled = true;
+    btnNextEntry.style.cursor = "default";
+
+    btnNextEntry.style.background = "transparent";
   } else {
     btnNextEntry.disabled = false;
+    btnNextEntry.style.cursor = "pointer";
+
+    btnNextEntry.addEventListener("mouseover", function() {
+      btnNextEntry.style.background = "lightgrey";
+    })
+  
+    btnNextEntry.addEventListener("mouseout", function() {
+      btnNextEntry.style.background = "transparent";
+    });
   }
 }
+
 /* For quick commenting out of code */
 
 /**
- * TODO
- *
  * Provides functionality to calendar view in yearly/monthly logs <p>
  *
- * Access to contents (and therefor target date) in the element that was triggered through event param <p>
+ * Access to contents (and therefor target date via ID) in the element that was triggered through event param <p>
  *
- * Set's currDate accordingly <p>
+ * Converts stored ID to date with IDConverter and loads into currDate <p>
  *
  * Reads history state's current view to decide whether to transition to Monthly or Daily view,
- * then calls appropriate load function (loadDay, loadMonth)
+ * then calls appropriate transition + load function (loadDay, loadMonth)
  *
- * @param {OnClickEvent} event
- *
-function zoomIn (event) {
-  // When user click on a button in yearly or monthly
-  // zoom into the correct month or date
-  // sets day, month, year to correct date.
+ * @param {OnClickEvent} event - that triggered this function, provides access to target ID
+ */
+export function zoomIn (event) {
+  switch (history.state.view) {
+    case 'month':
+      currDate = IDConverter.getDateFromID(event.target.id, 'day');
+      window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
+      loadDay();
+      transitionDaily();
+      break;
+    case 'year':
+      currDate = IDConverter.getDateFromID(event.target.id, 'month');
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
+      loadMonth();
+      transitionMonthly();
+      break;
+  }
 }
 /* For quick commenting out of code */
 
