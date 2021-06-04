@@ -556,7 +556,7 @@ class BulletEntry extends HTMLElement {
    *
    * Called for creation of both new and existing labels <p>
    *
-   * Data setting handled in a layer above (if needed at all)
+   * Data setting handled in a layer above (if needed at all) <p>
    *
    * Special click listeners added to allow for removal of a label (calls a helper function for deletion)
    *
