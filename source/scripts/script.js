@@ -32,6 +32,28 @@ let monthlyLog;
 // Elements for the yearly logs page
 let yearlyLog;
 // -----------------------------------------------
+
+// Labels object for mapping label names to colors
+export const labels = {
+  finance: {
+    color: 'yellow'
+  },
+  fitness: {
+    color: 'green'
+  },
+  academics: {
+    color: 'grey'
+  },
+  household: {
+    color: 'orange'
+  },
+  work: {
+    color: 'red'
+  },
+  leisure: {
+    color: 'blue'
+  }
+};
 // End of variable definition
 
 /**
@@ -335,6 +357,9 @@ function transitionMonthly () {
   btnZoomOut.disabled = 0;
   btnZoomOut.style.cursor = 'pointer';
 
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
+
   btnZoomOut.addEventListener('mouseover', function () {
     btnZoomOut.style.background = 'lightgrey';
   });
@@ -357,6 +382,9 @@ function transitionYearly () {
 
   btnZoomOut.disabled = 1;
   btnZoomOut.style.cursor = 'default';
+
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
 
   btnZoomOut.style.backgroundColor = 'transparent';
 }
@@ -515,14 +543,19 @@ function navigateEntry (amount) {
  * A lookup is done on today's ID to determine index (using a binary search on entries since it's a sorted array),
  * if the day hasn't been recorded yet, the day object will handle deciding whether or not to add the day to entries <p>
  *
- * Calls function to toggle buttons based off updated Index
+ * Calls function to toggle buttons based off updated Index and whether or not currentID is 'inBounds'
  * @param {string} [currID = IDConverter.generateID('day', currDate)] - current Day's ID used to update indexing and decide whether to toggle buttons
  */
 function updateIndex (currID = IDConverter.generateID('day', currDate)) {
   // Generate the ID and determine index
   index = IDConverter.generateIndex(entries, currID);
 
-  toggleCheck(currID < entries[index]);
+  if (index === 0 && currID < entries[index]) {
+    index -= 1;
+  }
+
+  // Boundedness is being between the start (index === 0) and end (entries >= entries[index])
+  toggleCheck(index > 0 && currID < entries[index]);
 }
 
 /**
@@ -534,7 +567,12 @@ function updateIndex (currID = IDConverter.generateID('day', currDate)) {
  *
  * Otherwise, logs an error indicating function was called unnecsarilly
  */
-export function updateEntries (currID = IDConverter.generateID('day', currDate), index = IDConverter.generateIndex(entries, currID)) {
+export function updateEntries (currID = IDConverter.generateID('day', currDate), targetIndex) {
+  if (targetIndex) {
+    index = targetIndex;
+  } else {
+    index = IDConverter.generateIndex(entries, currID);
+  }
   if (index === entries.length) {
     entries.push(currID);
   } else if (entries[index] !== currID) {
@@ -557,7 +595,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
  */
 function toggleCheck (inBounds = false) {
   // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
-  if (index <= 0 || history.state.view !== 'day') {
+  if ((index <= 0 && !inBounds) || history.state.view !== 'day') {
     btnPrevEntry.disabled = true;
     btnPrevEntry.style.cursor = 'default';
 
@@ -614,6 +652,7 @@ export function zoomIn (event) {
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       transitionDaily();
+      updateIndex();
       break;
     case 'year':
       currDate = IDConverter.getDateFromID(event.target.id, 'month');
