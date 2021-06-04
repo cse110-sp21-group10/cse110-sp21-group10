@@ -565,6 +565,7 @@ class BulletEntry extends HTMLElement {
   createLabel (labelName) {
     const button = document.createElement('button');
     button.className = 'label';
+    button.id = labelName;
     $(button).tooltip();
     button.title = labelName;
 
@@ -583,7 +584,28 @@ class BulletEntry extends HTMLElement {
       this.removeLabel(button, labelName);
     };
 
-    this.shadowRoot.querySelector('.bullet').insertBefore(button, this.shadowRoot.querySelector('.bullet-text'));
+    /** Figure out where to insert the newly created label
+     * 1. Check if there are no other labels, append to far left
+     * 2. Otherwise iterate through labels until new label > existing label (at index)
+     *   a. insertBefore will place label to right of existing label
+     * 3. Finally if the label is < all existing labels
+     *   a. insertBefore to the far left
+     *
+     * End result: Labels displayed by name A-Z
+     */
+    const bullet = this.shadowRoot.querySelector('.bullet');
+    const labelElems = bullet.querySelectorAll('.label');
+    if (!labelElems.length) {
+      bullet.insertBefore(button, bullet.querySelector('.bullet-text'));
+    } else {
+      for (let i = 0; i < labelElems.length; i++) {
+        if (labelName > labelElems[i].id) {
+          bullet.insertBefore(button, labelElems[i]);
+        } else if (i === labelElems.length - 1) {
+          bullet.insertBefore(button, bullet.querySelector('.bullet-text'));
+        }
+      }
+    }
   }
 
   /**
