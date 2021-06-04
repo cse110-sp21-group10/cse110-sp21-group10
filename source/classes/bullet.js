@@ -11,7 +11,7 @@ import { Database } from './database.js';
     {
       labelIDs: [],
       text: 'Walk the dog',
-      value: -1,
+      type: 'task-bullet',
       childrenIDs: []
     }
  * ];
@@ -27,7 +27,7 @@ import { Database } from './database.js';
  *
  * @property {jsonObject} data associated with this bulletEntry
  * @property {string[]} data.labelIDs - IDs of the labels assigned
- * @property {Number} data.value - value that determines the type of bullet (e.g. unchecked, dashed, crossed-off)
+ * @property {string} data.type - string describing type of bullet (e.g. 'task-bullet', 'notes-bullet', etc)
  * @property {string[]} data.childrenIDs - IDs of direct children bullets under this bullet
  */
 
@@ -135,7 +135,11 @@ class BulletEntry extends HTMLElement {
         [contenteditable] {
           outline: 0px solid transparent;
         }
-        
+
+        .irrelevant {
+          text-decoration: line-through;
+        }
+
       </style>
       
       <link href="../assets/css/all.css" rel="stylesheet"> <!--load all styles -->
@@ -169,7 +173,7 @@ class BulletEntry extends HTMLElement {
    * @returns {jsonObject} JSON object containing data representing this bullet element <p>
    * { labelIDs: [string] <p>
    *   text: string <p>
-   *   value: Number <p>
+   *   type: string <p>
    *   childrenIDs: [string] <p>
    * }
    */
@@ -193,7 +197,8 @@ class BulletEntry extends HTMLElement {
    *
    * Adds a listener to handle changes to input once user stops focusing on it (called blur -_-) <p>
    *
-   * TODO: Implement a way to update the type of bullet point based off value <p>
+   * Adds a listener to the bullet icon to allow user to open bullet type menu on right click and
+   * choose a new type of bullet from that menu <p>
    *
    * @param {Array.<{id: string, jsonData: Object, incrementBullet: callback}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [callback] used to generateID and increment bullet counter when creating children
    */
@@ -204,7 +209,7 @@ class BulletEntry extends HTMLElement {
       jsonData = {
         labelIDs: [],
         text: '',
-        value: -1,
+        type: 'task-bullet',
         childrenIDs: []
       };
       console.log('Setting empty template');
@@ -228,19 +233,55 @@ class BulletEntry extends HTMLElement {
     /** TODO: Iterate and apply labels
      */
 
-    /** Adding an Event Listener to the bullet-point itself for custom contextmenu (dropdown) for selecting type of bullet
+    /** Adding an event listener to the bullet-point itself for custom contextmenu (dropdown) for selecting type of bullet
      * Custom bullet menu toggle on
      * turns off default context menu
      * adds active class to custom context menu on right click to bullet-point
+     * adds event listeners to each option to apply the correct new icon and update the data when the user selects a new type of bullet
      */
+
+    // html elements that will be needed for displaying the dropdown and adding event listeners
+    const contextMenu = document.querySelector('#context-menu');
+    const labelMenu = document.querySelector('#label-menu');
+    const bulletOptions = document.querySelectorAll('.bullet-option');
+    const bulletIcon = this.shadowRoot.querySelector('.bullet-point > i');
+
     this.shadowRoot.querySelector('.bullet-point').addEventListener('contextmenu', (event) => {
+      // display custom dropdown with the bullet types
       event.preventDefault();
       const x = event.pageX + 'px';
       const y = event.pageY + 'px';
-      const contextmenu = document.querySelector('#context-menu');
-      contextmenu.style.top = y;
-      contextmenu.style.left = x;
-      contextmenu.classList.add('active');
+      contextMenu.style.top = y;
+      contextMenu.style.left = x;
+      contextMenu.classList.add('active'); // adds the active class to the contextmenu so it gets displayed
+
+      // loop through each option in the dropdown and add a click event listener for when the user selects an option
+      for (const bulletOption of bulletOptions) {
+        bulletOption.onclick = (event) => {
+          // get the icon that the user selected
+          const option = event.target.closest('.bullet-option');
+          const optionIcon = option.querySelector('i');
+
+          // check if the selected icon is different from the current icon (if it isn't, we don't have to update anything)
+          if (bulletIcon.className !== optionIcon.className) {
+            // update the current bullet icon with selected icon's class name in order to update the displayed icon
+            bulletIcon.className = optionIcon.className;
+
+            // add the strikethrough style if the user selects irrelevant bullet
+            if (optionIcon.id === 'irrelevant-bullet') {
+              bulletText.classList.add('irrelevant');
+            } else {
+              bulletText.classList.remove('irrelevant');
+            }
+
+            // update the bullet object's data and store the updated data in the database
+            // the bullet type is given by the id of the icon selected by the user (e.g. 'task-bullet', 'notes-bullet', etc)
+            jsonData.type = optionIcon.id;
+            this.setAttribute('data', JSON.stringify(jsonData));
+            this.storeToDatabase(id, jsonData, true);
+          }
+        };
+      }
     });
 
     /** Add an Event Listener to the "Add-Label" for a custom contextmenu (dropdown) for selecting labels to apply
@@ -252,10 +293,9 @@ class BulletEntry extends HTMLElement {
       setTimeout(() => {
         const x = event.pageX + 'px';
         const y = event.pageY + 'px';
-        const contextmenu = document.querySelector('#label-menu');
-        contextmenu.style.top = y;
-        contextmenu.style.left = x;
-        contextmenu.classList.add('active');
+        labelMenu.style.top = y;
+        labelMenu.style.left = x;
+        labelMenu.classList.add('active');
       }, 1);
     });
 
@@ -263,20 +303,17 @@ class BulletEntry extends HTMLElement {
      * This will remove the 'active' class from our contextmenu so it auto closes
      */
     window.addEventListener('click', (event) => {
-      document.querySelector('#context-menu').classList.remove('active');
-      document.querySelector('#label-menu').classList.remove('active');
+      contextMenu.classList.remove('active');
+      labelMenu.classList.remove('active');
     });
 
-    /** Checklist toggle based off value
-     * - Implemented using display: none
+    /** Bullet icon displayed based on the type in the bullet data
+     * This will update the bullet icon with the class name given by the bullet type stored in the json data
+     * Also adds the strikethrough styling to the bullet text if the bullet is an irrelevant bullet type
      */
-    switch (jsonData.value) {
-      case -1:
-        break;
-      case 0:
-        break;
-      case 1:
-        break;
+    bulletIcon.className = document.querySelector(`#${jsonData.type}`).className;
+    if (jsonData.type === 'irrelevant-bullet') {
+      bulletText.classList.add('irrelevant');
     }
 
     /**
@@ -284,8 +321,12 @@ class BulletEntry extends HTMLElement {
      * @param {BulletEntry~editTextCallback} callback - Decides whether to update data and does so where needed
      */
     bulletText.addEventListener('blur', (event) => {
-      if (bulletText.innerText && bulletText.innerText !== this.data.text && bulletText.innerText !== '\n') {
-        jsonData.text = bulletText.innerText;
+      if ((bulletText.innerText || bulletText.innerText === '') && bulletText.innerText !== this.data.text) {
+        if (bulletText.innerText !== '\n') {
+          jsonData.text = bulletText.innerText;
+        } else {
+          jsonData.text = '';
+        }
         this.setAttribute('data', JSON.stringify(jsonData));
         this.storeToDatabase(id, jsonData, true);
       }
@@ -457,7 +498,7 @@ customElements.define('bullet-entry', BulletEntry);
     {
       labelIDs: [],
       text: 'Walk the dog',
-      value: -1,
+      type: 'task-bullet',
       childrenIDs: []
     }
   ];
@@ -467,7 +508,7 @@ customElements.define('bullet-entry', BulletEntry);
     {
       labelIDs: [],
       text: 'Walk the dog',
-      value: -1,
+      type: 'task-bullet',
       childrenIDs: []
     }
   ];
@@ -477,7 +518,7 @@ customElements.define('bullet-entry', BulletEntry);
     {
       labelIDs: [],
       text: 'Walk the dog',
-      value: -1
+      type: 'task-bullet'
     }
   ];
  */

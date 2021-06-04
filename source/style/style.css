@@ -10,7 +10,7 @@
 }
 
 h1 {
-  font-size: 4vw;
+  font-size: 3.8vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -131,6 +131,7 @@ div.monthly {
   display: none;
   margin-left: 7.5%;
   margin-top: 2%;
+  margin-right: 7.5%;
 }
 
 /* This sets the size of the canvas elements that hold the tracker charts in the monthly log */
@@ -151,6 +152,7 @@ div.yearly {
   display: none;
   margin-left: 7.5%;
   margin-top: 2%;
+  margin-right: 7.5%;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
