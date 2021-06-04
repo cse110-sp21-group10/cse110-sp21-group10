@@ -105,22 +105,6 @@ class DailyLog extends HTMLElement {
       <div class="daily">
         <section class="header" id="daily-header">
           <h1></h1>
-          
-          <div class="container">
-            <div class="weather-container">
-              <div class="weather-icon">
-                  <img src="../assets/icons/unknown.png" alt="">
-              </div>
-              <div class="temperature-value">
-                  <p>&nbsp °<span>C</span></p>
-              </div>
-              <div class="temperature-description">
-                  <p>-</p>
-              </div>  
-            </div>
-          </div>
-
-          <button class="main-buttons" id="widgets"><i class="fas fa-star icon-size"></i></button>
           <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
         </section>
       </div>
@@ -387,100 +371,6 @@ class DailyLog extends HTMLElement {
 
     // set the data attribute of this element to the given JSON data so it can be retrieved later
     this.setAttribute('data', JSON.stringify(jsonData));
-
-    // The scipt for the weather
-
-    // Select Elements
-    const iconElement = this.shadowRoot.querySelector('.weather-icon');
-    const tempElement = this.shadowRoot.querySelector('.temperature-value p');
-    const descElement = this.shadowRoot.querySelector('.temperature-description p');
-    // const locationElement = this.shadowRoot.querySelector(".location p");
-    // const notificationElement = this.shadowRoot.querySelector(".notification");
-
-    // Data
-    const weather = {};
-
-    weather.temperature = {
-      unit: 'celsius'
-    };
-
-    // Constants and variables
-    const KELVIN = 273;
-    // API key
-    const key = '3f70f77aa960728d939b3bee01d7bbda';
-
-    // Check if browser supports geolocation
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(setPosition, showError);
-    } else {
-      console.error("Browser Doesn't Support Geolocation");
-    }
-
-    // Set user's position
-    function setPosition (position) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-
-      getWeather(latitude, longitude);
-    }
-
-    // Show error when there is an issue with geolocation service
-    function showError (error) {
-      console.error(error.message);
-    }
-
-    // Get weather from API provider
-    function getWeather (latitude, longitude) {
-      const api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
-
-      console.log(api); // FIXME
-
-      fetch(api)
-        .then(function (response) {
-          const data = response.json();
-          return data;
-        })
-        .then(function (data) {
-          weather.temperature.value = Math.floor(data.main.temp - KELVIN);
-          weather.description = data.weather[0].description;
-          weather.iconId = data.weather[0].icon;
-          weather.city = data.name;
-          weather.country = data.sys.country;
-        })
-        .then(function () {
-          displayWeather();
-        });
-    }
-
-    // Display weather to UI
-    function displayWeather () {
-      iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
-      tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
-      descElement.innerHTML = weather.description;
-      weather.temperature.unit = 'fahrenheit';
-      // locationElement.innerHTML = `${weather.city}, ${weather.country}`;
-    }
-
-    // C to F conversion
-    function celsiusToFahrenheit (temperature) {
-      return (temperature * 9 / 5) + 32;
-    }
-
-    // When the user clicks on the temperature element
-    tempElement.addEventListener('click', function () {
-      if (weather.temperature.value === undefined) return;
-
-      if (weather.temperature.unit === 'fahrenheit') {
-        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
-        weather.temperature.unit = 'celsius';
-      } else {
-        let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
-        fahrenheit = Math.floor(fahrenheit);
-
-        tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
-        weather.temperature.unit = 'fahrenheit';
-      }
-    });
   }
 
   // ----------------------------------- End Get/Set Functions ------------------------------------
