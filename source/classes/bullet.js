@@ -563,16 +563,19 @@ class BulletEntry extends HTMLElement {
    * @param {string} labelName - used to figure out what color the label should be
    */
   createLabel (labelName) {
+    // Create button and set attributes (for CSS and other logic) + apply a tooltip (on hoever, show labelName)
     const button = document.createElement('button');
     button.className = 'label';
     button.id = labelName;
     $(button).tooltip();
     button.title = labelName;
 
+    // Create icon that will go inside the button (image of the lable), color based off labelName and labels (from script!)
     const icon = document.createElement('i');
     icon.className = 'fas fa-bookmark';
     icon.style.color = labels[labelName].color;
 
+    // Nest the icon inside the button for a complete label
     button.appendChild(icon);
 
     /**
