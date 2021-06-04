@@ -304,7 +304,7 @@ function loadYear (ID = IDConverter.generateID('year', currDate)) {
     }
   });
   // append yearElem to internal content
-  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'block';
+  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'grid'; /*may need to change back!!!!!!!*/
   document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
   yearlyLog = yearElem;
   yearlyLog.style.display = 'block';
