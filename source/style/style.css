@@ -189,8 +189,8 @@ section.header button {
 /* Add a background color on hover */
 .global-icons button:hover {
   background-color: lightgray;
-  cursor: pointer; 
-} 
+  cursor: pointer;
+}
 
 section.header button:hover {
   background-color: lightgray;
@@ -636,6 +636,11 @@ button[id$='setting']:active {
   cursor: pointer;
 }
 
+#context-menu i,
+#label-menu i {
+  font-size: 0.75vw;
+}
+
 #context-menu .bullet-select .bullet-option i,
 #label-menu .label-select .label-option i {
   display: inline-block;
@@ -660,12 +665,6 @@ button[id$='setting']:active {
 #context-menu .bullet-select .bullet-option:hover::before,
 #label-menu .label-select .label-option:hover::before {
   width: 100%;
-}
-
-#context-menu i,
-#label-menu i{
-  font-size: 0.75vw;
-
 }
 
 .irrelevant {

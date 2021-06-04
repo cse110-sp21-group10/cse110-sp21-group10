@@ -1,5 +1,5 @@
 import { Database } from './database.js';
-import { labels } from '../scripts/script.js';
+// import { labels } from '../scripts/script.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
