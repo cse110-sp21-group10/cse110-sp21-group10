@@ -97,6 +97,8 @@ function setupScript () {
   setupButtons();
 
   loadDay();
+  loadMonth();
+  loadYear();
 }
 
 /**
