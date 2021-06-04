@@ -1,3 +1,4 @@
+import { labels } from '../scripts/script.js';
 import { Database } from './database.js';
 // import { labels } from '../scripts/script.js';
 
@@ -87,7 +88,8 @@ class BulletEntry extends HTMLElement {
         
         .bullet:hover .bullet-remove,
         .bullet:hover .child-add,
-        .bullet:hover .label-add {
+        .bullet:hover .label-add,
+        .bullet:hover .label {
           color: black;
         }
         
@@ -101,12 +103,14 @@ class BulletEntry extends HTMLElement {
           padding-right: .8vw;
         }
 
-        .label-add {
+        .label-add,
+        .label {
           float: right;
         }
         
         .child-add:hover,
-        .bullet-remove:hover {
+        .bullet-remove:hover,
+        .label:hover {
           font-size: 15px;
           position: relative;
           padding-top: .5vh;
@@ -121,6 +125,7 @@ class BulletEntry extends HTMLElement {
         .fa-stack { font-size: 0.5em; }
         i { vertical-align: middle; }
 
+        .label,
         .child-add,
         .label-add,
         .bullet-remove {
@@ -230,8 +235,8 @@ class BulletEntry extends HTMLElement {
      */
     this.setChildren();
 
-    /** TODO: Iterate and apply labels
-     */
+    // Iterates through labelIDs and sets display with each label
+    this.setLabels();
 
     /** Adding an event listener to the bullet-point itself for custom contextmenu (dropdown) for selecting type of bullet
      * Custom bullet menu toggle on
@@ -242,9 +247,11 @@ class BulletEntry extends HTMLElement {
 
     // html elements that will be needed for displaying the dropdown and adding event listeners
     const contextMenu = document.querySelector('#context-menu');
-    const labelMenu = document.querySelector('#label-menu');
     const bulletOptions = document.querySelectorAll('.bullet-option');
     const bulletIcon = this.shadowRoot.querySelector('.bullet-point > i');
+
+    const labelMenu = document.querySelector('#label-menu');
+    const labelOptions = document.querySelectorAll('.label-option');
 
     this.shadowRoot.querySelector('.bullet-point').addEventListener('contextmenu', (event) => {
       // display custom dropdown with the bullet types
@@ -297,6 +304,26 @@ class BulletEntry extends HTMLElement {
         labelMenu.style.left = x;
         labelMenu.classList.add('active');
       }, 1);
+
+      // loop through each option in the dropdown and add a click event listener for when the user selects an option
+      for (const labelOption of labelOptions) {
+        /**
+         * Handles for the addition of a NEW label
+         * @param {BulletEntry~addLabelCallback} callback - Creates NEW label and updates data (parent and database)
+         */
+        labelOption.onclick = (event) => {
+          const labelID = event.target.closest('.label-option').id;
+
+          if (!this.data.labelIDs.includes(labelID)) {
+            const data = this.data;
+            data.labelIDs.push(labelID);
+            this.setAttribute('data', JSON.stringify(data));
+            this.storeToDatabase(id, data, true);
+
+            this.createLabel(labelID);
+          }
+        };
+      }
     });
 
     /** Event Listener for any click on the window
@@ -357,6 +384,32 @@ class BulletEntry extends HTMLElement {
    *
    * @callback BulletEntry~editTextCallback
    * @param {blurEvent} event - provides access to element that stopped getting focused (for it's innerText)
+   */
+
+  /**
+   * Handles the process for creating a NEW label <p>
+   *
+   * Grabs the name (ID) of the label from the id of the selected option <p>
+   *
+   * Updates data (both parent and database) with new label (ID) <p>
+   *
+   * Calls on helper function for generating and displaying the label
+   *
+   * @callback BulletEntry~addLabelCallback
+   * @param {onClickEvent} event - provides access to the option that the user selected
+   */
+
+  /**
+   * Removal triggered by clicking on the label <p>
+   *
+   * Removal starts with display, the element representing the label is removed from div <p>
+   *
+   * labelID is used to remove from Database as well <p>
+   *
+   * Finally, the labelIDs data is updated with the removal of the labelID
+   *
+   * @callback BulletEntry~removeLabelCallback
+   * @param {onClickEvent} event - provides access to the element that contains the label to remove
    */
 
   /**
@@ -432,7 +485,7 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Handles the creation, data setting, appending to display, and potential deletion of children <p>
+   * Handles the creation and appending to display of a child bullet, and potential deletion of children <p>
    *
    * Called for both creation of new and existing children (based off whether param is empty jsonObj or not) <p>
    *
@@ -471,7 +524,7 @@ class BulletEntry extends HTMLElement {
   }
 
   /**
-   * Handles removal of a child from display, parent data, and database <p>
+   * Handles removal of a child from display, parent data, and database
    *
    * @param {HTMLElement} child - reference to child bullet's html element
    * @param {string} childID - used to remove from childIDs list in parent and from database
@@ -485,6 +538,67 @@ class BulletEntry extends HTMLElement {
     this.storeToDatabase(this.id, data);
 
     Database.delete(childID);
+  }
+
+  /**
+   * Handles the creation, appending, and deletion of EXISTING labels <p>
+   *
+   * Iterates through each labelID in data and call a helper function to generate each label
+   */
+  setLabels () {
+    for (const labelID of this.data.labelIDs) {
+      this.createLabel(labelID);
+    }
+  }
+
+  /**
+   * Handles the creation and display of a new label <p>
+   *
+   * Called for creation of both new and existing labels <p>
+   *
+   * Data setting handled in a layer above (if needed at all)
+   *
+   * Special click listeners added to allow for removal of a label (calls a helper function for deletion)
+   *
+   * @param {string} labelName - used to figure out what color the label should be
+   */
+  createLabel (labelName) {
+    const button = document.createElement('button');
+    button.className = 'label';
+    $(button).tooltip();
+    button.title = labelName;
+
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-bookmark';
+    icon.style.color = labels[labelName].color;
+
+    button.appendChild(icon);
+
+    /**
+     * Handles removal of a label from display, database, and childIDs (triggered by clicking on the label)
+     * @param {BulletEntry~removeLabelCallback} callback - Decides whether to remove and does so where needed
+     *
+     */
+    button.onclick = (event) => {
+      this.removeLabel(button, labelName);
+    };
+
+    this.shadowRoot.querySelector('.bullet').insertBefore(button, this.shadowRoot.querySelector('.bullet-text'));
+  }
+
+  /**
+   * Handles removal of a label from display, parent data, and database
+   *
+   * @param {HTMLElement} label - reference to element representing the label itself
+   * @param {string} labelID - used to remove from labelIDs list in parent and from database
+   */
+  removeLabel (label, labelID) {
+    this.shadowRoot.querySelector('.bullet').removeChild(label);
+
+    const data = this.data;
+    data.labelIDs = data.labelIDs.filter(label => label !== labelID);
+    this.setAttribute('data', JSON.stringify(data));
+    this.storeToDatabase(this.id, data);
   }
   // ------------------------------------- End of Helper definitions -------------------------------------------------
 }
