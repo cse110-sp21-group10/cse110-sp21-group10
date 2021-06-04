@@ -1,4 +1,5 @@
 import { Database } from './database.js';
+import { labels } from '../scripts/script.js';
 
 /**
  * This class contains a constructor and set/get data functions for the bullet custom HTML class
@@ -65,7 +66,7 @@ class BulletEntry extends HTMLElement {
         
         .bullet-text {
           display: inline-block;
-          width: 90%;
+          width: 70%;
           font-size: larger;
           margin: 0;
           /* border: 5px solid black; */
@@ -85,7 +86,8 @@ class BulletEntry extends HTMLElement {
         }
         
         .bullet:hover .bullet-remove,
-        .bullet:hover .child-add {
+        .bullet:hover .child-add,
+        .bullet:hover .label-add {
           color: black;
         }
         
@@ -98,20 +100,29 @@ class BulletEntry extends HTMLElement {
           float: right;
           padding-right: .8vw;
         }
+
+        .label-add {
+          float: right;
+        }
         
+        .child-add:hover,
         .bullet-remove:hover {
           font-size: 15px;
           position: relative;
           padding-top: .5vh;
         }
         
-        .child-add:hover {
-          font-size: 15px;
+        .label-add:hover {
+          font-size: 0.9em;
           position: relative;
           padding-top: .5vh;
         }
 
+        .fa-stack { font-size: 0.5em; }
+        i { vertical-align: middle; }
+
         .child-add,
+        .label-add,
         .bullet-remove {
           padding-top: .6vh;
 
@@ -133,6 +144,12 @@ class BulletEntry extends HTMLElement {
         <button class="child-add"><i class="fas fa-level-up-alt fa-rotate-90"></i></button>    
         <button class="bullet-point"><i class="fas fa-circle"></i></button>
         <button class="bullet-remove"><i class="fas fa-times"></i></button>
+        <button class="label-add">
+          <span class="fa-stack fa-2x" style="font-size:0.7em;">
+            <i class="fas fa-bookmark fa-stack-2x"></i>
+            <i class="fas fa-plus fa-stack-1x fa-inverse" style="position: relative; top: -10%;"></i>
+        </span>
+        </button>
         
         <p class="bullet-text" contenteditable="true">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -226,11 +243,31 @@ class BulletEntry extends HTMLElement {
       contextmenu.classList.add('active');
     });
 
+    let labelMenu = 0;
+    /** Add an Event Listener to the "Add-Label" for a custom contextmenu (dropdown) for selecting labels to apply
+     * Custom label menu toggle on
+     * Turns off default context menu
+     * Adds active class to custom context menu onClick to "Add-Label"
+     */
+    this.shadowRoot.querySelector('.label-add').addEventListener('click', (event) => {
+      setTimeout(() => { labelMenu = 1; }, 1);
+      const x = event.pageX + 'px';
+      const y = event.pageY + 'px';
+      const contextmenu = document.querySelector('#label-menu');
+      contextmenu.style.top = y;
+      contextmenu.style.left = x;
+      contextmenu.classList.add('active');
+    });
+
     /** Event Listener for any click on the window
      * This will remove the 'active' class from our contextmenu so it auto closes
      */
     window.addEventListener('click', (event) => {
       document.querySelector('#context-menu').classList.remove('active');
+      if (labelMenu) {
+        document.querySelector('#label-menu').classList.remove('active');
+        labelMenu = 0;
+      }
     });
 
     /** Checklist toggle based off value
