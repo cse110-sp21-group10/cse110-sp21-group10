@@ -283,9 +283,10 @@ class BulletEntry extends HTMLElement {
 
             // update the bullet object's data and store the updated data in the database
             // the bullet type is given by the id of the icon selected by the user (e.g. 'task-bullet', 'notes-bullet', etc)
-            jsonData.type = optionIcon.id;
-            this.setAttribute('data', JSON.stringify(jsonData));
-            this.storeToDatabase(id, jsonData, true);
+            const data = this.data;
+            data.type = optionIcon.id;
+            this.setAttribute('data', JSON.stringify(data));
+            this.storeToDatabase(id, data, true);
           }
         };
       }
@@ -349,13 +350,14 @@ class BulletEntry extends HTMLElement {
      */
     bulletText.addEventListener('blur', (event) => {
       if ((bulletText.innerText || bulletText.innerText === '') && bulletText.innerText !== this.data.text) {
+        const data = this.data;
         if (bulletText.innerText !== '\n') {
-          jsonData.text = bulletText.innerText;
+          data.text = bulletText.innerText;
         } else {
-          jsonData.text = '';
+          data.text = '';
         }
-        this.setAttribute('data', JSON.stringify(jsonData));
-        this.storeToDatabase(id, jsonData, true);
+        this.setAttribute('data', JSON.stringify(data));
+        this.storeToDatabase(id, data, true);
       }
     });
 
@@ -366,9 +368,10 @@ class BulletEntry extends HTMLElement {
     this.shadowRoot.querySelector('.child-add').addEventListener('click', () => {
       const childID = newBulletID();
 
-      jsonData.childrenIDs.push(childID);
+      const data = this.data;
+      data.childrenIDs.push(childID);
       this.setAttribute('data', JSON.stringify(jsonData));
-      this.storeToDatabase(id, jsonData, true);
+      this.storeToDatabase(id, data, true);
 
       this.createChild(childID, {}, newBulletID);
     });
