@@ -33,11 +33,7 @@ let monthlyLog;
 let yearlyLog;
 // -----------------------------------------------
 
-/**
- * Array of label objects, each having:
- * - color
- * - name
- */
+// Labels object for mapping label names to colors
 export const labels = {
   finance: {
     color: 'yellow'

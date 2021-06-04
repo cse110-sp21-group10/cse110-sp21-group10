@@ -243,20 +243,20 @@ class BulletEntry extends HTMLElement {
       contextmenu.classList.add('active');
     });
 
-    let labelMenu = 0;
     /** Add an Event Listener to the "Add-Label" for a custom contextmenu (dropdown) for selecting labels to apply
      * Custom label menu toggle on
      * Turns off default context menu
      * Adds active class to custom context menu onClick to "Add-Label"
      */
     this.shadowRoot.querySelector('.label-add').addEventListener('click', (event) => {
-      setTimeout(() => { labelMenu = 1; }, 1);
-      const x = event.pageX + 'px';
-      const y = event.pageY + 'px';
-      const contextmenu = document.querySelector('#label-menu');
-      contextmenu.style.top = y;
-      contextmenu.style.left = x;
-      contextmenu.classList.add('active');
+      setTimeout(() => {
+        const x = event.pageX + 'px';
+        const y = event.pageY + 'px';
+        const contextmenu = document.querySelector('#label-menu');
+        contextmenu.style.top = y;
+        contextmenu.style.left = x;
+        contextmenu.classList.add('active');
+      }, 1);
     });
 
     /** Event Listener for any click on the window
@@ -264,10 +264,7 @@ class BulletEntry extends HTMLElement {
      */
     window.addEventListener('click', (event) => {
       document.querySelector('#context-menu').classList.remove('active');
-      if (labelMenu) {
-        document.querySelector('#label-menu').classList.remove('active');
-        labelMenu = 0;
-      }
+      document.querySelector('#label-menu').classList.remove('active');
     });
 
     /** Checklist toggle based off value
