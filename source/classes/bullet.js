@@ -205,7 +205,7 @@ class BulletEntry extends HTMLElement {
    * Adds a listener to the bullet icon to allow user to open bullet type menu on right click and
    * choose a new type of bullet from that menu <p>
    *
-   * @param {Array.<{id: string, jsonData: Object, incrementBullet: callback}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [callback] used to generateID and increment bullet counter when creating children
+   * @param {Array.<{id: string, jsonData: Object, incrementBullet: newBulletID}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [newBulletID] callback used to generateID and increment bullet counter when creating children
    */
   set data ([id, jsonData, newBulletID]) {
     console.log('Setter called');
@@ -233,7 +233,7 @@ class BulletEntry extends HTMLElement {
      * handles deletion via backspace on empty
      * append to children div
      */
-    this.setChildren();
+    this.setChildren(newBulletID);
 
     // Iterates through labelIDs and sets display with each label
     this.setLabels();
@@ -474,12 +474,13 @@ class BulletEntry extends HTMLElement {
    *
    * 2. Fetches data and calls on helper function for child creation
    *
+   * @param {function} newBulletID - callback used to generate IDs for potential children
    */
-  setChildren () {
+  setChildren (newBulletID) {
     for (const childID of this.data.childrenIDs) {
       Database.fetch(childID, (data) => {
         if (data) {
-          this.createChild(childID, data);
+          this.createChild(childID, data, newBulletID);
         } else {
           console.log(`Something went wrong when fetching data for child: ${childID}`);
         }
@@ -500,13 +501,18 @@ class BulletEntry extends HTMLElement {
    *
    * @param {string} childID - ID used to retrieve (existing) / store (new) child bullet element
    * @param {jsonObject} childData - used to store child bullet's data (empty for new)
-   * @param {function} callback - used to generate IDs for potential children
+   * @param {function} newBulletID - callback used to generate IDs for potential children
+   * @param {HTMLElement} siblingElem - optional (on Enter) sibling bullet element to place the child bullet after
    */
-  createChild (childID, childData = {}, callback) {
+  createChild (childID, childData = {}, newBulletID, siblingElem) {
     const child = document.createElement('bullet-entry');
-    child.data = [childID, childData, callback];
+    child.data = [childID, childData, newBulletID];
 
-    this.shadowRoot.querySelector('.bullet').appendChild(child);
+    if (!siblingElem) {
+      this.shadowRoot.querySelector('.bullet').appendChild(child);
+    } else {
+      siblingElem.insertAdjacentElement('afterend', child);
+    }
 
     /**
      * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
@@ -516,6 +522,30 @@ class BulletEntry extends HTMLElement {
     child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
       if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
         this.removeChild(child, childID);
+      }
+
+      /** Enter button will "create a new bullet below"
+       * will replace default action
+       * iterate to find index
+       * insertion will occur at index + 1 (data)
+       * insertion will occur after current bullet element (display)
+      */
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        let index = -1;
+        this.shadowRoot.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+          if (elem.id === childID) {
+            index = ind;
+          }
+        });
+        const newID = newBulletID();
+
+        const data = this.data;
+        data.childrenIDs.splice(index + 1, 0, newID);
+        this.setAttribute('data', JSON.stringify(data));
+        this.storeToDatabase(this.id, data, true);
+
+        this.createChild(newID, {}, newBulletID, child);
       }
     });
 

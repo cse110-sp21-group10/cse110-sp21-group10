@@ -340,6 +340,23 @@ class DailyLog extends HTMLElement {
             if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
               dailyLog.deleteNoteHandler(bulletElement);
             }
+
+            /** Enter button will "create a new bullet below"
+             * will replace default action
+             * iterate to find index
+             * insertion will occur at index + 1 (data)
+             * insertion will occur after current bullet element (display)
+            */
+            if (event.keyCode === 13) {
+              let index = -1;
+              event.preventDefault();
+              sectionElement.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+                if (elem.id === bulletID) {
+                  index = ind;
+                }
+              });
+              dailyLog.newNoteHandler(sectionElement, index + 1, bulletElement);
+            }
           });
           bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
             dailyLog.deleteNoteHandler(bulletElement);
@@ -597,9 +614,11 @@ class DailyLog extends HTMLElement {
    * to allow for future deletion of the bullet element.
    *
    * @param {HTMLElement} sectionElement - The section element in which the new note button
+   * @param {Number} index - optional (on Enter) target index in bulletIDs to place the generated newNote (data)
+   * @param {HTMLElement} siblingElem - optional (on Enter) sibling bullet to place the generated newNote after (display)
    * was clicked to trigger the listener
    */
-  newNoteHandler (sectionElement) {
+  newNoteHandler (sectionElement, index, siblingElem) {
     // generate a bullet ID
     const sectionID = sectionElement.id;
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
@@ -609,7 +628,12 @@ class DailyLog extends HTMLElement {
     const data = this.data;
     for (const sec of data.sections) {
       if (sec.id === sectionID) {
-        sec.bulletIDs.push(bulletID);
+        // Figure out where to place the new bullet in data (using passed in index if triggered by pressing Enter)
+        if (!index) {
+          sec.bulletIDs.push(bulletID);
+        } else {
+          sec.bulletIDs.splice(index, 0, bulletID);
+        }
       }
     }
     this.setAttribute('data', JSON.stringify(data));
@@ -628,14 +652,38 @@ class DailyLog extends HTMLElement {
       if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
         dailyLog.deleteNoteHandler(bullet);
       }
+
+      /** Enter button will "create a new bullet below"
+       * will replace default action
+       * iterate to find index
+       * insertion will occur at index + 1 (data)
+       * insertion will occur after current bullet element (display)
+      */
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        if (!index) {
+          sectionElement.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+            if (elem.id === bulletID) {
+              index = ind;
+            }
+          });
+        }
+        dailyLog.newNoteHandler(sectionElement, index + 1, bullet);
+      }
     });
+
     bullet.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
       dailyLog.deleteNoteHandler(bullet);
     });
 
-    // insert the new bullet element child before the new note button
-    const newNote = sectionElement.querySelector('button.new-bullet');
-    sectionElement.insertBefore(bullet, newNote);
+    if (!siblingElem) {
+      // insert the new bullet element child before the new note button
+      const newNote = sectionElement.querySelector('button.new-bullet');
+      sectionElement.insertBefore(bullet, newNote);
+    } else {
+      // insert after passed in bulletElement (using passed in siblingElem if triggered by pressing Enter)
+      siblingElem.insertAdjacentElement('afterend', bullet);
+    }
 
     // prompt user to start typing note
     bullet.shadowRoot.querySelector('.bullet-text').focus();
