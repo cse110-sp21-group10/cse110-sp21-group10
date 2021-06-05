@@ -32,6 +32,28 @@ let monthlyLog;
 // Elements for the yearly logs page
 let yearlyLog;
 // -----------------------------------------------
+
+// Labels object for mapping label names to colors
+export const labels = {
+  finance: {
+    color: 'yellow'
+  },
+  fitness: {
+    color: 'green'
+  },
+  academics: {
+    color: 'grey'
+  },
+  household: {
+    color: 'orange'
+  },
+  work: {
+    color: 'red'
+  },
+  leisure: {
+    color: 'blue'
+  }
+};
 // End of variable definition
 
 /**

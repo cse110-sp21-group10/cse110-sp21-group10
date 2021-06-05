@@ -10,7 +10,7 @@
 }
 
 h1 {
-  font-size: 4vw;
+  font-size: 3.8vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
@@ -131,6 +131,7 @@ div.monthly {
   display: none;
   margin-left: 7.5%;
   margin-top: 2%;
+  margin-right: 7.5%;
 }
 
 /* This sets the size of the canvas elements that hold the tracker charts in the monthly log */
@@ -151,6 +152,7 @@ div.yearly {
   display: none;
   margin-left: 7.5%;
   margin-top: 2%;
+  margin-right: 7.5%;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
@@ -189,8 +191,8 @@ section.header button {
 /* Add a background color on hover */
 .global-icons button:hover {
   background-color: lightgray;
-  cursor: pointer; 
-} 
+  cursor: pointer;
+}
 
 section.header button:hover {
   background-color: lightgray;
@@ -598,7 +600,8 @@ button[id$='setting']:active {
 
 /* All styling necessary for the conext menu start */
 
-#context-menu {
+#context-menu,
+#label-menu {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -614,16 +617,19 @@ button[id$='setting']:active {
   z-index: 2;
 }
 
-#context-menu.active {
+#context-menu.active,
+#label-menu.active {
   transform: scale(1);
   transition: transform 250ms ease-in-out;
 }
 
-#context-menu .bullet-select {
+#context-menu .bullet-select,
+#label-menu .label-select {
   border-bottom: 0.5px solid #eee;
 }
 
-#context-menu .bullet-select .bullet-option {
+#context-menu .bullet-select .bullet-option,
+#label-menu .label-select .label-option {
   position: relative;
   padding: 0.25vw;
   padding-left: 0;
@@ -632,14 +638,21 @@ button[id$='setting']:active {
   cursor: pointer;
 }
 
-#context-menu .bullet-select .bullet-option i {
+#context-menu i,
+#label-menu i {
+  font-size: 0.75vw;
+}
+
+#context-menu .bullet-select .bullet-option i,
+#label-menu .label-select .label-option i {
   display: inline-block;
   width: 1.5vw;
   margin-right: 5px;
   text-align: center;
 }
 
-#context-menu .bullet-select .bullet-option::before {
+#context-menu .bullet-select .bullet-option::before,
+#label-menu .label-select .label-option::before {
   content: "";
   position: absolute;
   top: 0;
@@ -651,13 +664,9 @@ button[id$='setting']:active {
   transition: all 150ms ease-in-out;
 }
 
-#context-menu .bullet-select .bullet-option:hover::before {
+#context-menu .bullet-select .bullet-option:hover::before,
+#label-menu .label-select .label-option:hover::before {
   width: 100%;
-}
-
-#context-menu i {
-  font-size: 0.75vw;
-
 }
 
 .irrelevant {
