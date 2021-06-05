@@ -158,6 +158,9 @@ class YearlyLog extends HTMLElement {
         sectionElement.id = section.id;
         sectionElement.className = section.type;
 
+        // added a margin to the bottom of each section
+        sectionElement.style = 'margin-bottom: 1vw';
+
         // construct section header element
         const sectionHeader = document.createElement('h2');
         sectionHeader.innerText = section.name;
