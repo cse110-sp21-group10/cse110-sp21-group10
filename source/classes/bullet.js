@@ -136,6 +136,35 @@ class BulletEntry extends HTMLElement {
           border: none;
           background-color: transparent;
         }
+
+        .tooltip {
+          display: inline;
+          position: relative;
+        }
+
+        .tooltip:hover::after {
+          background: #333;
+          background: rgba(0, 0, 0, 0.8);
+          border-radius: 5px;
+          bottom: 26px;
+          color: #fff;
+          content: attr(tooltip);
+          left: -85%;
+          padding: 5px 15px;
+          position: absolute;
+          z-index: 98;
+        }
+
+        .tooltip:hover::before {
+          border: solid;
+          border-color: #333 transparent;
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+          content: "";
+          left: 20%;
+          position: absolute;
+          z-index: 99;
+        }
         
         [contenteditable] {
           outline: 0px solid transparent;
@@ -568,10 +597,10 @@ class BulletEntry extends HTMLElement {
   createLabel (labelName) {
     // Create button and set attributes (for CSS and other logic) + apply a tooltip (on hoever, show labelName)
     const button = document.createElement('button');
-    button.className = 'label';
+    button.classList.add('label');
+    button.classList.add('tooltip');
     button.id = labelName;
-    $(button).tooltip();
-    button.title = labelName;
+    button.setAttribute('tooltip', labelName);
 
     // Create icon that will go inside the button (image of the lable), color based off labelName and labels (from script!)
     const icon = document.createElement('i');
