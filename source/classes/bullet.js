@@ -203,7 +203,7 @@ class BulletEntry extends HTMLElement {
    * Adds a listener to handle changes to input once user stops focusing on it (called blur -_-) <p>
    *
    * Adds a listener to the bullet icon to allow user to open bullet type menu on right click and
-   * choose a new type of bullet from that menu <p>
+   * choose a new type of bullet from that menu
    *
    * @param {Array.<{id: string, jsonData: Object, incrementBullet: newBulletID}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [newBulletID] callback used to generateID and increment bullet counter when creating children
    */
@@ -383,7 +383,7 @@ class BulletEntry extends HTMLElement {
    * Does a comparison between original text and text currently stored in data for differences
    * as well as ensuring there actually IS text to store (avoids re-saving after deletion bug found earlier) <p>
    *
-   * Updates interally stored text (for future reference) and value in database <p>
+   * Updates interally stored text (for future reference) and value in database
    *
    * @callback BulletEntry~editTextCallback
    * @param {blurEvent} event - provides access to element that stopped getting focused (for it's innerText)
