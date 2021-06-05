@@ -121,6 +121,10 @@ function setupScript () {
   loadDay();
   loadMonth();
   loadYear();
+
+  dailyLog.style.display = 'block';
+  monthlyLog.style.display = 'none';
+  yearlyLog.style.display = 'none';
 }
 
 /**
