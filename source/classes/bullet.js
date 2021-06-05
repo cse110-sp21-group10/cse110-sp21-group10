@@ -370,7 +370,7 @@ class BulletEntry extends HTMLElement {
 
       const data = this.data;
       data.childrenIDs.push(childID);
-      this.setAttribute('data', JSON.stringify(jsonData));
+      this.setAttribute('data', JSON.stringify(data));
       this.storeToDatabase(id, data, true);
 
       this.createChild(childID, {}, newBulletID);
