@@ -32,6 +32,28 @@ let monthlyLog;
 // Elements for the yearly logs page
 let yearlyLog;
 // -----------------------------------------------
+
+// Labels object for mapping label names to colors
+export const labels = {
+  finance: {
+    color: 'yellow'
+  },
+  fitness: {
+    color: 'green'
+  },
+  academics: {
+    color: 'grey'
+  },
+  household: {
+    color: 'orange'
+  },
+  work: {
+    color: 'red'
+  },
+  leisure: {
+    color: 'blue'
+  }
+};
 // End of variable definition
 
 /**
@@ -56,11 +78,12 @@ window.onpopstate = function (event) {
   console.log('Current state.log: ' + event.state.view);
   switch (event.state.view) {
     case 'day':
+      transitionDaily();
       if (event.state.date) {
         currDate = event.state.date;
         loadDay();
+        updateIndex();
       }
-      transitionDaily();
       break;
     case 'month':
       if (event.state.date) {
@@ -96,6 +119,8 @@ function setupScript () {
   setupButtons();
 
   loadDay();
+  loadMonth();
+  loadYear();
 }
 
 /**
@@ -556,7 +581,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
   } else if (entries[index] !== currID) {
     entries.splice(index, 0, currID);
   } else {
-    console.error(`updateEntries unnecessarily called for ID ${currID} at index ${index}`);
+    console.log(`updateEntries has already been called for ID ${currID} at index ${index}`);
   }
 }
 /* For quick commenting out of code */
