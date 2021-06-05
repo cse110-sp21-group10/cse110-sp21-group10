@@ -127,6 +127,133 @@ function loadVars () {
 }
 
 /**
+ * Appends a weather HTML div that shows the weather but only on the current day's daily log. <p>
+ *
+ * The weather is pulled from a third-party API based on the location of the client browser. The
+ * weather temperature starts off with fahrenheit units to begin with but can changed when the user
+ * clicks on it. <p>
+ *
+ * In the case of a fetch error or other error, it defaults to a question-mark style denoting unknown.
+ */
+function appendWeather () {
+  // check if we are looking at today's daily log (we don't want to display weather on other logs)
+  const todayDate = new Date();
+  if (currDate.getDate() === todayDate.getDate() &&
+      currDate.getMonth() === todayDate.getMonth() &&
+      currDate.getFullYear() === todayDate.getFullYear()) {
+    // create weather div container and append it to the daily log's header
+    const weatherDiv = document.createElement('div');
+    weatherDiv.className = 'container';
+    weatherDiv.innerHTML = `
+      <div class="weather-container">
+        <div class="weather-icon">
+          <img src="../assets/icons/unknown.png" alt="">
+        </div>
+        <div class="temperature-value">
+          <p>&nbsp °<span>F</span></p>
+        </div>
+        <div class="temperature-description">
+            <p>-</p>
+        </div>  
+      </div>
+    `;
+    const newSectionButton = dailyLog.shadowRoot.querySelector('#related-sections-button');
+    dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, newSectionButton);
+    // Select Elements
+    const iconElement = weatherDiv.querySelector('.weather-icon');
+    const tempElement = weatherDiv.querySelector('.temperature-value p');
+    const descElement = weatherDiv.querySelector('.temperature-description p');
+    // const locationElement = this.shadowRoot.querySelector(".location p");
+    // const notificationElement = this.shadowRoot.querySelector(".notification");
+
+    // Data
+    const weather = {};
+
+    weather.temperature = {
+      unit: 'celsius'
+    };
+
+    // Constants and variables
+    const KELVIN = 273;
+    // API key
+    const key = '3f70f77aa960728d939b3bee01d7bbda';
+
+    // Check if browser supports geolocation
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(setPosition, showError);
+    } else {
+      console.error("Browser Doesn't Support Geolocation");
+    }
+
+    // Set user's position
+    function setPosition (position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      getWeather(latitude, longitude);
+    }
+
+    // Show error when there is an issue with geolocation service
+    function showError (error) {
+      console.error(error.message);
+    }
+
+    // Get weather from API provider
+    function getWeather (latitude, longitude) {
+      const api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
+
+      console.log(api); // FIXME
+
+      fetch(api)
+        .then(function (response) {
+          const data = response.json();
+          return data;
+        })
+        .then(function (data) {
+          weather.temperature.value = Math.floor(data.main.temp - KELVIN);
+          weather.description = data.weather[0].description;
+          weather.iconId = data.weather[0].icon;
+          weather.city = data.name;
+          weather.country = data.sys.country;
+        })
+        .then(function () {
+          displayWeather();
+        });
+    }
+
+    // Display weather to UI
+    function displayWeather () {
+      iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
+      descElement.innerHTML = weather.description;
+      weather.temperature.unit = 'fahrenheit';
+      // locationElement.innerHTML = `${weather.city}, ${weather.country}`;
+    }
+
+    // C to F conversion
+    function celsiusToFahrenheit (temperature) {
+      return (temperature * 9 / 5) + 32;
+    }
+
+    // When the user clicks on the temperature element
+    tempElement.addEventListener('click', function () {
+      if (weather.temperature.value === undefined) return;
+
+      if (weather.temperature.unit === 'fahrenheit') {
+        tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+        weather.temperature.unit = 'celsius';
+      } else {
+        let fahrenheit = celsiusToFahrenheit(weather.temperature.value);
+        fahrenheit = Math.floor(fahrenheit);
+
+        tempElement.innerHTML = `${fahrenheit}°<span>F</span>`;
+        weather.temperature.unit = 'fahrenheit';
+      }
+    });
+  }
+}
+
+/**
  * Functionality applied via onClickListeners to the following buttons: <p>
  *
  * Zoom Out button - using zoomOut <p>
@@ -208,6 +335,9 @@ function transitionMonthly () {
   btnZoomOut.disabled = 0;
   btnZoomOut.style.cursor = 'pointer';
 
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
+
   btnZoomOut.addEventListener('mouseover', function () {
     btnZoomOut.style.background = 'lightgrey';
   });
@@ -230,6 +360,9 @@ function transitionYearly () {
 
   btnZoomOut.disabled = 1;
   btnZoomOut.style.cursor = 'default';
+
+  btnPrevEntry.disabled = 1;
+  btnNextEntry.disabled = 1;
 
   btnZoomOut.style.backgroundColor = 'transparent';
 }
@@ -261,11 +394,12 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
       dayElem.data = [ID, {}, updateEntries];
     }
   });
-  // apend dayElem to internal content
+  // append dayElem to internal content
   dailyLog.shadowRoot.querySelector('div.daily').style.display = 'block';
   document.getElementById('internal-content').replaceChild(dayElem, dailyLog);
   dailyLog = dayElem;
   dailyLog.style.display = 'block';
+  appendWeather();
 }
 
 /**
@@ -387,14 +521,19 @@ function navigateEntry (amount) {
  * A lookup is done on today's ID to determine index (using a binary search on entries since it's a sorted array),
  * if the day hasn't been recorded yet, the day object will handle deciding whether or not to add the day to entries <p>
  *
- * Calls function to toggle buttons based off updated Index
+ * Calls function to toggle buttons based off updated Index and whether or not currentID is 'inBounds'
  * @param {string} [currID = IDConverter.generateID('day', currDate)] - current Day's ID used to update indexing and decide whether to toggle buttons
  */
 function updateIndex (currID = IDConverter.generateID('day', currDate)) {
   // Generate the ID and determine index
   index = IDConverter.generateIndex(entries, currID);
 
-  toggleCheck(currID < entries[index]);
+  if (index === 0 && currID < entries[index]) {
+    index -= 1;
+  }
+
+  // Boundedness is being between the start (index === 0) and end (entries >= entries[index])
+  toggleCheck(index > 0 && currID < entries[index]);
 }
 
 /**
@@ -406,7 +545,12 @@ function updateIndex (currID = IDConverter.generateID('day', currDate)) {
  *
  * Otherwise, logs an error indicating function was called unnecsarilly
  */
-export function updateEntries (currID = IDConverter.generateID('day', currDate), index = IDConverter.generateIndex(entries, currID)) {
+export function updateEntries (currID = IDConverter.generateID('day', currDate), targetIndex) {
+  if (targetIndex) {
+    index = targetIndex;
+  } else {
+    index = IDConverter.generateIndex(entries, currID);
+  }
   if (index === entries.length) {
     entries.push(currID);
   } else if (entries[index] !== currID) {
@@ -429,7 +573,7 @@ export function updateEntries (currID = IDConverter.generateID('day', currDate),
  */
 function toggleCheck (inBounds = false) {
   // Either beginning or end of list indicates respective prev/next Entry toggling should be disabled
-  if (index <= 0 || history.state.view !== 'day') {
+  if ((index <= 0 && !inBounds) || history.state.view !== 'day') {
     btnPrevEntry.disabled = true;
     btnPrevEntry.style.cursor = 'default';
 
@@ -486,6 +630,7 @@ export function zoomIn (event) {
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
       loadDay();
       transitionDaily();
+      updateIndex();
       break;
     case 'year':
       currDate = IDConverter.getDateFromID(event.target.id, 'month');
