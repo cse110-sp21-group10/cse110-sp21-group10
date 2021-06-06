@@ -507,6 +507,7 @@ class BulletEntry extends HTMLElement {
   createChild (childID, childData = {}, newBulletID, siblingElem) {
     const child = document.createElement('bullet-entry');
     child.data = [childID, childData, newBulletID];
+    child.parent = this;
 
     if (!siblingElem) {
       this.shadowRoot.querySelector('.bullet').appendChild(child);
@@ -532,12 +533,6 @@ class BulletEntry extends HTMLElement {
       */
       if (event.keyCode === 13) {
         event.preventDefault();
-        let index = -1;
-        this.shadowRoot.querySelectorAll('bullet-entry').forEach((elem, ind) => {
-          if (elem.id === childID) {
-            index = ind;
-          }
-        });
         const newID = newBulletID();
 
         const data = this.data;
@@ -546,6 +541,73 @@ class BulletEntry extends HTMLElement {
         this.storeToDatabase(this.id, data, true);
 
         this.createChild(newID, {}, newBulletID, child);
+      }
+
+      /** Up/Down button will blur current and focus target sibling
+       * Checks for prev/next sibling that are bullets
+       * - blurs current and focuses on sibling
+       * - selects all and collapses selection to end (workarount to get cursor to end of input)
+       */
+      if (event.keyCode === 38) { // UP
+        const prevSibling = child.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          event.target.blur();
+
+          // Start at prev's LAST child if prev has children
+          // Don't even ask about this recursive bs
+          function getLastChild (referenceNode) {
+            const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
+            if (prevChildren.length) {
+              return getLastChild(prevChildren[prevChildren.length - 1]);
+            } else {
+              return referenceNode.shadowRoot.querySelector('.bullet-text');
+            }
+          }
+          getLastChild(prevSibling).focus();
+
+          // Focus at end
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        } else {
+          // Go to parent if bullet is the first child
+          const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
+          if (siblings[0] === child) {
+            event.target.blur();
+            this.shadowRoot.querySelector('.bullet-text').focus();
+            document.execCommand('selectAll', false, null);
+            document.getSelection().collapseToEnd();
+          }
+        }
+      }
+      if (event.keyCode === 40) { // DOWN
+        function getNextElement (currElem, skipChild) {
+          const children = currElem.shadowRoot.querySelectorAll('bullet-entry');
+          const nextSibling = currElem.nextSibling;
+          const nextRelative = currElem.parent.nextSibling;
+          // Go to first child if bullet has children
+          if (!skipChild && children.length) {
+            return children[0].shadowRoot.querySelector('.bullet-text');
+          } else if (nextSibling && nextSibling.nodeName === 'BULLET-ENTRY') {
+          // Continue with siblings
+            return nextSibling.shadowRoot.querySelector('.bullet-text');
+          } else if (nextRelative) {
+          // Continue to next available relative (parent's nextSibling)
+            return nextRelative.shadowRoot.querySelector('.bullet-text');
+          } else if (currElem.parent) {
+          // Continue to parent (skipping children and only looking for sublings/nextRelatives)
+            return getNextElement(currElem.parent, true);
+          } else {
+          // Otherwise at the very end of the section and can't go anywhere
+            return null;
+          }
+        }
+        const nextElem = getNextElement(child);
+        if (nextElem) {
+          event.target.blur();
+          nextElem.focus();
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        }
       }
     });
 
