@@ -515,54 +515,68 @@ class BulletEntry extends HTMLElement {
       siblingElem.insertAdjacentElement('afterend', child);
     }
 
-    /**
-     * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
-     * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
-     *
-     */
+    // Handle keyboard input for specific keycodes (Enter, Up, Down, Tab, Backspace)
     child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
+      /**
+       * Workaround helper function to set cursor to end of line <p>
+       *
+       * Select's everything in the currently focused input, then collapses that selection to the end
+       */
+      function gotoEOL () {
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+      }
+
+      /**
+       * Recursive function to determine the previous bullet to focus on when moving up (and also after deletion) <p>
+       *
+       * If previous sibling has children, will recursively call function on the last child
+       * of previous sibling's children <p>
+       *
+       * This continues until previous sibling doesn't have children, then returning the currentElement <p>
+       *
+       * Base case of previous sibling never having children will return the element pased in
+       *
+       * @param {HTMLElement} currElem - current element in the recursion, will check to make sure prevChildren don't exist before turning self in
+      */
+      function getLastChild (currElem) {
+        const prevChildren = currElem.shadowRoot.querySelectorAll('bullet-entry');
+        if (prevChildren.length) {
+          return getLastChild(prevChildren[prevChildren.length - 1]);
+        } else {
+          return currElem.shadowRoot.querySelector('.bullet-text');
+        }
+      }
+
+      /**
+       * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
+       * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
+       *
+       */
       if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
         const prevSibling = child.previousSibling;
+        // Check if there is some bullet to fall back to
         if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Blur current, then focus fallback bullet (given by a helper), use a workaround to move cursor to end of line
           event.target.blur();
 
           // Start at prev's LAST child if prev has children
-          // Don't even ask about this recursive bs
-          function getLastChild (referenceNode) {
-            const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
-            if (prevChildren.length) {
-              return getLastChild(prevChildren[prevChildren.length - 1]);
-            } else {
-              return referenceNode.shadowRoot.querySelector('.bullet-text');
-            }
-          }
           getLastChild(prevSibling).focus();
+          gotoEOL();
 
-          // Focus at end
-          document.execCommand('selectAll', false, null);
-          document.getSelection().collapseToEnd();
+          // prevent default to avoid deleting the first character of fallback bullet
+          event.preventDefault();
         } else {
           // Go to parent if bullet is the first child
+          event.preventDefault();
           const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
           if (siblings[0] === child) {
             event.target.blur();
             this.shadowRoot.querySelector('.bullet-text').focus();
-            document.execCommand('selectAll', false, null);
-            document.getSelection().collapseToEnd();
+            gotoEOL();
           }
         }
         this.removeChild(child, childID);
-      }
-
-      // Enter will need index
-      let index = -1;
-      if (event.keyCode === 13) {
-        event.preventDefault();
-        this.querySelectorAll('bullet-entry').forEach((elem, ind) => {
-          if (elem.id === childID) {
-            index = ind;
-          }
-        });
       }
 
       /** Enter button will "create a new bullet below"
@@ -573,6 +587,13 @@ class BulletEntry extends HTMLElement {
       */
       if (event.keyCode === 13) {
         event.preventDefault();
+
+        let index = -1;
+        this.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+          if (elem.id === childID) {
+            index = ind;
+          }
+        });
         const newID = newBulletID();
 
         const data = this.data;
@@ -583,6 +604,32 @@ class BulletEntry extends HTMLElement {
         this.createChild(newID, {}, newBulletID, child);
       }
 
+      /** Tab button will "Turn current bullet into last child of previous sibling"
+       * - replace default action
+       * - use elements to modify data + display
+       */
+      if (event.keyCode === 9) {
+        event.preventDefault();
+        const prevSibling = child.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Remove child from parent's childrenIDs (local and database) and from display
+          const data = this.data;
+          data.childrenIDs = data.childrenIDs.filter((bulletID) => bulletID !== childID);
+          this.setAttribute('data', JSON.stringify(data));
+          this.storeToDatabase(childID, child.data);
+          this.removeChild(child, childID);
+
+          // Update previous siblings data to include this child becoming a new child (local and database)
+          const prevData = prevSibling.data;
+          prevData.childrenIDs.push(childID);
+          prevSibling.setAttribute('data', JSON.stringify(prevData));
+          prevSibling.storeToDatabase(prevSibling.id, prevData, false);
+
+          // Call on create child to display
+          prevSibling.createChild(childID, child.data, newBulletID);
+        }
+      }
+
       /** Up/Down button will blur current and focus target sibling
        * Checks for prev/next sibling that are bullets
        * - blurs current and focuses on sibling
@@ -591,18 +638,11 @@ class BulletEntry extends HTMLElement {
       if (event.keyCode === 38) { // UP
         const prevSibling = child.previousSibling;
         if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Prevent the default of moving back to beginning of line
+          event.preventDefault();
           event.target.blur();
 
           // Start at prev's LAST child if prev has children
-          // Don't even ask about this recursive bs
-          function getLastChild (referenceNode) {
-            const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
-            if (prevChildren.length) {
-              return getLastChild(prevChildren[prevChildren.length - 1]);
-            } else {
-              return referenceNode.shadowRoot.querySelector('.bullet-text');
-            }
-          }
           getLastChild(prevSibling).focus();
 
           // Focus at end
@@ -612,6 +652,8 @@ class BulletEntry extends HTMLElement {
           // Go to parent if bullet is the first child
           const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
           if (siblings[0] === child) {
+            // Prevent the default of moving back to beginning of line
+            event.preventDefault();
             event.target.blur();
             this.shadowRoot.querySelector('.bullet-text').focus();
             document.execCommand('selectAll', false, null);
@@ -620,17 +662,21 @@ class BulletEntry extends HTMLElement {
         }
       }
       if (event.keyCode === 40) { // DOWN
+        // helper function to determine what the next element should be
         function getNextElement (currElem, skipChild) {
           const children = currElem.shadowRoot.querySelectorAll('bullet-entry');
           const nextSibling = currElem.nextSibling;
-          const nextRelative = currElem.parent.nextSibling;
+          let nextRelative;
+          if (currElem.parent) {
+            nextRelative = currElem.parent.nextSibling;
+          }
           // Go to first child if bullet has children
           if (!skipChild && children.length) {
             return children[0].shadowRoot.querySelector('.bullet-text');
           } else if (nextSibling && nextSibling.nodeName === 'BULLET-ENTRY') {
           // Continue with siblings
             return nextSibling.shadowRoot.querySelector('.bullet-text');
-          } else if (nextRelative) {
+          } else if (nextRelative && nextRelative.nodeName === 'BULLET-ENTRY') {
           // Continue to next available relative (parent's nextSibling)
             return nextRelative.shadowRoot.querySelector('.bullet-text');
           } else if (currElem.parent) {
