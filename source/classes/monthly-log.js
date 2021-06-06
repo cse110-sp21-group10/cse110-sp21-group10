@@ -174,6 +174,7 @@ class MonthlyLog extends HTMLElement {
       // get the canvas context and create the new chart
       // the chart starts off empty, but gets populated with each fetch call for daily data
       const ctx = canvas.getContext('2d');
+
       const chart = new Chart(ctx, {
         type: 'line', // line chart
         data: {
@@ -224,6 +225,11 @@ class MonthlyLog extends HTMLElement {
           }
         }
       });
+
+      // chart.canvas.parentNode.style.width = '30vw';
+      // chart.canvas.parentNode.style.height = '38vh';
+      // chart.style.width  = "30vw";
+      // chart.style.height  = "30vh";
       chart.render(); // render the initial chart (will get updated when data is updated)
       charts.push(chart);
     }
@@ -299,6 +305,11 @@ class MonthlyLog extends HTMLElement {
       });
     }
 
+    const divElement = document.createElement('div');
+    divElement.className = "notes";
+
+    root.appendChild(divElement);
+
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
@@ -350,7 +361,7 @@ class MonthlyLog extends HTMLElement {
         });
         sectionElement.appendChild(newNoteButton);
 
-        root.appendChild(sectionElement);
+        divElement.appendChild(sectionElement);
       }
     }
 

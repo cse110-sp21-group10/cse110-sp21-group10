@@ -12,8 +12,8 @@
 h1 {
   font-size: 3.8vw;
   position: relative;
-  margin-top: 1%;
-  margin-bottom: 1%;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
   font-family: 'Kaushan Script', cursive;
 }
 
@@ -24,7 +24,7 @@ h1 {
   position: absolute;
   min-height: 80vh;
   width: 85%;
-  top: 10%;
+  top: 10vh;
   left: 7.5%;
   max-height: 80vh;
   overflow: auto;
@@ -132,14 +132,16 @@ div.monthly {
   margin-left: 7.5%;
   margin-top: 2%;
   margin-right: 7.5%;
+
+  max-height: 70vh;
 }
 
 /* This sets the size of the canvas elements that hold the tracker charts in the monthly log */
 div.monthly .chart {
-  min-height: 400px;
-  max-height: 400px;
-  min-width: 400px;
-  max-width: 400px;
+  min-height: 38vh;
+  max-height: 38vh;
+  min-width: 36vw;
+  max-width: 36vw;
 }
 
 fieldset {
@@ -186,6 +188,12 @@ section.header button {
   margin-top: 1.8%;
   border-radius: 30px;
   font-size: 0.8vw;
+}
+
+section h2 {
+  font-size: 2vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 /* Add a background color on hover */
@@ -288,7 +296,7 @@ section.header button:hover {
   /* padding-top: 10px; */
   padding-left: 2%;
   padding-bottom: 1%;
-  width: 97.5%;
+  width: 96%;
 }
 
 .new-bullet {
@@ -671,6 +679,69 @@ button[id$='setting']:active {
 
 .irrelevant {
   text-decoration: line-through;
+}
+
+/* styling monthly */
+
+#monthly-calendar {
+  position: absolute;
+  height: 28vh;
+  width: 34.2vw;
+  border: 2px solid black;
+
+  border-radius: 20px;
+}
+
+#monthly-calendar button {
+  width: 3vw;
+  height: 5vh;
+  margin-right: .65vw;
+  margin-left: .65vw;
+  margin-bottom: .2vh;
+  margin-top: .2vh;
+
+  position: relative;
+  left: 1.8vw;
+ 
+  border-radius: 10px;
+  align-self: center;
+}
+
+#monthly-charts {
+  box-sizing: border-box;
+  
+  min-height: 45vh;
+  max-height: 45vh;
+  width: 40vw;
+
+  position: relative;
+  left: 38vw;
+  top: 15vh;
+
+  overflow: auto;
+  /* border: 2px solid black; */
+}
+
+#monthly-charts::-webkit-scrollbar {
+  display: none;
+}
+
+div.notes {
+  box-sizing: border-box;
+
+  height: 30vh;
+  width: 35vw;
+
+  position: relative;
+  left: 0vw;
+  bottom:15vh;
+
+  overflow: auto;
+  /* border: 2px solid black; */
+}
+
+div.notes::-webkit-scrollbar {
+  display: none;
 }
 
 /* All styling necessary for the conext menu end */
