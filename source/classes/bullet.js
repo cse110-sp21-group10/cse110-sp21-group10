@@ -522,7 +522,47 @@ class BulletEntry extends HTMLElement {
      */
     child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
       if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        const prevSibling = child.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          event.target.blur();
+
+          // Start at prev's LAST child if prev has children
+          // Don't even ask about this recursive bs
+          function getLastChild (referenceNode) {
+            const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
+            if (prevChildren.length) {
+              return getLastChild(prevChildren[prevChildren.length - 1]);
+            } else {
+              return referenceNode.shadowRoot.querySelector('.bullet-text');
+            }
+          }
+          getLastChild(prevSibling).focus();
+
+          // Focus at end
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        } else {
+          // Go to parent if bullet is the first child
+          const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
+          if (siblings[0] === child) {
+            event.target.blur();
+            this.shadowRoot.querySelector('.bullet-text').focus();
+            document.execCommand('selectAll', false, null);
+            document.getSelection().collapseToEnd();
+          }
+        }
         this.removeChild(child, childID);
+      }
+
+      // Enter will need index
+      let index = -1;
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        this.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+          if (elem.id === childID) {
+            index = ind;
+          }
+        });
       }
 
       /** Enter button will "create a new bullet below"

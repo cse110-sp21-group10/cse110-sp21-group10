@@ -338,6 +338,24 @@ class DailyLog extends HTMLElement {
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
             // condition check to determine if the listener was triggered when backspace was pressed on an empty note
             if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+              const prevSibling = bulletElement.previousSibling;
+              if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+                event.target.blur();
+                // Start at prev's LAST child if prev has children
+                // Don't even ask about this recursive bs
+                function getLastChild (referenceNode) {
+                  const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
+                  if (prevChildren.length) {
+                    return getLastChild(prevChildren[prevChildren.length - 1]);
+                  } else {
+                    return referenceNode.shadowRoot.querySelector('.bullet-text');
+                  }
+                }
+                getLastChild(prevSibling).focus();
+                document.execCommand('selectAll', false, null);
+                document.getSelection().collapseToEnd();
+              }
+
               dailyLog.deleteNoteHandler(bulletElement);
             }
 
@@ -698,6 +716,26 @@ class DailyLog extends HTMLElement {
     bullet.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
       // condition check to determine if backspace was pressed on an empty note
       if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        const prevSibling = bullet.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          event.target.blur();
+          // Start at prev's LAST child if prev has children
+          // Don't even ask about this recursive bs
+          function getLastChild (referenceNode) {
+            const prevChildren = referenceNode.shadowRoot.querySelectorAll('bullet-entry');
+            if (prevChildren.length) {
+              return getLastChild(prevChildren[prevChildren.length - 1]);
+            } else {
+              return referenceNode.shadowRoot.querySelector('.bullet-text');
+            }
+          }
+          getLastChild(prevSibling).focus();
+
+          // Focus at end
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        }
+
         dailyLog.deleteNoteHandler(bullet);
       }
 
