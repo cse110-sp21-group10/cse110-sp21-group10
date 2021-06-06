@@ -252,7 +252,7 @@ class MonthlyLog extends HTMLElement {
       }
 
       // get the data for the chart
-      Database.fetch(dateID, function (data) {
+      Database.fetch(dateID, function (data, date) {
         // if data is present
         if (data) {
           for (const tracker of data.trackers) {
@@ -278,17 +278,17 @@ class MonthlyLog extends HTMLElement {
 
             // update chart data with tracker data
             if (trackerChart) {
-              trackerChart.data.datasets[0].data[i - 1] = tracker.value;
+              trackerChart.data.datasets[0].data[date - 1] = tracker.value;
             }
           }
         } else {
           for (const chart of charts) {
-            chart.data.datasets[0].data[i - 1] = undefined;
+            chart.data.datasets[0].data[date - 1] = undefined;
           }
         }
 
         // update chart by the last day of the month
-        if (i === numDays) {
+        if (date === numDays) {
           for (const chart of charts) {
             chart.update();
           }
@@ -296,7 +296,7 @@ class MonthlyLog extends HTMLElement {
           exerciseTracker.innerText = `Exercise: ${numExerciseDays}/${numDays} days (${Math.round(numExerciseDays / numDays * 100)}%)`;
           root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
-      });
+      }, i);
     }
 
     // loop through all sections in JSON data and construct and populate them
