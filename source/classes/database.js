@@ -1,13 +1,13 @@
 /**
  * This class contains a suite of static functions that can be used to interact with our app's IndexedDB
  * database. The functions allow for storage, retrieval and deletion of bullet, label, daily, monthly,
- * and yearly JSON objects.
+ * yearly, and style JSON objects.
  *
  * @classdesc
  * @example <caption>Example usage of Database</caption>
  * // this sample code would store a daily object in the database and print a success statement when it completes
- * const id = '20210519';
- * Database.store(id, { 'notes': 'this is an example' }, function (stored, id) {
+ * const id = 'D 20210519';
+ * Database.store(id, { notes: 'this is an example' }, function (stored, id) {
  *   if (stored === true) {
  *     console.log('finished storing object with id ' + id);
  *   } else {
@@ -37,7 +37,8 @@ export class Database {
       MONTHLY: 'monthly',
       YEARLY: 'yearly',
       BULLETS: 'bullets',
-      LABELS: 'labels'
+      LABELS: 'labels',
+      STYLE: 'style'
     };
   }
 
@@ -102,14 +103,17 @@ export class Database {
    */
   static openDatabase (callback = null) {
     // opens database (async)
-    const dbOpenRequest = indexedDB.open(this.DATABASE_NAME, 1);
+    const dbOpenRequest = indexedDB.open(this.DATABASE_NAME, 2);
 
-    // called when database is first created (then never called again)
+    // called when database is first created and when db updates are needed
     dbOpenRequest.onupgradeneeded = function (event) {
-      // adds empty object stores to the empty database
+      // adds empty object stores to the database if they don't exist yet
       const db = dbOpenRequest.result;
+      const objectStores = db.objectStoreNames;
       Object.values(Database.Stores).forEach(value => {
-        db.createObjectStore(value);
+        if (!objectStores.contains(value)) {
+          db.createObjectStore(value);
+        }
       });
       console.log('CREATED DATABASE'); // console logging
     };
@@ -189,9 +193,9 @@ export class Database {
         return this.Stores.BULLETS; // ID starting with 'B' signifies bullet object
       case 'L':
         return this.Stores.LABELS; // ID starting with 'L' signifies label object
+      case 'S':
+        return this.Stores.STYLE; // ID starting with 'S' signifies style object
     }
-
-    // will need to add cases for section IDs, widget IDs, etc. when we implement those objects
   }
 
   // ------------------------------------ End Helper Functions ------------------------------------
