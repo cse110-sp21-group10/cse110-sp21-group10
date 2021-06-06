@@ -712,6 +712,28 @@ button[id$='setting']:active {
   
 }
 
+/* Styling of the month buttons for the #yearly-calendar */
+
+#yearly-calendar button {
+  height: 5vh;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 1.25vw;
+  border: 0.5px solid black;
+  padding-top: 0.5px;
+  background-color: rgb(250, 248, 248);
+}
+
+/* Styling of the month buttons for the #yearly-calendar on hover
+  - color will change
+  - cursor will also change
+*/
+
+#yearly-calendar button:hover {
+  cursor: pointer;
+  background-color:rgb(219, 219, 219)
+}
+
 /* Assigns the goals section in to the first row, second column */
 
 div.yearly section[id$="00"] {
@@ -735,28 +757,6 @@ div.yearly section[id$="01"] {
   margin-top: 2vh;
   display: inline-block;
   font-size: 1.5vw;
-}
-
-/* Styling of the month buttons for the #yearly-calendar */
-
-#yearly-calendar button {
-  height: 5vh;
-  width: 100%;
-  border-radius: 10px;
-  font-size: 1.25vw;
-  border: 0.5px solid black;
-  padding-top: 0.5px;
-  background-color: rgb(250, 248, 248);
-}
-
-/* Styling of the month buttons for the #yearly-calendar on hover
-  - color will change
-  - cursor will also change
-*/
-
-#yearly-calendar button:hover {
-  cursor: pointer;
-  background-color:rgb(219, 219, 219)
 }
 
 /* Styling for Yearly-Element end */
