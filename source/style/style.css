@@ -676,9 +676,10 @@ button[id$='setting']:active {
 /* Sets up the grid areas for the entire yearly div */
 .yearly {
   grid-template-areas:
-  "header header"
-  "calendar goals"
-  "notes notes";
+
+    "header header"
+    "calendar goals"
+    "notes notes";
   grid-template-columns: 25vw 45vw;
   column-gap: 1vw;
 }
@@ -705,11 +706,11 @@ button[id$='setting']:active {
   padding-right: 0.75vw;
   row-gap: 0.25vh;
   column-gap: 0.5vw;
-  grid-template-areas: 
+  grid-template-areas:
+
     "jan feb mar apr"
     "may jun jul aug"
     "sep oct nov dec";
-  
 }
 
 /* Styling of the month buttons for the #yearly-calendar */
@@ -731,7 +732,7 @@ button[id$='setting']:active {
 
 #yearly-calendar button:hover {
   cursor: pointer;
-  background-color:rgb(219, 219, 219)
+  background-color: rgb(219, 219, 219);
 }
 
 /* Assigns the goals section in to the first row, second column */
