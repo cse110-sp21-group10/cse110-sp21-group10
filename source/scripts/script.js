@@ -79,24 +79,18 @@ window.onpopstate = function (event) {
   switch (event.state.view) {
     case 'day':
       transitionDaily();
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadDay();
-        updateIndex();
-      }
+      currDate = event.state.date;
+      loadDay();
+      updateIndex();
       break;
     case 'month':
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadMonth();
-      }
+      currDate = event.state.date;
+      loadMonth();
       transitionMonthly();
       break;
     case 'year':
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadYear();
-      }
+      currDate = event.state.date;
+      loadYear();
       transitionYearly();
       break;
   }
@@ -113,18 +107,29 @@ window.onpopstate = function (event) {
  * @callback setupScript
  */
 function setupScript () {
-  window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
-
   loadVars();
   setupButtons();
 
-  loadDay();
-  loadMonth();
-  loadYear();
+  if (!history.state) {
+    window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
+  } else {
+    currDate = history.state.date;
+  }
 
-  dailyLog.style.display = 'block';
-  monthlyLog.style.display = 'none';
-  yearlyLog.style.display = 'none';
+  switch (history.state.view) {
+    case 'day':
+      loadDay();
+      transitionDaily();
+      break;
+    case 'month':
+      loadMonth();
+      transitionMonthly();
+      break;
+    case 'year':
+      loadYear();
+      transitionYearly();
+      break;
+  }
 }
 
 /**
@@ -319,12 +324,12 @@ function zoomOut () {
   // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       loadMonth();
       transitionMonthly();
       break;
     case 'month':
-      window.history.pushState({ view: 'year' }, 'Yearly Log', '#year');
+      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
       loadYear();
       transitionYearly();
       break;
@@ -341,6 +346,7 @@ function zoomOut () {
 function transitionDaily () {
   dailyLog.style.display = 'block';
   monthlyLog.style.display = 'none';
+  yearlyLog.style.display = 'none';
 
   btnPrevEntry.disabled = 0;
   btnNextEntry.disabled = 0;
@@ -384,6 +390,7 @@ function transitionMonthly () {
  * Zoom out icon is disabled in Yearly View
  */
 function transitionYearly () {
+  dailyLog.style.display = 'none';
   monthlyLog.style.display = 'none';
   yearlyLog.style.display = 'block';
 
