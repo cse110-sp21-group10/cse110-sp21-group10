@@ -232,7 +232,19 @@ class MonthlyLog extends HTMLElement {
     // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
-    let numExerciseDays = 0;
+
+    // create the section for exercise checkboxes
+    const exerciseTracker = document.createElement('div');
+    exerciseTracker.style.display = 'flex';
+    exerciseTracker.style.flexDirection = 'row';
+    const exerciseTrackerHeading = document.createElement('div');
+    exerciseTrackerHeading.innerText = 'Exercise';
+    exerciseTracker.appendChild(exerciseTrackerHeading);
+    const exerciseTrackerBoxes = document.createElement('div');
+    exerciseTrackerBoxes.style.display = 'flex';
+    exerciseTrackerBoxes.style.flexDirection = 'row';
+    exerciseTracker.appendChild(exerciseTrackerBoxes);
+
     for (let i = 1; i <= numDays; i++) {
       // date button creation
       const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
@@ -250,6 +262,29 @@ class MonthlyLog extends HTMLElement {
       for (const chart of charts) {
         chart.data.labels.push(i);
       }
+
+      const exerciseTrackerBox = document.createElement('div');
+      exerciseTrackerBox.style.display = 'flex';
+      exerciseTrackerBox.style.flexDirection = 'column';
+      exerciseTrackerBox.style.textAlign = 'center';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.disabled = 'true';
+      checkbox.checked = false;
+      exerciseTrackerBox.appendChild(checkbox);
+      const datePar1 = document.createElement('p');
+      datePar1.style.margin = '0';
+      datePar1.style.lineHeight = '0.75';
+      datePar1.innerText = String(i).charAt(0);
+      const datePar2 = document.createElement('p');
+      datePar2.style.margin = '0';
+      datePar2.style.lineHeight = '0.75';
+      if (String(i).length > 1) {
+        datePar2.innerText = String(i).charAt(1);
+      }
+      exerciseTrackerBox.appendChild(datePar1);
+      exerciseTrackerBox.appendChild(datePar2);
+      exerciseTrackerBoxes.appendChild(exerciseTrackerBox);
 
       // get the data for the chart
       Database.fetch(dateID, function (data, date) {
@@ -272,7 +307,7 @@ class MonthlyLog extends HTMLElement {
                 trackerChart = charts[3];
                 break;
               case 'Exercise':
-                numExerciseDays = numExerciseDays + tracker.value;
+                checkbox.checked = tracker.value === 1;
                 break;
             }
 
@@ -292,8 +327,6 @@ class MonthlyLog extends HTMLElement {
           for (const chart of charts) {
             chart.update();
           }
-          const exerciseTracker = document.createElement('p');
-          exerciseTracker.innerText = `Exercise: ${numExerciseDays}/${numDays} days (${Math.round(numExerciseDays / numDays * 100)}%)`;
           root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
       }, i);
