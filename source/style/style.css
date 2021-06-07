@@ -594,6 +594,13 @@ button[id$='setting']:active {
   font-size: 0.8em;
 } */
 
+/* Styling for the icons in the tracker div for daily */
+
+div.tracker div i {
+  font-size: 1.5vw;
+  align-self: center;
+}
+
 /* All styling necessary for the conext menu start */
 
 #context-menu,
