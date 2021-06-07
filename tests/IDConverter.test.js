@@ -20,7 +20,7 @@ const year = currDate.getFullYear() % 100;
 
 describe('Testing getDateFromID', () => {
     test('Testing day case', () => {
-        date = IDConverter.getDateFromID( 'D 210602', 'day');
+        date = IDConverter.getDateFromID('D 210602', 'day');
         expect(date.toString().includes('Wed Jun 02')).toBe(true);
     });
     test('Testing month case', () => {
