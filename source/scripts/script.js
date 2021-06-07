@@ -36,10 +36,10 @@ let yearlyLog;
 // Labels object for mapping label names to colors
 export const labels = {
   finance: {
-    color: 'yellow'
+    color: 'green'
   },
   fitness: {
-    color: 'green'
+    color: 'darkviolet'
   },
   academics: {
     color: 'grey'
