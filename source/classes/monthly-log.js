@@ -60,6 +60,7 @@ class MonthlyLog extends HTMLElement {
           <h1></h1>
         </section>
         <section id="monthly-calendar"></section>
+        <section id="monthly-checks"></section>
         <section id="monthly-charts"></section>
       </div>
     `;
@@ -174,7 +175,6 @@ class MonthlyLog extends HTMLElement {
       // get the canvas context and create the new chart
       // the chart starts off empty, but gets populated with each fetch call for daily data
       const ctx = canvas.getContext('2d');
-
       const chart = new Chart(ctx, {
         type: 'line', // line chart
         data: {
@@ -225,11 +225,6 @@ class MonthlyLog extends HTMLElement {
           }
         }
       });
-
-      // chart.canvas.parentNode.style.width = '30vw';
-      // chart.canvas.parentNode.style.height = '38vh';
-      // chart.style.width  = "30vw";
-      // chart.style.height  = "30vh";
       chart.render(); // render the initial chart (will get updated when data is updated)
       charts.push(chart);
     }
@@ -238,7 +233,20 @@ class MonthlyLog extends HTMLElement {
     // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
-    let numExerciseDays = 0;
+
+    // create the section for exercise checkboxes
+    const exerciseTracker = document.createElement('div');
+    root.querySelector('#monthly-checks').appendChild(exerciseTracker);
+    exerciseTracker.style.display = 'flex';
+    exerciseTracker.style.flexDirection = 'row';
+    const exerciseTrackerHeading = document.createElement('div');
+    exerciseTrackerHeading.innerText = 'Exercise';
+    exerciseTracker.appendChild(exerciseTrackerHeading);
+    const exerciseTrackerBoxes = document.createElement('div');
+    exerciseTrackerBoxes.style.display = 'flex';
+    exerciseTrackerBoxes.style.flexDirection = 'row';
+    exerciseTracker.appendChild(exerciseTrackerBoxes);
+
     for (let i = 1; i <= numDays; i++) {
       // date button creation
       const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
@@ -257,8 +265,31 @@ class MonthlyLog extends HTMLElement {
         chart.data.labels.push(i);
       }
 
+      const exerciseTrackerBox = document.createElement('div');
+      exerciseTrackerBox.style.display = 'flex';
+      exerciseTrackerBox.style.flexDirection = 'column';
+      exerciseTrackerBox.style.textAlign = 'center';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.disabled = 'true';
+      checkbox.checked = false;
+      exerciseTrackerBox.appendChild(checkbox);
+      const datePar1 = document.createElement('p');
+      datePar1.style.margin = '0';
+      datePar1.style.lineHeight = '0.9';
+      datePar1.innerText = String(i).charAt(0);
+      const datePar2 = document.createElement('p');
+      datePar2.style.margin = '0';
+      datePar2.style.lineHeight = '0.9';
+      if (String(i).length > 1) {
+        datePar2.innerText = String(i).charAt(1);
+      }
+      exerciseTrackerBox.appendChild(datePar1);
+      exerciseTrackerBox.appendChild(datePar2);
+      exerciseTrackerBoxes.appendChild(exerciseTrackerBox);
+
       // get the data for the chart
-      Database.fetch(dateID, function (data) {
+      Database.fetch(dateID, function (data, date) {
         // if data is present
         if (data) {
           for (const tracker of data.trackers) {
@@ -278,37 +309,29 @@ class MonthlyLog extends HTMLElement {
                 trackerChart = charts[3];
                 break;
               case 'Exercise':
-                numExerciseDays = numExerciseDays + tracker.value;
+                checkbox.checked = tracker.value === 1;
                 break;
             }
 
             // update chart data with tracker data
             if (trackerChart) {
-              trackerChart.data.datasets[0].data[i - 1] = tracker.value;
+              trackerChart.data.datasets[0].data[date - 1] = tracker.value;
             }
           }
         } else {
           for (const chart of charts) {
-            chart.data.datasets[0].data[i - 1] = undefined;
+            chart.data.datasets[0].data[date - 1] = undefined;
           }
         }
 
         // update chart by the last day of the month
-        if (i === numDays) {
+        if (date === numDays) {
           for (const chart of charts) {
             chart.update();
           }
-          const exerciseTracker = document.createElement('p');
-          exerciseTracker.innerText = `Exercise: ${numExerciseDays}/${numDays} days (${Math.round(numExerciseDays / numDays * 100)}%)`;
-          root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
-      });
+      }, i);
     }
-
-    const divElement = document.createElement('div');
-    divElement.className = "notes";
-
-    root.appendChild(divElement);
 
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
@@ -361,7 +384,7 @@ class MonthlyLog extends HTMLElement {
         });
         sectionElement.appendChild(newNoteButton);
 
-        divElement.appendChild(sectionElement);
+        root.appendChild(sectionElement);
       }
     }
 
