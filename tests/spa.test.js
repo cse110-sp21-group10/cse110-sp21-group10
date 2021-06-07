@@ -11,7 +11,7 @@ let currSuffix = IDConverter.getSuffixOfDate(currDate);
 
 describe('Basic user flow for SPA ', () => {
   beforeAll(async () => {
-    await page.goto('https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html#day');
+    await page.goto('https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html');
     await page.waitForTimeout(500);
   });
 
@@ -173,4 +173,13 @@ describe('Basic user flow for SPA ', () => {
     
     expect(header).toBe(prevDayOfWeek + ", " + prevMonth + " " + prevDay + prevSuffix);
   });
+
+  /**
+   * To test:
+   *    Clicking on the weather icon changes the temperature value
+   *    Clicking on menu icon sets the right class for the 'index' div
+   *    Changing the font sets the style of the body to the right font
+   *    
+   */
+
 });
