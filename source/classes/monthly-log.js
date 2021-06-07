@@ -240,9 +240,10 @@ class MonthlyLog extends HTMLElement {
     exerciseTracker.style.display = 'flex';
     exerciseTracker.style.flexDirection = 'row';
     const exerciseTrackerHeading = document.createElement('div');
-    exerciseTrackerHeading.innerText = 'Exercise';
+    exerciseTrackerHeading.innerText = 'Exercise:';
     exerciseTracker.appendChild(exerciseTrackerHeading);
     const exerciseTrackerBoxes = document.createElement('div');
+    exerciseTrackerBoxes.className = 'tracking-boxes';
     exerciseTrackerBoxes.style.display = 'flex';
     exerciseTrackerBoxes.style.flexDirection = 'row';
     exerciseTracker.appendChild(exerciseTrackerBoxes);
@@ -273,6 +274,7 @@ class MonthlyLog extends HTMLElement {
       checkbox.type = 'checkbox';
       checkbox.disabled = 'true';
       checkbox.checked = false;
+      checkbox.className = 'check';
       exerciseTrackerBox.appendChild(checkbox);
       const datePar1 = document.createElement('p');
       datePar1.style.margin = '0';
@@ -333,6 +335,11 @@ class MonthlyLog extends HTMLElement {
       }, i);
     }
 
+    const divElement = document.createElement('div');
+    divElement.className = "notes";
+
+    root.appendChild(divElement);
+
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
@@ -384,7 +391,7 @@ class MonthlyLog extends HTMLElement {
         });
         sectionElement.appendChild(newNoteButton);
 
-        root.appendChild(sectionElement);
+        divElement.appendChild(sectionElement);
       }
     }
 

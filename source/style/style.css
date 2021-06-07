@@ -716,7 +716,7 @@ button[id$='setting']:active {
 
   position: relative;
   left: 38vw;
-  top: 15vh;
+  top: 3vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -729,12 +729,12 @@ button[id$='setting']:active {
 div.notes {
   box-sizing: border-box;
 
-  height: 30vh;
+  height: 28vh;
   width: 35vw;
 
   position: relative;
   left: 0vw;
-  bottom:15vh;
+  bottom: 25vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -742,6 +742,36 @@ div.notes {
 
 div.notes::-webkit-scrollbar {
   display: none;
+}
+
+#monthly-checks {
+  box-sizing: border-box;
+  
+  min-height: 10vh;
+  max-height: 10vh;
+  width: 36vw;
+
+  position: relative;
+  left: 39vw;
+  top: 0vh;
+
+  overflow: auto;
+  /* border: 2px solid black; */
+}
+
+section#monthly-checks::-webkit-scrollbar {
+  display: none;
+}
+
+.check {
+  margin: 0;
+  margin-top: .8vh;
+  margin-left: .05vw;
+  margin-right: .05vw;
+}
+
+.tracking-boxes {
+  margin-left: .5vw;
 }
 
 /* All styling necessary for the conext menu end */
