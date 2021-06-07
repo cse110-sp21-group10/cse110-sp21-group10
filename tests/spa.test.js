@@ -15,7 +15,7 @@ describe('Basic user flow for SPA ', () => {
     await page.waitForTimeout(500);
   });
 
-  it('Test 1: The daily page header should read May 31, 2021', async () => {
+  it('Test 1: The daily page header should read the current date', async () => {
     const header = await page.$eval('daily-log', (elem) => {
       return elem.shadowRoot.querySelector('h1').textContent;
     });
@@ -74,5 +74,103 @@ describe('Basic user flow for SPA ', () => {
       return elem.shadowRoot.querySelectorAll('bullet-entry').length;
     });
     expect(bulletListLength).toBe(1);
+  });
+
+  it('Test 9: Clicking the foward buttons should change page url to /#month', async () => {
+    await page.goForward();
+    expect(page.url().includes('#month')).toBe(true);
+  });
+
+  it('Test 10: Clicking the foward buttons should change page url to /#year', async () => {
+    await page.goForward();
+    expect(page.url().includes('#year')).toBe(true);
+  });
+
+  it('Test 11: Clicking the January button should change page url to /#month', async () => {
+    await page.$eval('yearly-log', (elem) => {
+      elem.shadowRoot.querySelectorAll('button')[0].click();
+    });
+    expect(page.url().includes('#month')).toBe(true);
+  });
+
+  it('Test 12: Clicking the 1 button should change page url to /#day', async () => {
+    await page.$eval('monthly-log', (elem) => {
+      elem.shadowRoot.querySelectorAll('button')[0].click();
+    });
+    expect(page.url().includes('#day')).toBe(true);
+  });
+
+  it('Test 13: Clicking the last-entry-forward button should put us on the current day', async () => {
+    await page.$$eval('button', (buttons) => { 
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].id == 'last-entry-forward') {
+          buttons[i].click();
+        }        
+      }
+    });
+    const header = await page.$eval('daily-log', (elem) => {
+      return elem.shadowRoot.querySelector('h1').textContent;
+    });
+    expect(header).toBe(currDay + ", " + currMonth + " " + day + currSuffix);
+  });
+
+  it('Test 14: Clicking the next-day button should put us on the next day', async () => {
+    await page.$$eval('button', (buttons) => { 
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].id == 'next-day') {
+          buttons[i].click();
+        }        
+      }
+    });
+    const header = await page.$eval('daily-log', (elem) => {
+      return elem.shadowRoot.querySelector('h1').textContent;
+    });
+    let nextDate = new Date();
+    nextDate.setDate(currDate.getDate() + 1);
+    
+    let nextDay = nextDate.getDate();
+
+    let nextDayOfWeek = IDConverter.getDayFromDate(nextDate);
+    let nextMonth = IDConverter.getMonthFromDate(nextDate);
+    let nextSuffix = IDConverter.getSuffixOfDate(nextDate);
+    
+    expect(header).toBe(nextDayOfWeek + ", " + nextMonth + " " + nextDay + nextSuffix);
+  });
+
+  it('Test 15: Clicking the last-entry-back button should put us on the current day', async () => {
+    await page.$$eval('button', (buttons) => { 
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].id == 'last-entry-back') {
+          buttons[i].click();
+        }        
+      }
+    });
+    const header = await page.$eval('daily-log', (elem) => {
+      return elem.shadowRoot.querySelector('h1').textContent;
+    });
+    expect(header).toBe(currDay + ", " + currMonth + " " + day + currSuffix);
+  });
+
+  it('Test 16: Clicking the prev-day button should put us on the next day', async () => {
+    await page.$$eval('button', (buttons) => { 
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].id == 'prev-day') {
+          buttons[i].click();
+        }        
+      }
+    });
+    const header = await page.$eval('daily-log', (elem) => {
+      return elem.shadowRoot.querySelector('h1').textContent;
+    });
+    let prevDate = new Date();
+    prevDate.setDate(currDate.getDate() - 1);
+    
+    let prevDay = prevDate.getDate();
+
+    let prevDayOfWeek = IDConverter.getDayFromDate(prevDate);
+    let prevMonth = IDConverter.getMonthFromDate(prevDate);
+    let prevSuffix = IDConverter.getSuffixOfDate(prevDate);
+    
+    expect(header).toBe(prevDayOfWeek + ", " + prevMonth + " " + prevDay + prevSuffix);
   });
 });
