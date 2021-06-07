@@ -751,9 +751,6 @@ div.daily section[id$="00"] {
   overflow: auto;
 }
 
-div.daily section[id$="00"]::-webkit-scrollbar {
-  display: none;
-}
 
 /* More styling for daily-log end */
 
@@ -831,12 +828,6 @@ div.yearly section[id$="00"] {
   overflow: auto;
 }
 
-/* Adding a scrollbar for overflow in the yearly goals section */
-
-div.yearly section[id$="00"]::-webkit-scrollbar {
-  display: none;
-}
-
 /* Assigns the notes section to the bottom row */
 
 div.yearly section[id$="01"] {
@@ -846,4 +837,16 @@ div.yearly section[id$="01"] {
   font-size: 1.5vw;
 }
 
+/* Adding a scrollbar for overflow in the yearly goals section */
+
+div.yearly section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}
+
 /* Styling for Yearly-Element end */
+
+/* scrollbar for daily reminders is going here bc the linter is being picky */
+
+div.daily section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}
