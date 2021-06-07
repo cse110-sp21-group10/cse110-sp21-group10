@@ -336,11 +336,9 @@ class DailyLog extends HTMLElement {
           // create bullet element and add the deletion event listeners to it
           const bulletElement = document.createElement('bullet-entry');
           bulletElement.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-            // condition check to determine if the listener was triggered when backspace was pressed on an empty note
-            if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-              dailyLog.deleteNoteHandler(bulletElement);
-            }
+            dailyLog.keyCodeListener(event, bulletElement, bulletID, sectionElement, sectionID);
           });
+
           bulletElement.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
             dailyLog.deleteNoteHandler(bulletElement);
           });
@@ -588,6 +586,156 @@ class DailyLog extends HTMLElement {
   // ------------------------------------ Start Event Handlers ------------------------------------
 
   /**
+   * This function handles the keyboard input and looks for special keycodes: <p>
+   * Enter -  creates a new sibling bullet below current bullet <p>
+   * Up -  moves the focus up the onscreen bullets <p>
+   * Down -  moves the focus down the onscreen bullets <p>
+   * Tab -  indents the bullet, essentially making the current bullet a child of it's previuos sibling <p>
+   * Backspace -  deletes the bullet and moves the focus up on teh onscreen bullets
+   *
+   * @param {keydownEvent} event - provides access to the keyCode input
+   * @param {HTMLElement} bulletElement - current bullet element, mainly used for display related logic
+   * @param {String} bulletID - current bullet's ID, mainly used for data related logic
+   * @param {HTMLElement} sectionElement - current section element, mainly used for display related logic
+   * @param {String} sectionID - current section ID, mainly used for data related logic
+   */
+  keyCodeListener (event, bulletElement, bulletID, sectionElement, sectionID) {
+    const dailyLog = this;
+
+    /**
+     * Workaround helper function to set cursor to end of line <p>
+     *
+     * Select's everything in the currently focused input, then collapses that selection to the end
+     */
+    function gotoEOL () {
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
+    }
+
+    // condition check to determine if the listener was triggered when backspace was pressed on an empty note
+    if (event.keyCode === 8 && event.target.innerText.length === 0) {
+      const prevSibling = bulletElement.previousSibling;
+      // Check if there is some bullet to fall back to
+      if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+        // Blur current, then focus fallback bullet (given by a helper), use a workaround to move cursor to end of line
+        event.target.blur();
+        dailyLog.getLastChild(prevSibling).focus();
+        gotoEOL();
+        // prevent default to avoid deleting the first character of fallback bullet
+        event.preventDefault();
+      }
+
+      dailyLog.deleteNoteHandler(bulletElement);
+    }
+
+    /** Enter button will "create a new bullet below"
+     * will replace default action
+     * iterate to find index
+     * insertion will occur at index + 1 (data)
+     * insertion will occur after current bullet element (display)
+    */
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      let index = -1;
+      sectionElement.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+        if (elem.id === bulletID) {
+          index = ind;
+        }
+      });
+      dailyLog.newNoteHandler(sectionElement, index + 1, bulletElement);
+    }
+
+    /** Tab button will "Turn current bullet into last child of previous sibling"
+     * - replace default action
+     * - use elements to modify data + display
+     */
+    if (event.keyCode === 9) {
+      event.preventDefault();
+      const prevSibling = bulletElement.previousSibling;
+      if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+        // Call on deleteNoteHandler to remove bullet from parent's childIDs (will also remove from DB)
+        dailyLog.deleteNoteHandler(bulletElement);
+
+        // Add bullet back into database
+        bulletElement.storeToDatabase(bulletElement.id, bulletElement.data, false);
+
+        // Update previous siblings data to include this bullet becoming a new child (local and database)
+        const prevData = prevSibling.data;
+        prevData.childrenIDs.push(bulletElement.id);
+        prevSibling.setAttribute('data', JSON.stringify(prevData));
+        prevSibling.storeToDatabase(prevSibling.id, prevData, false);
+
+        // Generate the callback to be used by future children
+        const newBulletID = function () {
+          const newID = dailyLog.generateBulletID(sectionID);
+          return newID;
+        };
+
+        // Call on createChild to handle display
+        prevSibling.createChild(bulletElement.id, bulletElement.data, newBulletID);
+      }
+    }
+
+    /** Up/Down button will blur current and focus target sibling
+     * Checks for prev/next sibling that are bullets
+     * - blurs current and focuses on sibling
+     * - selects all and collapses selection to end (workarount to get cursor to end of input)
+     */
+
+    if (event.keyCode === 38) { // UP
+      const prevSibling = bulletElement.previousSibling;
+      if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+        // Prevent default of moving back to beginning of line
+        event.preventDefault();
+
+        // Blur current, then focus fallback bullet (given by a helper), use a workaround to move cursor to end of line
+        event.target.blur();
+        dailyLog.getLastChild(prevSibling).focus();
+        gotoEOL();
+      }
+    }
+
+    if (event.keyCode === 40) { // DOWN
+      const children = bulletElement.shadowRoot.querySelectorAll('bullet-entry');
+      const nextSibling = bulletElement.nextSibling;
+
+      // Go to first child if bullet has children
+      if (children.length) {
+        event.target.blur();
+        children[0].shadowRoot.querySelector('.bullet-text').focus();
+        gotoEOL();
+      } else if (nextSibling && nextSibling.nodeName === 'BULLET-ENTRY') {
+        // Otherwise continue with siblings
+        event.target.blur();
+        nextSibling.shadowRoot.querySelector('.bullet-text').focus();
+        gotoEOL();
+      }
+    }
+  }
+
+  /**
+   * Recursive function to determine the previous bullet to focus on when moving up (and also after deletion) <p>
+   *
+   * If previous sibling has children, will recursively call function on the last child
+   * of previous sibling's children <p>
+   *
+   * This continues until previous sibling doesn't have children, then returning the currentElement <p>
+   *
+   * Base case of previous sibling never having children will return the element pased in
+   *
+   * @param {HTMLElement} currElem - current element in the recursion, will check to make sure prevChildren don't exist before turning self in
+  */
+  getLastChild (currElem) {
+    const prevChildren = currElem.shadowRoot.querySelectorAll('bullet-entry');
+    if (prevChildren.length) {
+      return this.getLastChild(prevChildren[prevChildren.length - 1]);
+    } else {
+      return currElem.shadowRoot.querySelector('.bullet-text');
+    }
+  }
+
+  /**
    * This function creates a new bullet. It first generates a bullet ID by combining the date of
    * the daily log to which the bullet will belong, the ID of the section to which the bullet
    * is being added, and the ID of the new bullet, which is determined based on the number of
@@ -597,9 +745,11 @@ class DailyLog extends HTMLElement {
    * to allow for future deletion of the bullet element.
    *
    * @param {HTMLElement} sectionElement - The section element in which the new note button
+   * @param {Number} index - optional (on Enter) target index in bulletIDs to place the generated newNote (data)
+   * @param {HTMLElement} siblingElem - optional (on Enter) sibling bullet to place the generated newNote after (display)
    * was clicked to trigger the listener
    */
-  newNoteHandler (sectionElement) {
+  newNoteHandler (sectionElement, index, siblingElem) {
     // generate a bullet ID
     const sectionID = sectionElement.id;
     const dailyID = this.shadowRoot.querySelector('div.daily').id;
@@ -609,7 +759,12 @@ class DailyLog extends HTMLElement {
     const data = this.data;
     for (const sec of data.sections) {
       if (sec.id === sectionID) {
-        sec.bulletIDs.push(bulletID);
+        // Figure out where to place the new bullet in data (using passed in index if triggered by pressing Enter)
+        if (!index) {
+          sec.bulletIDs.push(bulletID);
+        } else {
+          sec.bulletIDs.splice(index, 0, bulletID);
+        }
       }
     }
     this.setAttribute('data', JSON.stringify(data));
@@ -624,18 +779,21 @@ class DailyLog extends HTMLElement {
     // add event listeners to the bullet element to handle deletion
     const dailyLog = this;
     bullet.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', function (event) {
-      // condition check to determine if backspace was pressed on an empty note
-      if (event.keyCode === 8 && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
-        dailyLog.deleteNoteHandler(bullet);
-      }
+      dailyLog.keyCodeListener(event, bullet, bulletID, sectionElement, sectionID);
     });
+
     bullet.shadowRoot.querySelector('.bullet-remove').addEventListener('click', function (event) {
       dailyLog.deleteNoteHandler(bullet);
     });
 
-    // insert the new bullet element child before the new note button
-    const newNote = sectionElement.querySelector('button.new-bullet');
-    sectionElement.insertBefore(bullet, newNote);
+    if (!siblingElem) {
+      // insert the new bullet element child before the new note button
+      const newNote = sectionElement.querySelector('button.new-bullet');
+      sectionElement.insertBefore(bullet, newNote);
+    } else {
+      // insert after passed in bulletElement (using passed in siblingElem if triggered by pressing Enter)
+      siblingElem.insertAdjacentElement('afterend', bullet);
+    }
 
     // prompt user to start typing note
     bullet.shadowRoot.querySelector('.bullet-text').focus();

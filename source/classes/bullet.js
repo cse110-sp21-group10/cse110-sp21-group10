@@ -136,6 +136,35 @@ class BulletEntry extends HTMLElement {
           border: none;
           background-color: transparent;
         }
+
+        .tooltip {
+          display: inline;
+          position: relative;
+        }
+
+        .tooltip:hover::after {
+          background: #333;
+          background: rgba(0, 0, 0, 0.8);
+          border-radius: 5px;
+          bottom: 26px;
+          color: #fff;
+          content: attr(tooltip);
+          left: -85%;
+          padding: 5px 15px;
+          position: absolute;
+          z-index: 98;
+        }
+
+        .tooltip:hover::before {
+          border: solid;
+          border-color: #333 transparent;
+          border-width: 6px 6px 0 6px;
+          bottom: 20px;
+          content: "";
+          left: 20%;
+          position: absolute;
+          z-index: 99;
+        }
         
         [contenteditable] {
           outline: 0px solid transparent;
@@ -205,7 +234,7 @@ class BulletEntry extends HTMLElement {
    * Adds a listener to the bullet icon to allow user to open bullet type menu on right click and
    * choose a new type of bullet from that menu
    *
-   * @param {Array.<{id: string, jsonData: Object, incrementBullet: callback}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [callback] used to generateID and increment bullet counter when creating children
+   * @param {Array.<{id: string, jsonData: Object, incrementBullet: newBulletID}>} data - [ID, data] pair used to create, load, and store bullet data to and from DB. [newBulletID] callback used to generateID and increment bullet counter when creating children
    */
   set data ([id, jsonData, newBulletID]) {
     console.log('Setter called');
@@ -233,7 +262,7 @@ class BulletEntry extends HTMLElement {
      * handles deletion via backspace on empty
      * append to children div
      */
-    this.setChildren();
+    this.setChildren(newBulletID);
 
     // Iterates through labelIDs and sets display with each label
     this.setLabels();
@@ -370,7 +399,7 @@ class BulletEntry extends HTMLElement {
 
       const data = this.data;
       data.childrenIDs.push(childID);
-      this.setAttribute('data', JSON.stringify(jsonData));
+      this.setAttribute('data', JSON.stringify(data));
       this.storeToDatabase(id, data, true);
 
       this.createChild(childID, {}, newBulletID);
@@ -474,12 +503,13 @@ class BulletEntry extends HTMLElement {
    *
    * 2. Fetches data and calls on helper function for child creation
    *
+   * @param {function} newBulletID - callback used to generate IDs for potential children
    */
-  setChildren () {
+  setChildren (newBulletID) {
     for (const childID of this.data.childrenIDs) {
       Database.fetch(childID, (data) => {
         if (data) {
-          this.createChild(childID, data);
+          this.createChild(childID, data, newBulletID);
         } else {
           console.log(`Something went wrong when fetching data for child: ${childID}`);
         }
@@ -500,22 +530,199 @@ class BulletEntry extends HTMLElement {
    *
    * @param {string} childID - ID used to retrieve (existing) / store (new) child bullet element
    * @param {jsonObject} childData - used to store child bullet's data (empty for new)
-   * @param {function} callback - used to generate IDs for potential children
+   * @param {function} newBulletID - callback used to generate IDs for potential children
+   * @param {HTMLElement} siblingElem - optional (on Enter) sibling bullet element to place the child bullet after
    */
-  createChild (childID, childData = {}, callback) {
+  createChild (childID, childData = {}, newBulletID, siblingElem) {
     const child = document.createElement('bullet-entry');
-    child.data = [childID, childData, callback];
+    child.data = [childID, childData, newBulletID];
+    child.parent = this;
 
-    this.shadowRoot.querySelector('.bullet').appendChild(child);
+    if (!siblingElem) {
+      this.shadowRoot.querySelector('.bullet').appendChild(child);
+    } else {
+      siblingElem.insertAdjacentElement('afterend', child);
+    }
 
-    /**
-     * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
-     * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
-     *
-     */
+    // Handle keyboard input for specific keycodes (Enter, Up, Down, Tab, Backspace)
     child.shadowRoot.querySelector('.bullet-text').addEventListener('keydown', (event) => {
+      /**
+       * Workaround helper function to set cursor to end of line <p>
+       *
+       * Select's everything in the currently focused input, then collapses that selection to the end
+       */
+      function gotoEOL () {
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+      }
+
+      /**
+       * Recursive function to determine the previous bullet to focus on when moving up (and also after deletion) <p>
+       *
+       * If previous sibling has children, will recursively call function on the last child
+       * of previous sibling's children <p>
+       *
+       * This continues until previous sibling doesn't have children, then returning the currentElement <p>
+       *
+       * Base case of previous sibling never having children will return the element pased in
+       *
+       * @param {HTMLElement} currElem - current element in the recursion, will check to make sure prevChildren don't exist before turning self in
+      */
+      function getLastChild (currElem) {
+        const prevChildren = currElem.shadowRoot.querySelectorAll('bullet-entry');
+        if (prevChildren.length) {
+          return getLastChild(prevChildren[prevChildren.length - 1]);
+        } else {
+          return currElem.shadowRoot.querySelector('.bullet-text');
+        }
+      }
+
+      /**
+       * Handles removal of a child bullet from display, database, and childIDs list under the right conditions
+       * @param {BulletEntry~removeChildCallback} callback - Decides whether to remove and does so where needed
+       *
+       */
       if (event.key === 'Backspace' && (event.target.innerText.length === 0 || event.target.innerText === '\n')) {
+        const prevSibling = child.previousSibling;
+        // Check if there is some bullet to fall back to
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Blur current, then focus fallback bullet (given by a helper), use a workaround to move cursor to end of line
+          event.target.blur();
+
+          // Start at prev's LAST child if prev has children
+          getLastChild(prevSibling).focus();
+          gotoEOL();
+
+          // prevent default to avoid deleting the first character of fallback bullet
+          event.preventDefault();
+        } else {
+          // Go to parent if bullet is the first child
+          event.preventDefault();
+          const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
+          if (siblings[0] === child) {
+            event.target.blur();
+            this.shadowRoot.querySelector('.bullet-text').focus();
+            gotoEOL();
+          }
+        }
         this.removeChild(child, childID);
+      }
+
+      /** Enter button will "create a new bullet below"
+       * will replace default action
+       * iterate to find index
+       * insertion will occur at index + 1 (data)
+       * insertion will occur after current bullet element (display)
+      */
+      if (event.keyCode === 13) {
+        event.preventDefault();
+
+        let index = -1;
+        this.querySelectorAll('bullet-entry').forEach((elem, ind) => {
+          if (elem.id === childID) {
+            index = ind;
+          }
+        });
+        const newID = newBulletID();
+
+        const data = this.data;
+        data.childrenIDs.splice(index + 1, 0, newID);
+        this.setAttribute('data', JSON.stringify(data));
+        this.storeToDatabase(this.id, data, true);
+
+        this.createChild(newID, {}, newBulletID, child);
+      }
+
+      /** Tab button will "Turn current bullet into last child of previous sibling"
+       * - replace default action
+       * - use elements to modify data + display
+       */
+      if (event.keyCode === 9) {
+        event.preventDefault();
+        const prevSibling = child.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Remove child from parent's childrenIDs (local and database) and from display
+          const data = this.data;
+          data.childrenIDs = data.childrenIDs.filter((bulletID) => bulletID !== childID);
+          this.setAttribute('data', JSON.stringify(data));
+          this.storeToDatabase(childID, child.data);
+          this.removeChild(child, childID);
+
+          // Update previous siblings data to include this child becoming a new child (local and database)
+          const prevData = prevSibling.data;
+          prevData.childrenIDs.push(childID);
+          prevSibling.setAttribute('data', JSON.stringify(prevData));
+          prevSibling.storeToDatabase(prevSibling.id, prevData, false);
+
+          // Call on create child to display
+          prevSibling.createChild(childID, child.data, newBulletID);
+        }
+      }
+
+      /** Up/Down button will blur current and focus target sibling
+       * Checks for prev/next sibling that are bullets
+       * - blurs current and focuses on sibling
+       * - selects all and collapses selection to end (workarount to get cursor to end of input)
+       */
+      if (event.keyCode === 38) { // UP
+        const prevSibling = child.previousSibling;
+        if (prevSibling && prevSibling.nodeName === 'BULLET-ENTRY') {
+          // Prevent the default of moving back to beginning of line
+          event.preventDefault();
+          event.target.blur();
+
+          // Start at prev's LAST child if prev has children
+          getLastChild(prevSibling).focus();
+
+          // Focus at end
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        } else {
+          // Go to parent if bullet is the first child
+          const siblings = this.shadowRoot.querySelectorAll('bullet-entry');
+          if (siblings[0] === child) {
+            // Prevent the default of moving back to beginning of line
+            event.preventDefault();
+            event.target.blur();
+            this.shadowRoot.querySelector('.bullet-text').focus();
+            document.execCommand('selectAll', false, null);
+            document.getSelection().collapseToEnd();
+          }
+        }
+      }
+      if (event.keyCode === 40) { // DOWN
+        // helper function to determine what the next element should be
+        function getNextElement (currElem, skipChild) {
+          const children = currElem.shadowRoot.querySelectorAll('bullet-entry');
+          const nextSibling = currElem.nextSibling;
+          let nextRelative;
+          if (currElem.parent) {
+            nextRelative = currElem.parent.nextSibling;
+          }
+          // Go to first child if bullet has children
+          if (!skipChild && children.length) {
+            return children[0].shadowRoot.querySelector('.bullet-text');
+          } else if (nextSibling && nextSibling.nodeName === 'BULLET-ENTRY') {
+          // Continue with siblings
+            return nextSibling.shadowRoot.querySelector('.bullet-text');
+          } else if (nextRelative && nextRelative.nodeName === 'BULLET-ENTRY') {
+          // Continue to next available relative (parent's nextSibling)
+            return nextRelative.shadowRoot.querySelector('.bullet-text');
+          } else if (currElem.parent) {
+          // Continue to parent (skipping children and only looking for sublings/nextRelatives)
+            return getNextElement(currElem.parent, true);
+          } else {
+          // Otherwise at the very end of the section and can't go anywhere
+            return null;
+          }
+        }
+        const nextElem = getNextElement(child);
+        if (nextElem) {
+          event.target.blur();
+          nextElem.focus();
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
+        }
       }
     });
 
@@ -568,10 +775,10 @@ class BulletEntry extends HTMLElement {
   createLabel (labelName) {
     // Create button and set attributes (for CSS and other logic) + apply a tooltip (on hoever, show labelName)
     const button = document.createElement('button');
-    button.className = 'label';
+    button.classList.add('label');
+    button.classList.add('tooltip');
     button.id = labelName;
-    $(button).tooltip();
-    button.title = labelName;
+    button.setAttribute('tooltip', labelName);
 
     // Create icon that will go inside the button (image of the lable), color based off labelName and labels (from script!)
     const icon = document.createElement('i');
