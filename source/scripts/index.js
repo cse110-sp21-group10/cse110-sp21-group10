@@ -76,21 +76,19 @@ for (let i = 0; i < fonts.length; i++) {
     if (idName === 'helvetica') {
       headerType = fontType = 'Helvetica, sans-serif';
     }
-
-    document.body.style.fontFamily = fontType;
+    
+    // necessary html header elements for changing the font
     const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
+    const monthlyHeader = document.querySelector('monthly-log').shadowRoot.querySelector('#monthly-header > h1');
+    const yearlyHeader = document.querySelector('yearly-log').shadowRoot.querySelector('#yearly-header > h1');
+    // console.log("first: " + document.body.style.fontFamily);
+    // document.body.style.fontFamily = '';
+    document.body.style.fontFamily = fontType;
+    // console.log(fontType);
+    // console.log("after: " + document.body.style.fontFamily);
     dailyHeader.style.fontFamily = headerType;
-
-    /** eventually won't need this loop because we'll
-     * need to access the monthly and yearly elements thru
-     * their shadow roots
-     */
-
-    const headers = document.querySelectorAll('h1');
-    for (let i = 0; i < headers.length; i++) {
-      headers[i].style.fontFamily = headerType;
-      console.log(headers[i].content);
-    }
+    monthlyHeader.style.fontFamily = headerType;
+    yearlyHeader.style.fontFamily = headerType;
   });
 }
 
@@ -99,14 +97,14 @@ for (let i = 0; i < fonts.length; i++) {
   * TODO: Only change the necessary icons:
   *       might need to add another class to the icons that will change
   */
-// const darkModeBtn = document.getElementById('dark-mode');
-// darkModeBtn.addEventListener('click', () => {
-//   console.log("theme changing? - isn't done yet");
-//   document.body.style.color = 'white';
-//   document.body.style.backgroundColor = 'black';
+const darkModeBtn = document.getElementById('dark-mode');
+darkModeBtn.addEventListener('click', () => {
+  document.getElementsByTagName( 'html' )[0].className = 'dark-mode-theme';
+// document.getElementById('index').className = 'dark-mode-theme';
 
-//   const icons = document.querySelectorAll('button');
-//   for (let i = 0; i < icons.length; i++) {
-//     icons[i].style.color = 'white';
-//   }
-// });
+});
+
+const defaultThemeBtn = document.getElementById('default-theme');
+defaultThemeBtn.addEventListener('click', () => {
+  document.getElementsByTagName( 'html' )[0].className = '';
+});

@@ -1,13 +1,8 @@
 /* General Body/Default View CSS Start */
 
-/*
-    Ivan: "CSS styled for my screen only so far haha."
-    Asya: "Need to make it not fixed sizes. :)"
-*/
-
-* {
+/* * {
   font-family: cursive;
-}
+} */
 
 h1 {
   font-size: 3.8vw;
@@ -29,6 +24,10 @@ h1 {
   max-height: 80vh;
   overflow: auto;
   font-size: larger;
+}
+
+.dark-mode-theme #internal-content {
+  border: 5px solid white;
 }
 
 /* To hide scrollbar */
@@ -194,9 +193,17 @@ section.header button {
   cursor: pointer;
 }
 
+.dark-mode-theme .global-icons button:hover {
+  background-color: #2C2C2C;
+}
+
 section.header button:hover {
   background-color: lightgray;
   cursor: pointer; /* Pointer/hand icon */
+}
+
+.dark-mode-theme section.header button:hover {
+  background-color: #2C2C2C;
 }
 
 /* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
@@ -260,6 +267,10 @@ section.header button:hover {
   border-radius: 20px;
 }
 
+.dark-mode-theme .bullet:hover {
+  background-color: #0E0E0E;
+}
+
 .bullet-delete {
   display: none;
   float: right;
@@ -284,11 +295,17 @@ section.header button:hover {
   border: 2px solid black;
   border-radius: 30px;
   min-height: 30%;
-
-  /* padding-top: 10px; */
   padding-left: 2%;
   padding-bottom: 1%;
   width: 97.5%;
+}
+
+.dark-mode-theme .log {
+  border: 2px solid white;
+}
+
+.dark-mode-theme div{
+  border-color: white;
 }
 
 .new-bullet {
@@ -322,6 +339,11 @@ section.header button:hover {
   transition: all 500ms linear;
 }
 
+.dark-mode-theme #index {
+  border-right: 5px solid white;
+  /* color: black; */
+}
+
 #index-content * {
   padding: 5px  10px;
 }
@@ -347,6 +369,11 @@ section.header button:hover {
   left: 0;
   opacity: 100%;
   background: white;
+}
+
+.dark-mode-theme #index.active{
+  background: black;
+  color: white;
 }
 
 #index #menu-button {
@@ -426,9 +453,19 @@ button[id$='setting']:active {
   outline: none;
 }
 
+.dark-mode-theme .collapsible {
+  color: white;
+}
+
 .active,
 .collapsible:hover {
   background-color: rgb(219, 219, 219);
+}
+
+
+.dark-mode-theme .active,
+.collapsible:hover {
+  background-color: #242424;
 }
 
 .collapsible::after {
@@ -439,6 +476,10 @@ button[id$='setting']:active {
   font-weight: bold;
   float: right;
   margin-left: 5px;
+}
+
+.dark-mode-theme .collapsible::after {
+  color: white;
 }
 
 .active::after {
@@ -457,6 +498,10 @@ button[id$='setting']:active {
   width: 95%;
 }
 
+.dark-mode-theme .content {
+  background-color: black;
+}
+
 .setting-option {
   font-size: 1.25vw;
   text-align: left;
@@ -472,6 +517,10 @@ button[id$='setting']:active {
 .content .setting-option:hover {
   background-color: rgba(236, 236, 236, 0.911);
   border-radius: 15px;
+}
+
+.dark-mode-theme .content .setting-option:hover {
+  background-color: #131313;
 }
 
 #verdana {
@@ -561,6 +610,10 @@ button[id$='setting']:active {
   right: 0.2vw;
 }
 
+.dark-mode-theme .temperature-value p {
+  color: white;
+}
+
 /* .temperature-value p:hover{
 
 } */
@@ -584,6 +637,10 @@ button[id$='setting']:active {
   text-align: center;
   font-size: 1.5vw;
   font-family: cursive;
+}
+
+.dark-mode-theme .temperature-description p {
+  color: white;
 }
 
 /* .location{
@@ -674,3 +731,25 @@ button[id$='setting']:active {
 }
 
 /* All styling necessary for the conext menu end */
+
+/* Dark mode stylin start */
+
+/* use a media query to see what the user already uses for their browser */
+
+/* @media (prefers-color-scheme: dark) {
+  body{
+    background-color: black;
+    color: blue;
+  }
+} */
+
+.dark-mode-theme body{
+  background: black;
+  color: white;
+}
+
+#bujo-settings {
+  align-self: center;
+}
+
+/* Dark mode styling end */

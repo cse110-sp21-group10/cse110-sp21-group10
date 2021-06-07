@@ -80,6 +80,10 @@ class BulletEntry extends HTMLElement {
           padding-left: .5vw;
           background-color: white;
         }
+
+        .dark-mode-theme .bullet {
+          background-color: black;
+        }
         
         .bullet:hover {
           filter: brightness(96%);
@@ -91,6 +95,13 @@ class BulletEntry extends HTMLElement {
         .bullet:hover .label-add,
         .bullet:hover .label {
           color: black;
+        }
+
+        .dark-mode-theme .bullet:hover .bullet-remove,
+        .bullet:hover .child-add,
+        .bullet:hover .label-add,
+        .bullet:hover .label {
+          color: white;
         }
         
         .child-add {
