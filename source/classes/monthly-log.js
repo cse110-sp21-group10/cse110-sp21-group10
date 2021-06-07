@@ -238,6 +238,43 @@ class MonthlyLog extends HTMLElement {
     // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
+    const dates = document.createElement('div');
+    dates.className = 'dates';
+
+    for (let i = 1; i <= 7; i++) {
+      const dateName = document.createElement('h3');
+      dateName.className = 'date-name';
+
+      switch(i) {
+        case 1:
+          dateName.innerHTML = 'Sun';
+          break;
+        case 2:
+          dateName.innerHTML = 'Mon';
+          break;
+        case 3:
+          dateName.innerHTML = 'Tue';
+          break;
+        case 4:
+          dateName.innerHTML = 'Wed';
+          break;
+        case 5:
+          dateName.innerHTML = 'Thu';
+          break;
+        case 6:
+          dateName.innerHTML = 'Fri';
+          break;
+        case 7:
+          dateName.innerHTML = 'Sat';
+          break;
+        default:
+          dateName.innerHTML = 'oops';
+      }
+
+      dates.appendChild(dateName);
+    }
+
+    calendar.appendChild(dates);
 
     // create the section for exercise checkboxes
     const exerciseTracker = document.createElement('div');

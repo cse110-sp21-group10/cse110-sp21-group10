@@ -12,8 +12,7 @@
 h1 {
   font-size: 3.8vw;
   position: relative;
-  margin-top: .5vh;
-  margin-bottom: .51vh;
+
   font-family: 'Kaushan Script', cursive;
 }
 
@@ -112,6 +111,10 @@ nav.navigation {
 This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
 
+#daily-header {
+  margin-bottom: 4vh;
+}
+
 div.daily {
   display: block;
   margin-left: 7.5%;
@@ -172,8 +175,11 @@ section.header {
 }
 
 section.header h1 {
-  position: inherit;
+  position: relative;
+  top: 1vh;
   margin-right: 4%;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 section.header button {
@@ -685,26 +691,69 @@ button[id$='setting']:active {
 
 #monthly-calendar {
   position: absolute;
-  height: 28vh;
-  width: 34.2vw;
-  border: 2px solid black;
 
-  border-radius: 20px;
+  left: 10.8vw;
+  top: 16vh;
+
+  height: 27vh;
+  width: 25vw;
+  border: none;
+  /* background-color: rgb(236, 236, 236); */
+  /* border: 2px solid black; */
+
+  /* border-radius: 20px; */
 }
 
 #monthly-calendar button {
-  width: 3vw;
-  height: 5vh;
+  width: 2vw;
+  height: 4vh;
+
+  padding: 0;
+
   margin-right: .65vw;
   margin-left: .65vw;
   margin-bottom: .2vh;
   margin-top: .2vh;
 
+  font-size: 1.4vw;
+
+  text-align: center;
+
   position: relative;
-  left: 1.8vw;
+  left: 1vw;
+  top: .5vh;
  
   border-radius: 10px;
-  align-self: center;
+  background-color: transparent;
+  border: none;
+}
+
+#monthly-calendar button:hover {
+  background-color: rgb(236, 236, 236);
+}
+
+.dates {
+  display: flex;
+  flex-direction: row;
+  height: 4vh;
+
+  background-color: rgb(236, 236, 236);
+  border-radius: 20px;
+}
+
+h3.date-name {
+  font-size: 1.3vw;
+
+  text-align: center;
+  width: 3vw;
+
+  margin-top: .5vh;
+  margin-bottom: 0;
+  margin-left: .15vw;
+  margin-right: .15vw;
+
+  position: relative;
+  left: 1vw;
 }
 
 #monthly-charts {
@@ -714,9 +763,9 @@ button[id$='setting']:active {
   max-height: 45vh;
   width: 40vw;
 
-  position: relative;
-  left: 41vw;
-  top: 5vh;
+  position: absolute;
+  left: 47vw;
+  bottom: 5vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -732,9 +781,8 @@ div.notes {
   height: 28vh;
   width: 35vw;
 
-  position: relative;
-  left: 0vw;
-  bottom: 32vh;
+  position: absolute;
+  bottom: 5vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -749,11 +797,11 @@ div.notes::-webkit-scrollbar {
   
   min-height: 10vh;
   max-height: 10vh;
-  width: 36vw;
+  width: 32vw;
 
-  position: relative;
-  left: 39vw;
-  top: 5vh;
+  position: absolute;
+  left: 47vw;
+  top: 19vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -771,13 +819,13 @@ section#monthly-checks::-webkit-scrollbar {
 }
 
 .tracking-boxes {
-  margin-left: .5vw;
+  margin-left: .4vw;
 }
 
 .tracker-header {
-  position: relative;
-  left: 53vw;
-  bottom: 58vh;
+  position: absolute;
+  left: 59vw;
+  bottom: 60vh;
 }
 
 /* All styling necessary for the conext menu end */
