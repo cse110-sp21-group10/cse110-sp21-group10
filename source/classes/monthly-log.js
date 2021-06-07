@@ -141,6 +141,11 @@ class MonthlyLog extends HTMLElement {
     const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
 
+    const trackerHeader = document.createElement('h2');
+    trackerHeader.className = 'tracker-header';
+    trackerHeader.innerHTML = 'Trackers';
+    root.appendChild(trackerHeader);
+
     // IDs to use for the charts
     const canvasIDs = ['mood-tracker', 'sleepq-tracker', 'calorie-tracker', 'money-tracker'];
     const charts = []; // array of all the charts

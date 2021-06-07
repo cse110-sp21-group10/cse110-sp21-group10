@@ -12,8 +12,8 @@
 h1 {
   font-size: 3.8vw;
   position: relative;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
+  margin-top: .5vh;
+  margin-bottom: .51vh;
   font-family: 'Kaushan Script', cursive;
 }
 
@@ -138,10 +138,10 @@ div.monthly {
 
 /* This sets the size of the canvas elements that hold the tracker charts in the monthly log */
 div.monthly .chart {
-  min-height: 38vh;
-  max-height: 38vh;
-  min-width: 36vw;
-  max-width: 36vw;
+  min-height: 32vh;
+  max-height: 32vh;
+  min-width: 30vw;
+  max-width: 30vw;
 }
 
 fieldset {
@@ -302,7 +302,7 @@ section.header button:hover {
 .new-bullet {
   size: 10px;
   position: relative;
-  left: 2.4vw;
+  left: 2.45vw;
   border-radius: 25%;
   background: none;
   border: none;
@@ -715,8 +715,8 @@ button[id$='setting']:active {
   width: 40vw;
 
   position: relative;
-  left: 38vw;
-  top: 3vh;
+  left: 41vw;
+  top: 5vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -734,7 +734,7 @@ div.notes {
 
   position: relative;
   left: 0vw;
-  bottom: 25vh;
+  bottom: 32vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -753,7 +753,7 @@ div.notes::-webkit-scrollbar {
 
   position: relative;
   left: 39vw;
-  top: 0vh;
+  top: 5vh;
 
   overflow: auto;
   /* border: 2px solid black; */
@@ -764,14 +764,20 @@ section#monthly-checks::-webkit-scrollbar {
 }
 
 .check {
-  margin: 0;
   margin-top: .8vh;
   margin-left: .05vw;
   margin-right: .05vw;
+  margin-bottom: .2vh;
 }
 
 .tracking-boxes {
   margin-left: .5vw;
+}
+
+.tracker-header {
+  position: relative;
+  left: 53vw;
+  bottom: 58vh;
 }
 
 /* All styling necessary for the conext menu end */
