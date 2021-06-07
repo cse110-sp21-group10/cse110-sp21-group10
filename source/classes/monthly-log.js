@@ -60,6 +60,7 @@ class MonthlyLog extends HTMLElement {
           <h1></h1>
         </section>
         <section id="monthly-calendar"></section>
+        <section id="monthly-checks"></section>
         <section id="monthly-charts"></section>
       </div>
     `;
@@ -235,6 +236,7 @@ class MonthlyLog extends HTMLElement {
 
     // create the section for exercise checkboxes
     const exerciseTracker = document.createElement('div');
+    root.querySelector('#monthly-checks').appendChild(exerciseTracker);
     exerciseTracker.style.display = 'flex';
     exerciseTracker.style.flexDirection = 'row';
     const exerciseTrackerHeading = document.createElement('div');
@@ -274,11 +276,11 @@ class MonthlyLog extends HTMLElement {
       exerciseTrackerBox.appendChild(checkbox);
       const datePar1 = document.createElement('p');
       datePar1.style.margin = '0';
-      datePar1.style.lineHeight = '0.75';
+      datePar1.style.lineHeight = '0.9';
       datePar1.innerText = String(i).charAt(0);
       const datePar2 = document.createElement('p');
       datePar2.style.margin = '0';
-      datePar2.style.lineHeight = '0.75';
+      datePar2.style.lineHeight = '0.9';
       if (String(i).length > 1) {
         datePar2.innerText = String(i).charAt(1);
       }
@@ -327,7 +329,6 @@ class MonthlyLog extends HTMLElement {
           for (const chart of charts) {
             chart.update();
           }
-          root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
       }, i);
     }
