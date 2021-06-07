@@ -671,6 +671,85 @@ button[id$='setting']:active {
 
 /* All styling necessary for the conext menu end */
 
+/* More styling for daily-log start */
+
+section.trackers::-webkit-scrollbar {
+  display: none;
+}
+
+div.daily section.trackers {
+  border: 2px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 30px;
+  width: 97.5%;
+  height: 23vh;
+  overflow: auto;
+  padding-left: 1.5vw;
+  padding-bottom: 1vw;
+  margin-bottom: 1vw;
+}
+
+div.daily h2 {
+  font-size: 3vw;
+}
+
+div.daily section.trackers h2 {
+  grid-area: header;
+}
+
+div.tracker {
+  width: 100%;
+  display: grid;
+  grid-template-areas: "name input";
+  align-content: center;
+}
+
+.numInput {
+  height: 2.5vh;
+  width: 14.5vw;
+  align-self: center;
+  justify-self: end;
+  margin-right: 3.2vw;
+}
+
+#Exercise {
+  align-self: center;
+  justify-self: end;
+  margin-right: 3.2vw;
+}
+
+div.tracker h3 {
+  font-size: 1.5vw;
+  display: inline-block;
+  width: 15vw;
+}
+
+.slider-div {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  font-size: 2vw;
+  justify-self: end;
+  padding-right: 3vw;
+}
+
+.slider {
+  width: 12.5vw;
+}
+
+div.daily section[id$="00"] {
+  display: inline-block;
+  max-height: 25vh;
+  overflow: auto;
+}
+
+div.daily section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* More styling for daily-log end */
+
 /* Styling for Yearly-Element start */
 
 /* Sets up the grid areas for the entire yearly div */
