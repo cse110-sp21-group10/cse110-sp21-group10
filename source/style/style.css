@@ -200,6 +200,8 @@ section h2 {
   font-size: 2vw;
   margin-top: 2vh;
   margin-bottom: 2vh;
+  margin-left: auto;
+  margin-left: auto;
 }
 
 /* Add a background color on hover */
@@ -698,10 +700,6 @@ button[id$='setting']:active {
   height: 27vh;
   width: 25vw;
   border: none;
-  /* background-color: rgb(236, 236, 236); */
-  /* border: 2px solid black; */
-
-  /* border-radius: 20px; */
 }
 
 #monthly-calendar button {
@@ -712,8 +710,8 @@ button[id$='setting']:active {
 
   margin-right: .65vw;
   margin-left: .65vw;
-  margin-bottom: .2vh;
-  margin-top: .2vh;
+  margin-bottom: 0vh;
+  margin-top: 0vh;
 
   font-size: 1.4vw;
 
@@ -721,7 +719,7 @@ button[id$='setting']:active {
 
   position: relative;
   left: 1vw;
-  top: .5vh;
+  top: 0vh;
  
   border-radius: 10px;
   background-color: transparent;
@@ -739,6 +737,10 @@ button[id$='setting']:active {
 
   background-color: rgb(236, 236, 236);
   border-radius: 20px;
+}
+
+#monthly-calendar .blank-button:hover {
+  background-color: transparent;
 }
 
 h3.date-name {

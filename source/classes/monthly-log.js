@@ -290,13 +290,22 @@ class MonthlyLog extends HTMLElement {
     exerciseTrackerBoxes.style.flexDirection = 'row';
     exerciseTracker.appendChild(exerciseTrackerBoxes);
 
+    dateObj.setDate(1);
+    for (let i = 0; i < dateObj.getDay(); i++) {
+      // add fake buttons
+      const blankButton = document.createElement('button');
+      blankButton.className = 'blank-button';
+      calendar.appendChild(blankButton);
+    }
+
     for (let i = 1; i <= numDays; i++) {
       // date button creation
       const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
       const dateButton = document.createElement('button');
-      dateButton.className = 'monthly-calendar-button';
+      dateButton.className = 'monthly-calendar-button' + i;
       dateButton.id = dateID;
       dateButton.innerText = String(i);
+      dateButton.style.color = 'black';
       dateButton.addEventListener('click', function (event) {
         callback(event);
       });
@@ -376,6 +385,25 @@ class MonthlyLog extends HTMLElement {
         }
       }, i);
     }
+    
+    var today = new Date();
+    var dd = String(today.getDate());
+    this.shadowRoot.querySelector('.monthly-calendar-button' + dd).style.color = 'red';
+
+    // runs check every minute on current day to make it red in the calendar
+    setInterval(function() {
+      today = new Date();
+      dd = String(today.getDate());
+      var newdd = dd - 1;
+
+      if (dd != 1) {
+        this.shadowRoot.querySelector('.monthly-calendar-button' + newdd).style.color = 'black';
+      }
+      this.shadowRoot.querySelector('.monthly-calendar-button' + dd).style.color = 'red';
+      
+    }, 60000);
+
+
 
     const divElement = document.createElement('div');
     divElement.className = "notes";
