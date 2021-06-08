@@ -12,7 +12,6 @@
 h1 {
   font-size: 3.8vw;
   position: relative;
-
   font-family: 'Kaushan Script', cursive;
 }
 
@@ -135,7 +134,6 @@ div.monthly {
   margin-left: 7.5%;
   margin-top: 2%;
   margin-right: 7.5%;
-
   max-height: 70vh;
 }
 
@@ -200,8 +198,6 @@ section h2 {
   font-size: 2vw;
   margin-top: 2vh;
   margin-bottom: 2vh;
-  margin-left: auto;
-  margin-left: auto;
 }
 
 /* Add a background color on hover */
@@ -693,10 +689,8 @@ button[id$='setting']:active {
 
 #monthly-calendar {
   position: absolute;
-
   left: 10.8vw;
   top: 16vh;
-
   height: 27vh;
   width: 25vw;
   border: none;
@@ -705,22 +699,16 @@ button[id$='setting']:active {
 #monthly-calendar button {
   width: 2vw;
   height: 4vh;
-
   padding: 0;
-
-  margin-right: .65vw;
-  margin-left: .65vw;
-  margin-bottom: 0vh;
-  margin-top: 0vh;
-
+  margin-right: 0.65vw;
+  margin-left: 0.65vw;
+  margin-bottom: 0;
+  margin-top: 0;
   font-size: 1.4vw;
-
   text-align: center;
-
   position: relative;
   left: 1vw;
-  top: 0vh;
- 
+  top: 0;
   border-radius: 10px;
   background-color: transparent;
   border: none;
@@ -734,7 +722,6 @@ button[id$='setting']:active {
   display: flex;
   flex-direction: row;
   height: 4vh;
-
   background-color: rgb(236, 236, 236);
   border-radius: 20px;
 }
@@ -745,31 +732,26 @@ button[id$='setting']:active {
 
 h3.date-name {
   font-size: 1.3vw;
-
   text-align: center;
   width: 3vw;
-
-  margin-top: .5vh;
+  margin-top: 0.5vh;
   margin-bottom: 0;
-  margin-left: .15vw;
-  margin-right: .15vw;
-
+  margin-left: 0.15vw;
+  margin-right: 0.15vw;
   position: relative;
   left: 1vw;
 }
 
 #monthly-charts {
   box-sizing: border-box;
-  
   min-height: 45vh;
   max-height: 45vh;
   width: 40vw;
-
   position: absolute;
   left: 47vw;
   bottom: 5vh;
-
   overflow: auto;
+
   /* border: 2px solid black; */
 }
 
@@ -779,14 +761,12 @@ h3.date-name {
 
 div.notes {
   box-sizing: border-box;
-
   height: 28vh;
   width: 35vw;
-
   position: absolute;
   bottom: 5vh;
-
   overflow: auto;
+
   /* border: 2px solid black; */
 }
 
@@ -796,16 +776,14 @@ div.notes::-webkit-scrollbar {
 
 #monthly-checks {
   box-sizing: border-box;
-  
   min-height: 10vh;
   max-height: 10vh;
   width: 32vw;
-
   position: absolute;
   left: 47vw;
   top: 19vh;
-
   overflow: auto;
+
   /* border: 2px solid black; */
 }
 
@@ -814,14 +792,14 @@ section#monthly-checks::-webkit-scrollbar {
 }
 
 .check {
-  margin-top: .8vh;
-  margin-left: .05vw;
-  margin-right: .05vw;
-  margin-bottom: .2vh;
+  margin-top: 0.8vh;
+  margin-left: 0.05vw;
+  margin-right: 0.05vw;
+  margin-bottom: 0.2vh;
 }
 
 .tracking-boxes {
-  margin-left: .4vw;
+  margin-left: 0.4vw;
 }
 
 .tracker-header {
