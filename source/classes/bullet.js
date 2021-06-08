@@ -51,6 +51,7 @@ class BulletEntry extends HTMLElement {
           background: none;
           float: left;
           padding-top: .8vh;
+          color: var(--bullet-point-color, black);
         }
 
         div < div.bullet-remove {
@@ -78,32 +79,29 @@ class BulletEntry extends HTMLElement {
         .bullet {
           margin-left: 1vw;
           padding-left: .5vw;
-          background-color: white;
-        }
-
-        .dark-mode-theme .bullet {
-          background-color: black;
+          // background: var(--bullet-bg, #fff);
         }
         
         .bullet:hover {
+          background: var(--bullet-hover-bg, #fff);
           filter: brightness(96%);
           border-radius: 20px;
         }
         
         .bullet:hover .bullet-remove,
-        .bullet:hover .child-add,
-        .bullet:hover .label-add,
-        .bullet:hover .label {
-          color: black;
-        }
-
-        .dark-mode-theme .bullet:hover .bullet-remove,
-        .bullet:hover .child-add,
-        .bullet:hover .label-add,
-        .bullet:hover .label {
-          color: white;
+        .bullet:hover .child-add {
+          color: var(--bullet-point-color, black);
         }
         
+        .bullet:hover .fa-stack-2x,
+        .bullet:hover .label {
+          color: var(--label-add-bookmark, black);
+        }
+
+        .bullet:hover .fa-stack-1x {
+          color: var(--plus-label, white);
+        }
+
         .child-add {
           float: left;
           max-width: 1vw;
@@ -133,7 +131,10 @@ class BulletEntry extends HTMLElement {
           padding-top: .5vh;
         }
 
-        .fa-stack { font-size: 0.5em; }
+        .fa-stack { 
+          font-size: 0.5em;
+        }
+
         i { vertical-align: middle; }
 
         .label,
@@ -196,7 +197,7 @@ class BulletEntry extends HTMLElement {
         <button class="label-add">
           <span class="fa-stack fa-2x" style="font-size:0.7em;">
             <i class="fas fa-bookmark fa-stack-2x"></i>
-            <i class="fas fa-plus fa-stack-1x fa-inverse" style="position: relative; top: -10%;"></i>
+            <i class="fas fa-plus fa-stack-1x" style="position: relative; top: -10%;"></i>
         </span>
         </button>
         

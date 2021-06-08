@@ -53,7 +53,6 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    // console.log(i + ": " + fonts[i].id);
     let fontType, headerType;
 
     if (idName === 'verdana') {
@@ -77,34 +76,20 @@ for (let i = 0; i < fonts.length; i++) {
       headerType = fontType = 'Helvetica, sans-serif';
     }
     
-    // necessary html header elements for changing the font
-    const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-    const monthlyHeader = document.querySelector('monthly-log').shadowRoot.querySelector('#monthly-header > h1');
-    const yearlyHeader = document.querySelector('yearly-log').shadowRoot.querySelector('#yearly-header > h1');
-    // console.log("first: " + document.body.style.fontFamily);
-    // document.body.style.fontFamily = '';
+
     document.body.style.fontFamily = fontType;
-    // console.log(fontType);
-    // console.log("after: " + document.body.style.fontFamily);
-    dailyHeader.style.fontFamily = headerType;
-    monthlyHeader.style.fontFamily = headerType;
-    yearlyHeader.style.fontFamily = headerType;
   });
 }
 
-/** Changing the display to be in dark mode
-  * TODO: Figure out why the header color will change, but not the contents of bullets
-  * TODO: Only change the necessary icons:
-  *       might need to add another class to the icons that will change
+/** Changing the display to be in high contrast mode
   */
-const darkModeBtn = document.getElementById('dark-mode');
-darkModeBtn.addEventListener('click', () => {
-  document.getElementsByTagName( 'html' )[0].className = 'dark-mode-theme';
-// document.getElementById('index').className = 'dark-mode-theme';
-
+const highContrastBtn = document.getElementById('high-contrast');
+highContrastBtn.addEventListener('click', () => {
+  document.getElementsByTagName('html')[0].className = 'high-contrast-mode';
+  // dailyEl.shadowRoot.querySelector('weather-icon').querySelector('img').setAttribute('style', 'color: white');
 });
 
 const defaultThemeBtn = document.getElementById('default-theme');
 defaultThemeBtn.addEventListener('click', () => {
-  document.getElementsByTagName( 'html' )[0].className = '';
+  document.getElementsByTagName('html')[0].className = '';
 });

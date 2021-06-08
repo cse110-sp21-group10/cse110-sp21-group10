@@ -1,20 +1,22 @@
 /* General Body/Default View CSS Start */
 
-* {
+/* * {
   font-family: cursive;
-} 
+}  */
 
 h1 {
   font-size: 3.8vw;
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
-  font-family: 'Kaushan Script', cursive;
+  /* font-family: 'Kaushan Script', cursive; */
 }
 
 #internal-content {
   box-sizing: border-box;
-  border: 5px solid black;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--color, black);
   border-radius: 75px;
   position: absolute;
   min-height: 80vh;
@@ -26,10 +28,6 @@ h1 {
   font-size: larger;
 }
 
-.dark-mode-theme #internal-content {
-  border: 5px solid white;
-}
-
 /* To hide scrollbar */
 #internal-content::-webkit-scrollbar {
   display: none;
@@ -37,11 +35,12 @@ h1 {
 
 /* Styling for exterior buttons (menu, zoom out, help)
    Gets rid of the border and background on them.
-   Adding gey out hover feature. */
+   Adding grey out hover feature. */
 
 .global-icons button {
   border: none;
   background: none;
+  color: var(--color, black);
 }
 
 #menu-button {
@@ -175,8 +174,6 @@ section.header h1 {
 
 section.header button {
   position: relative;
-
-  /* right: 0; */
   margin-right: 4%;
   border: none;
   background: none;
@@ -185,25 +182,18 @@ section.header button {
   margin-top: 1.8%;
   border-radius: 30px;
   font-size: 0.8vw;
+  color: var(--color, black);
 }
 
 /* Add a background color on hover */
 .global-icons button:hover {
-  background-color: lightgray;
+  background-color: var(--bg-button-color, lightgray);
   cursor: pointer;
 }
 
-.dark-mode-theme .global-icons button:hover {
-  background-color: #2C2C2C;
-}
-
 section.header button:hover {
-  background-color: lightgray;
+  background-color: var(--bg-button-color, lightgray);
   cursor: pointer; /* Pointer/hand icon */
-}
-
-.dark-mode-theme section.header button:hover {
-  background-color: #2C2C2C;
 }
 
 /* Styling for the font size of the icons. Can be overriden with a media query to change size of the icons */
@@ -226,86 +216,15 @@ section.header button:hover {
   }
 }
 
-.bullet-point {
-  font-size: 10px;
-  border: none;
-  background: none;
-  float: left;
-  padding-top: 0.9%;
-}
-
-.bullet-point:hover {
-  font-size: 12px;
-  position: relative;
-  padding-top: 0.8%;
-  right: 1px;
-  width: 22px;
-}
-
-.bullet-text {
-  display: inline-block;
-  width: 65vw;
-  font-size: larger;
-  margin: 0;
-
-  /* border: 5px solid black; */
-
-  padding-left: 1%;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-}
-
-.bullet {
-  margin-left: 1%;
-  margin-right: 12%;
-  padding-left: 0.5%;
-  padding-right: 1%;
-}
-
-.bullet:hover {
-  background-color: rgb(241, 241, 241);
-  border-radius: 20px;
-}
-
-.dark-mode-theme .bullet:hover {
-  background-color: #0E0E0E;
-}
-
-.bullet-delete {
-  display: none;
-  float: right;
-  padding-top: 0.9%;
-  border: none;
-  background-color: transparent;
-}
-
-.bullet-delete:hover {
-  font-size: 15px;
-  position: relative;
-  padding-top: 0.8%;
-  left: 0.75px;
-}
-
-.bullet:hover .bullet-delete {
-  display: inline-block;
-}
-
 .log {
   display: inline-block;
-  border: 2px solid black;
+  border: 2px solid;
+  border-color: var(--border-color, black);
   border-radius: 30px;
   min-height: 30%;
   padding-left: 2%;
   padding-bottom: 1%;
   width: 97.5%;
-}
-
-.dark-mode-theme .log {
-  border: 2px solid white;
-}
-
-.dark-mode-theme div{
-  border-color: white;
 }
 
 .new-bullet {
@@ -315,11 +234,13 @@ section.header button:hover {
   border-radius: 25%;
   background: none;
   border: none;
+  color: var(--color, black);
 }
 
 .new-bullet:hover {
-  background-color: rgb(241, 241, 241);
+  background-color: var(--new-bullet-bg, rgb(241, 241, 241));
   color: #3c3;
+  cursor: pointer;
 }
 
 [contenteditable] {
@@ -332,16 +253,13 @@ section.header button:hover {
   position: fixed;
   width: 40vw;
   height: 100%;
-  border-right: 5px solid black;
+  border-right-width: 5px;
+  border-right-style: solid;
+  border-right-color: var(--color, black);
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   left: -42vw;
   transition: all 500ms linear;
-}
-
-.dark-mode-theme #index {
-  border-right: 5px solid white;
-  /* color: black; */
 }
 
 #index-content * {
@@ -368,12 +286,8 @@ section.header button:hover {
 #index.active {
   left: 0;
   opacity: 100%;
-  background: white;
-}
-
-.dark-mode-theme #index.active{
-  background: black;
-  color: white;
+  background: var(--bg-color, white);
+  color: var(--color, black);
 }
 
 #index #menu-button {
@@ -385,6 +299,7 @@ section.header button:hover {
   left: 44vw;
   border: none;
   background: none;
+  color: var(--color, black);
 }
 
 #index.active #menu-button {
@@ -395,50 +310,21 @@ section.header button:hover {
   visibility: visible;
 }
 
+
 #index #menu-button:hover {
-  background-color: lightgray;
+  background-color: var(--bg-button-color, lightgray);
   cursor: pointer; /* Pointer/hand icon */
-}
-
-#search-bar {
-  /* position: relative;
-  top:5%;  */
-  display: inline-block;
-
-  /* font-size: 5vw; */
-  margin: 0;
-  width: 100%;
-}
-
-#search-input {
-  width: 75%;
-  padding: 5px;
-}
-
-#search-button {
-  position: relative;
-  top: 0.2vh;
-  background: none;
-  border: none;
-  font-size: 1.5vw;
-  padding: 0;
-}
-
-#search-button:hover {
-  background: none;
-  background-color: rgb(241, 241, 241);
-  cursor: pointer;
-  border-radius: 30px;
+  /* width: 22.5vw; */
 }
 
 div[id$='setting']:hover {
   cursor: pointer;
-  background-color: rgb(241, 241, 241);
+  background-color: var(--bg-button-color, rgb(241, 241, 241));
 }
 
 div[id$='setting']:active,
 button[id$='setting']:active {
-  background: rgb(219, 219, 219);
+  background: var(--active-color, rgb(219, 219, 219));
 }
 
 .collapsible {
@@ -447,39 +333,26 @@ button[id$='setting']:active {
   border-bottom-right-radius: 20px;
   color: black;
   cursor: pointer;
-  width: 96%;
+  width: 38vw;
   border: none;
   text-align: left;
   outline: none;
-}
-
-.dark-mode-theme .collapsible {
-  color: white;
+  color: (--color, black);
 }
 
 .active,
 .collapsible:hover {
-  background-color: rgb(219, 219, 219);
-}
-
-
-.dark-mode-theme .active,
-.collapsible:hover {
-  background-color: #242424;
+  background-color: var(--active-color, rgb(219, 219, 219));
 }
 
 .collapsible::after {
   position: relative;
   top: 0.4vh;
   content: '\002B';
-  color: black;
+  color: var(--color, black);
   font-weight: bold;
   float: right;
   margin-left: 5px;
-}
-
-.dark-mode-theme .collapsible::after {
-  color: white;
 }
 
 .active::after {
@@ -493,13 +366,13 @@ button[id$='setting']:active {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: white;
+  background-color: var(--bg-color, white);
   border-radius: 15px;
   width: 95%;
 }
 
-.dark-mode-theme .content {
-  background-color: black;
+.setting-item {
+  color: var(--color, black);
 }
 
 .setting-option {
@@ -508,19 +381,17 @@ button[id$='setting']:active {
   background: none;
   border: none;
   width: inherit;
+  color: var(--color, black);
 }
+
 
 .setting-option:hover {
   cursor: pointer;
 }
 
 .content .setting-option:hover {
-  background-color: rgba(236, 236, 236, 0.911);
+  background-color: var(--content-hover, rgba(236, 236, 236, 0.911));
   border-radius: 15px;
-}
-
-.dark-mode-theme .content .setting-option:hover {
-  background-color: #131313;
 }
 
 #verdana {
@@ -601,7 +472,7 @@ button[id$='setting']:active {
 .temperature-value p {
   padding: 0.5vw;
   margin: 0;
-  color: black;
+  color: var(--color, black);
   font-size: 2.5vw;
   font-family: cursive;
   cursor: pointer;
@@ -610,16 +481,12 @@ button[id$='setting']:active {
   right: 0.2vw;
 }
 
-.dark-mode-theme .temperature-value p {
-  color: white;
-}
-
 /* .temperature-value p:hover{
 
 } */
 
 .temperature-value span {
-  color: black;
+  color: var(--color, black);
   font-size: 1.5vw;
 }
 
@@ -633,14 +500,10 @@ button[id$='setting']:active {
 
 .temperature-description p {
   margin: 0;
-  color: black;
+  color: var(--color, black);
   text-align: center;
   font-size: 1.5vw;
   font-family: cursive;
-}
-
-.dark-mode-theme .temperature-description p {
-  color: white;
 }
 
 /* .location{
@@ -672,10 +535,10 @@ div.tracker div i {
   position: fixed;
   top: 1vh;
   left: 1.2vw;
-  background: #fdfdfd;
+  background: var(--context-menus, #fdfdfd);
   width: 7.5vw;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 5px 2px var(--shadow-context, rgba(0, 0, 0, 0.05));
   transform: scale(0);
   transform-origin: top left;
   z-index: 2;
@@ -698,7 +561,7 @@ div.tracker div i {
   padding: 0.25vw;
   padding-left: 0;
   font-size: 1vw;
-  color: #555;
+  color: var(--content-text-color, #555);
   cursor: pointer;
 }
 
@@ -723,7 +586,7 @@ div.tracker div i {
   left: 0;
   width: 0%;
   height: 100%;
-  background: #eee;
+  background: var(--context-bg, #eee);
   z-index: -1;
   transition: all 150ms ease-in-out;
 }
@@ -739,18 +602,36 @@ div.tracker div i {
 
 /* All styling necessary for the conext menu end */
 
-/* Dark mode stylin start */
+/* High Contrast mode stylin start #323333 #727475 */
 
-.dark-mode-theme body{
+.high-contrast-mode body{
   background: black;
   color: white;
+  --bg-color: black;
+  --color: white;
+  --bg: white;
+  --bullet-bg: #363636;
+  --bullet-hover-bg: #363636;
+  --bullet-point-color: white;
+  --border-color: white;
+  --label-add-bookmark: white;
+  --plus-label: black;
+  --bg-button-color: #2C2C2C;
+  --new-bullet-bg: #2C2C2C;
+  --context-menus: #242424;
+  --shadow-context: rgba(255, 255, 255, 0.05);
+  --context-bg: #2B2B2B;
+  --content-text-color: #AAA;
+  --active-color: #242424;
+  --content-hover: rgba(19, 19, 19, 0.911);
 }
+
+/* High Contrast styling end */
 
 #bujo-settings {
   align-self: center;
 }
 
-/* Dark mode styling end */
 /* More styling for daily-log start */
 
 section.trackers::-webkit-scrollbar {
@@ -758,7 +639,9 @@ section.trackers::-webkit-scrollbar {
 }
 
 div.daily section.trackers {
-  border: 2px solid black;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color, black);
   display: flex;
   flex-wrap: wrap;
   border-radius: 30px;
