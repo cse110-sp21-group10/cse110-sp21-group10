@@ -7,19 +7,6 @@ import { Database } from '../classes/database.js';
  */
 export function loadStyle (fontType) {
   document.body.style.fontFamily = fontType;
-
-  const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-  dailyHeader.style.fontFamily = fontType;
-
-  /** eventually won't need this loop because we'll
-       * need to access the monthly and yearly elements thru
-       * their shadow roots
-       */
-  const headers = document.querySelectorAll('h1');
-  for (let i = 0; i < headers.length; i++) {
-    headers[i].style.fontFamily = fontType;
-    console.log(headers[i].content);
-  }
 }
 
 /* Getter for the Hamburger menu button */
@@ -77,8 +64,7 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    // console.log(i + ": " + fonts[i].id);
-    let fontType, headerType;
+    let fontType;
 
     if (idName === 'verdana') {
       fontType = 'Verdana, sans-serif';
@@ -86,7 +72,6 @@ for (let i = 0; i < fonts.length; i++) {
 
     if (idName === 'default-font') {
       fontType = 'Times New Roman, serif';
-      headerType = 'Kaushan Script, cursive';
     }
 
     if (idName === 'garamond') {
@@ -94,32 +79,37 @@ for (let i = 0; i < fonts.length; i++) {
     }
 
     if (idName === 'courier-new') {
-      headerType = fontType = 'Courier New, serif';
+      fontType = 'Courier New, serif';
     }
 
     if (idName === 'helvetica') {
-      headerType = fontType = 'Helvetica, sans-serif';
+      fontType = 'Helvetica, sans-serif';
     }
 
     Database.store('S', { fontType: fontType });
     loadStyle(fontType);
-    console.log('Not actually using ' + headerType + ' for now :0');
   });
 }
 
-/** Changing the display to be in dark mode
-  * TODO: Figure out why the header color will change, but not the contents of bullets
-  * TODO: Only change the necessary icons:
-  *       might need to add another class to the icons that will change
-  */
-// const darkModeBtn = document.getElementById('dark-mode');
-// darkModeBtn.addEventListener('click', () => {
-//   console.log("theme changing? - isn't done yet");
-//   document.body.style.color = 'white';
-//   document.body.style.backgroundColor = 'black';
+// Getting all possible theme setting
+const themes = document.getElementsByClassName('theme-style');
 
-//   const icons = document.querySelectorAll('button');
-//   for (let i = 0; i < icons.length; i++) {
-//     icons[i].style.color = 'white';
-//   }
-// });
+/** This loop adds an event listener for changing the theme
+ * If statements are used to determine which theme to switch to
+ */
+for (let i = 0; i < themes.length; i++) {
+  themes[i].addEventListener('click', () => {
+    const themeId = themes[i].id;
+    let themeType;
+
+    if (themeId === 'high-contrast') {
+      themeType = 'high-contrast-mode';
+    }
+
+    if (themeId === 'default-theme') {
+      themeType = '';
+    }
+
+    document.getElementsByTagName('html')[0].className = themeType;
+  });
+}
