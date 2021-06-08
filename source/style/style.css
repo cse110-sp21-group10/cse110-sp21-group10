@@ -9,9 +9,6 @@ h1 {
   position: relative;
   margin-top: 1%;
   margin-bottom: 1%;
-
-  /* font-family: 'Kaushan Script', cursive; */
-
 }
 
 #internal-content {
@@ -315,7 +312,7 @@ section.header button:hover {
 
 #index #menu-button:hover {
   background-color: var(--bg-button-color, lightgray);
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 div[id$='setting']:hover {
