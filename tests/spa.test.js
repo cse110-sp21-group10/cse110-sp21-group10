@@ -149,43 +149,21 @@ describe('Basic user flow for SPA ', () => {
     const prevDayOfWeek = IDConverter.getDayFromDate(prevDate);
     const prevMonth = IDConverter.getMonthFromDate(prevDate);
     const prevSuffix = IDConverter.getSuffixOfDate(prevDate);
-    
     expect(header).toBe(prevDayOfWeek + ', ' + prevMonth + ' ' + prevDay + prevSuffix);
   });
-
-  /*
-  it('Test 17: First get back to current day. Then clicking on the weather icon should change the temperature type', async () => {
-    await page.$$eval('button', (buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id === 'next-day') {
-          buttons[i].click();
-        }
-      }
+  it('Test 17: First get back to current day. Clicking the menu button should open the menu', async () => {
+    await page.$eval('#next-day', (b1) => {
+      b1.click();
     });
-    const weather = await page.$eval('daily-log', (elem) => {
-      return elem.shadowRoot.querySelectorAll[4].querySelector('p');
+    await page.$eval('#menu-button', (b2) => {
+      b2.click();
     });
-    weather.click();
-    expect(weather.querySelector('span').textContent).toBe('C');
+    const indexClass = await page.$eval('main', (elem) => {
+      return elem.querySelector('#index').className;
+    });
+    expect(indexClass.includes('active')).toBe(true);
   });
-  it('Test 18: Clicking the menu button should open the menu', async () => {
-    await page.$$eval('button', (buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id === 'menu-button') {
-          buttons[i].click();
-        }
-      }
-    });
-    const index = await page.$$eval('div', (divs) => {
-      for (let i = 0; i < divs.length; i++) {
-        if (divs[i].id === 'index') {
-          return divs[i];
-        }
-      }
-    });
-    expect(index.className.includes('active')).toBe(true);
-  });
-  it('Test 19: Clicking a font should change the font on the page', async () => {
+  it('Test 18: Clicking a font should change the font on the page', async () => {
     await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'verdana') {
@@ -193,12 +171,12 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const body = await page.$eval('body', (elem) => {
-      return elem;
+    const bodyFontFamily = await page.$eval('body', (elem) => {
+      return elem.style.fontFamily;
     });
-    expect(body.style.fontFamily.includes('Verdana, sans-serif')).toBe(true);
+    expect(bodyFontFamily.includes('Verdana, sans-serif')).toBe(true);
   });
-  it('Test 20: Clicking the close menu button should close the menu', async () => {
+  it('Test 19: Clicking the close menu button should close the menu', async () => {
     await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'close-index') {
@@ -206,26 +184,39 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const index = await page.$$eval('div', (divs) => {
-      for (let i = 0; i < divs.length; i++) {
-        if (divs[i].id === 'index') {
-          return divs[i];
-        }
-      }
+    const indexClass = await page.$eval('main', (elem) => {
+      return elem.querySelector('#index').className;
     });
-    expect(index.className.includes('active')).toBe(false);
+    expect(indexClass.includes('active')).toBe(false);
   });
-
-  /**
-   * To test:
-   *    Clicking on the weather icon changes the temperature value
-   *    Clicking on menu icon sets the right class for the 'index' div
-   *    Changing the font sets the style of the body to the right font
-   *    Clicking the close menu buttons should remove the right class from the 'index' div
-   *    Clicking the return button creates a new journal entry
-   *    Clcking the delete button deletes a journal entry
-   *    Clicking the add section buttons adds a new section with id '02'
-   *    Clicking the new bullet button in the new section adds a new bullet to the section
-   *    Clicking the delete section button deletes the section with id '02'
-   */
+  it('Test 20: Clicking the return button on a bullet enrty creates a new nested journal entry', async() => {
+    const bulletListLength = await page.$eval('daily-log', (elem) => {
+      const nestedShadowRoot = elem.shadowRoot.querySelector('bullet-entry').shadowRoot;
+      nestedShadowRoot.querySelectorAll('button')[0].click();
+      return nestedShadowRoot.querySelectorAll('bullet-entry').length;
+    });
+    expect(bulletListLength).toBe(1);
+  });
+  it('Test 21: Clicking the delete button on a bullet enrty deletes the journal entry', async() => {
+    const isEmpty = await page.$eval('daily-log', (elem) => {
+      const entry = elem.shadowRoot.querySelector('bullet-entry');
+      entry.shadowRoot.querySelectorAll('button')[2].click();
+      return entry.length === undefined;
+    });
+    expect(isEmpty).toBe(true);
+  });
+  it('Test 22: Clicking the related-sections-button button should add another section to the page', async () => {
+    const sectionID = await page.$eval('daily-log', (elem) => {
+      elem.shadowRoot.querySelector('#related-sections-button').click();
+      return elem.shadowRoot.querySelectorAll('.log')[2].id;
+    });
+    expect(sectionID).toBe('02');
+  });
+  it('Test 23: Clicking the delete section button button should delete the section from the page', async () => {
+    const isEmpty = await page.$eval('daily-log', (elem) => {
+      elem.shadowRoot.querySelector('.delete-section').click();
+      return elem.shadowRoot.querySelectorAll('.log')[2] === undefined;
+    });
+    expect(isEmpty).toBe(true);
+  });
 });
