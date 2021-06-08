@@ -53,30 +53,28 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    let fontType, headerType;
+    let fontType;
 
     if (idName === 'verdana') {
-      headerType = fontType = 'Verdana, sans-serif';
+      fontType = 'Verdana, sans-serif';
     }
 
     if (idName === 'default-font') {
       fontType = 'Times New Roman, serif';
-      headerType = 'Kaushan Script, cursive';
     }
 
     if (idName === 'garamond') {
-      headerType = fontType = 'Garamond, serif';
+      fontType = 'Garamond, serif';
     }
 
     if (idName === 'courier-new') {
-      headerType = fontType = 'Courier New, serif';
+      fontType = 'Courier New, serif';
     }
 
     if (idName === 'helvetica') {
-      headerType = fontType = 'Helvetica, sans-serif';
+      fontType = 'Helvetica, sans-serif';
     }
     
-
     document.body.style.fontFamily = fontType;
   });
 }
