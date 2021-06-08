@@ -127,7 +127,7 @@ div.slider-div {
 div.monthly {
   display: none;
   margin-left: 7.5%;
-  margin-top: 2%;
+  margin-top: 1.5vh;
   margin-right: 7.5%;
   max-height: 70vh;
 }
@@ -191,9 +191,10 @@ section.header button {
 }
 
 section h2 {
-  font-size: 2vw;
+  font-size: 2.5vw;
   margin-top: 2vh;
   margin-bottom: 2vh;
+  margin-left: 1vw;
 }
 
 /* Add a background color on hover */
@@ -824,16 +825,12 @@ div.daily section.trackers {
   display: flex;
   flex-wrap: wrap;
   border-radius: 30px;
-  width: 97.5%;
+  width: 96%;
   height: 23vh;
   overflow: auto;
-  padding-left: 1.5vw;
-  padding-bottom: 1vw;
-  margin-bottom: 1vw;
-}
-
-div.daily h2 {
-  font-size: 3vw;
+  padding-left: 2%;
+  padding-bottom: 1.5vh;
+  margin-bottom: 1.5vw;
 }
 
 div.daily section.trackers h2 {
@@ -845,6 +842,12 @@ div.tracker {
   display: grid;
   grid-template-areas: "name input";
   align-content: center;
+}
+
+div.tracker h3 {
+  margin-left: 2.5vw;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 .numInput {
@@ -905,6 +908,7 @@ div.daily section[id$="00"] {
 
 #yearly-header {
   grid-area: header;
+  margin-bottom: 4vh;
 }
 
 /* Assigns #yearly-calendar to be in the second row, first column
