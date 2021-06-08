@@ -103,7 +103,7 @@ class DailyLog extends HTMLElement {
       <link rel="stylesheet" href="../style/style.css">
       <link rel="stylesheet" href="../assets/css/all.css">
       <div class="daily">
-        <section class="header" id="daily-header">
+        <section class="header" id="daily-header" style="display: flex;">
           <h1></h1>
           <button class="main-buttons" id="related-sections-button"><i class="fas fa-plus icon-size"></i></button>
         </section>

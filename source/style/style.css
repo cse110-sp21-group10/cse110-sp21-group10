@@ -170,7 +170,6 @@ div.icons-for-yearly {
 Primarily keeps the header and buttons in the same line */
 
 section.header {
-  display: flex;
   margin-bottom: 2%;
 }
 
@@ -180,6 +179,7 @@ section.header h1 {
   margin-right: 4%;
   margin-top: 0;
   margin-bottom: 0;
+  text-align: center;
 }
 
 section.header button {
