@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from './IDConverter.js';
+import { indicateDate } from '../scripts/script.js';
 
 // tell the linter that Chart is defined by a previous script
 /* global Chart */
@@ -245,7 +246,7 @@ class MonthlyLog extends HTMLElement {
       const dateName = document.createElement('h3');
       dateName.className = 'date-name';
 
-      switch(i) {
+      switch (i) {
         case 1:
           dateName.innerHTML = 'Sun';
           break;
@@ -385,28 +386,11 @@ class MonthlyLog extends HTMLElement {
         }
       }, i);
     }
-    
-    var today = new Date();
-    var dd = String(today.getDate());
-    this.shadowRoot.querySelector('.monthly-calendar-button' + dd).style.color = 'red';
 
-    // runs check every minute on current day to make it red in the calendar
-    setInterval(function() {
-      today = new Date();
-      dd = String(today.getDate());
-      var newdd = dd - 1;
-
-      if (dd != 1) {
-        this.shadowRoot.querySelector('.monthly-calendar-button' + newdd).style.color = 'black';
-      }
-      this.shadowRoot.querySelector('.monthly-calendar-button' + dd).style.color = 'red';
-      
-    }, 60000);
-
-
+    indicateDate(this.shadowRoot);
 
     const divElement = document.createElement('div');
-    divElement.className = "notes";
+    divElement.className = 'notes';
 
     root.appendChild(divElement);
 

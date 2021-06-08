@@ -1,5 +1,15 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
+/**
+ * Helper function to indicate what today's date is
+ * @param {string} root - the shadow root inside the monthly element to access the calendar button from
+ */
+export function indicateDate (root) {
+  const today = new Date();
+  if (currDate.getMonth() === today.getMonth()) {
+    root.querySelector('.monthly-calendar-button' + today.getDate()).style.color = 'red';
+  }
+}
 
 /*
  * Workflow (to be implemented):
@@ -669,6 +679,7 @@ export function zoomIn (event) {
       break;
   }
 }
+
 /* For quick commenting out of code */
 
 // Notes and old code -------------------------------------------------------------------------------
