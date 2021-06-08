@@ -201,8 +201,9 @@ function appendWeather () {
         </div>  
       </div>
     `;
-    const newSectionButton = dailyLog.shadowRoot.querySelector('#related-sections-button');
-    dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, newSectionButton);
+    
+    const temp = document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1');
+    dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, temp);
     // Select Elements
     const iconElement = weatherDiv.querySelector('.weather-icon');
     const tempElement = weatherDiv.querySelector('.temperature-value p');

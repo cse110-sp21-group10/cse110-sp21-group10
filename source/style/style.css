@@ -107,6 +107,16 @@ This block may not be necessary as it's the default on the page
 
 #daily-header {
   margin-bottom: 4vh;
+  margin-left: 3vw;
+  align-content: center;
+}
+
+#daily-header .container {
+  margin-right: 4.5vw;
+}
+
+#daily-header #related-sections-button {
+  margin-left: 8vw;
 }
 
 div.daily {
