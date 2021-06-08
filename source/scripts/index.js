@@ -81,8 +81,7 @@ for (let i = 0; i < fonts.length; i++) {
   });
 }
 
-/** Changing the display to be in high contrast mode
-  */
+/** Changing the display to be in high contrast mode */
 const highContrastBtn = document.getElementById('high-contrast');
 highContrastBtn.addEventListener('click', () => {
   document.getElementsByTagName('html')[0].className = 'high-contrast-mode';
