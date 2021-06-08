@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
+import { loadStyle } from './index.js';
 
 /*
  * Workflow (to be implemented):
@@ -436,6 +437,7 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
   dailyLog = dayElem;
   dailyLog.style.display = 'block';
   appendWeather();
+  setupStyle();
 }
 
 /**
@@ -457,6 +459,7 @@ function loadMonth (ID = IDConverter.generateID('month', currDate)) {
   document.getElementById('internal-content').replaceChild(monthElem, monthlyLog);
   monthlyLog = monthElem;
   monthlyLog.style.display = 'block';
+  setupStyle();
 }
 
 /**
@@ -478,6 +481,7 @@ function loadYear (ID = IDConverter.generateID('year', currDate)) {
   document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
   yearlyLog = yearElem;
   yearlyLog.style.display = 'block';
+  setupStyle();
 }
 
 /**
@@ -675,6 +679,19 @@ export function zoomIn (event) {
       transitionMonthly();
       break;
   }
+}
+
+/**
+ * Description here
+ */
+function setupStyle () {
+  Database.fetch('S', (data) => {
+    if (data) {
+      loadStyle(data.fontType, data.headerType);
+    } else {
+      console.log('No style was set yet!');
+    }
+  });
 }
 /* For quick commenting out of code */
 

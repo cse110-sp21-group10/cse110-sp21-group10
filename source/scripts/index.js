@@ -1,3 +1,21 @@
+import { Database } from '../classes/database.js';
+export function loadStyle (fontType, headerType) {
+  document.body.style.fontFamily = fontType;
+  const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
+  dailyHeader.style.fontFamily = headerType;
+
+  /** eventually won't need this loop because we'll
+       * need to access the monthly and yearly elements thru
+       * their shadow roots
+       */
+
+  const headers = document.querySelectorAll('h1');
+  for (let i = 0; i < headers.length; i++) {
+    headers[i].style.fontFamily = headerType;
+    console.log(headers[i].content);
+  }
+}
+
 /* Getter for the Hamburger menu button */
 const indexBtn = document.getElementById('menu-button');
 
@@ -77,20 +95,8 @@ for (let i = 0; i < fonts.length; i++) {
       headerType = fontType = 'Helvetica, sans-serif';
     }
 
-    document.body.style.fontFamily = fontType;
-    const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-    dailyHeader.style.fontFamily = headerType;
-
-    /** eventually won't need this loop because we'll
-     * need to access the monthly and yearly elements thru
-     * their shadow roots
-     */
-
-    const headers = document.querySelectorAll('h1');
-    for (let i = 0; i < headers.length; i++) {
-      headers[i].style.fontFamily = headerType;
-      console.log(headers[i].content);
-    }
+    Database.store('S', { fontType: fontType, headerType: headerType });
+    loadStyle(fontType, headerType);
   });
 }
 
