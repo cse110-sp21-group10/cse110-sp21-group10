@@ -85,19 +85,19 @@ const themes = document.getElementsByClassName('theme-style');
 /** This loop adds an event listener for changing the theme
  * If statements are used to determine which theme to switch to
  */
-for(let i = 0; i < themes.length; i++){
+for (let i = 0; i < themes.length; i++) {
   themes[i].addEventListener('click', () => {
     const themeId = themes[i].id;
     let themeType;
 
-    if(themeId === 'high-contrast'){
+    if (themeId === 'high-contrast') {
       themeType = 'high-contrast-mode';
     }
 
-    if(themeId === 'default-theme'){
+    if (themeId === 'default-theme') {
       themeType = '';
     }
 
-    document.getElementsByTagName('html')[0].className = themeType;    
+    document.getElementsByTagName('html')[0].className = themeType;
   });
 }
