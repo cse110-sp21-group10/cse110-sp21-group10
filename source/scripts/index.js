@@ -74,19 +74,30 @@ for (let i = 0; i < fonts.length; i++) {
     if (idName === 'helvetica') {
       fontType = 'Helvetica, sans-serif';
     }
-    
+
     document.body.style.fontFamily = fontType;
   });
 }
 
-/** Changing the display to be in high contrast mode */
-const highContrastBtn = document.getElementById('high-contrast');
-highContrastBtn.addEventListener('click', () => {
-  document.getElementsByTagName('html')[0].className = 'high-contrast-mode';
-  // dailyEl.shadowRoot.querySelector('weather-icon').querySelector('img').setAttribute('style', 'color: white');
-});
+// Getting all possible theme setting
+const themes = document.getElementsByClassName('theme-style');
 
-const defaultThemeBtn = document.getElementById('default-theme');
-defaultThemeBtn.addEventListener('click', () => {
-  document.getElementsByTagName('html')[0].className = '';
-});
+/** This loop adds an event listener for changing the theme
+ * If statements are used to determine which theme to switch to
+ */
+for(let i = 0; i < themes.length; i++){
+  themes[i].addEventListener('click', () => {
+    const themeId = themes[i].id;
+    let themeType;
+
+    if(themeId === 'high-contrast'){
+      themeType = 'high-contrast-mode';
+    }
+
+    if(themeId === 'default-theme'){
+      themeType = '';
+    }
+
+    document.getElementsByTagName('html')[0].className = themeType;    
+  });
+}
