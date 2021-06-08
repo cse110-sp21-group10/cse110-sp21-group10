@@ -133,7 +133,7 @@ describe('Basic user flow for SPA ', () => {
     expect(header).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
   });
   it('Test 16: Clicking the prev-day button should put us on the prev day', async () => {
-    await page.$$eval('button', (buttons) => { 
+    await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'prev-day') {
           buttons[i].click();
@@ -189,7 +189,7 @@ describe('Basic user flow for SPA ', () => {
     });
     expect(indexClass.includes('active')).toBe(false);
   });
-  it('Test 20: Clicking the return button on a bullet enrty creates a new nested journal entry', async() => {
+  it('Test 20: Clicking the return button on a bullet enrty creates a new nested journal entry', async () => {
     const bulletListLength = await page.$eval('daily-log', (elem) => {
       const nestedShadowRoot = elem.shadowRoot.querySelector('bullet-entry').shadowRoot;
       nestedShadowRoot.querySelectorAll('button')[0].click();
@@ -197,7 +197,7 @@ describe('Basic user flow for SPA ', () => {
     });
     expect(bulletListLength).toBe(1);
   });
-  it('Test 21: Clicking the delete button on a bullet enrty deletes the journal entry', async() => {
+  it('Test 21: Clicking the delete button on a bullet enrty deletes the journal entry', async () => {
     const isEmpty = await page.$eval('daily-log', (elem) => {
       const entry = elem.shadowRoot.querySelector('bullet-entry');
       entry.shadowRoot.querySelectorAll('button')[2].click();

@@ -193,7 +193,7 @@ describe('Testing generateID', () => {
     expect(id).toBe(undefined);
   });
   test('Testing different branch for the date', () => {
-    const branchDate = new Date("December 11, 2021");
+    const branchDate = new Date('December 11, 2021');
     id = IDConverter.generateID('day', branchDate);
     expect(id).toBe('D 211211');
   });
