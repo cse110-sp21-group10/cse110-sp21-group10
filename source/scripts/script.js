@@ -682,12 +682,12 @@ export function zoomIn (event) {
 }
 
 /**
- * Description here
+ * Fetches style from database and calls on helper to apply it
  */
 function setupStyle () {
   Database.fetch('S', (data) => {
     if (data) {
-      loadStyle(data.fontType, data.headerType);
+      loadStyle(data.fontType);
     } else {
       console.log('No style was set yet!');
     }

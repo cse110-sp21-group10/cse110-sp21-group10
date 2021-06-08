@@ -1,17 +1,23 @@
 import { Database } from '../classes/database.js';
-export function loadStyle (fontType, headerType) {
+
+/**
+ * Helper function to apply styles loaded from database
+ *
+ * @param {string} fontType - font to apply
+ */
+export function loadStyle (fontType) {
   document.body.style.fontFamily = fontType;
+
   const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-  dailyHeader.style.fontFamily = headerType;
+  dailyHeader.style.fontFamily = fontType;
 
   /** eventually won't need this loop because we'll
        * need to access the monthly and yearly elements thru
        * their shadow roots
        */
-
   const headers = document.querySelectorAll('h1');
   for (let i = 0; i < headers.length; i++) {
-    headers[i].style.fontFamily = headerType;
+    headers[i].style.fontFamily = fontType;
     console.log(headers[i].content);
   }
 }
@@ -75,7 +81,7 @@ for (let i = 0; i < fonts.length; i++) {
     let fontType, headerType;
 
     if (idName === 'verdana') {
-      headerType = fontType = 'Verdana, sans-serif';
+      fontType = 'Verdana, sans-serif';
     }
 
     if (idName === 'default-font') {
@@ -84,7 +90,7 @@ for (let i = 0; i < fonts.length; i++) {
     }
 
     if (idName === 'garamond') {
-      headerType = fontType = 'Garamond, serif';
+      fontType = 'Garamond, serif';
     }
 
     if (idName === 'courier-new') {
@@ -95,8 +101,9 @@ for (let i = 0; i < fonts.length; i++) {
       headerType = fontType = 'Helvetica, sans-serif';
     }
 
-    Database.store('S', { fontType: fontType, headerType: headerType });
-    loadStyle(fontType, headerType);
+    Database.store('S', { fontType: fontType });
+    loadStyle(fontType);
+    console.log('Not actually using ' + headerType + ' for now :0');
   });
 }
 
