@@ -22,15 +22,15 @@ describe('Testing getDateFromID', () => {
   test('Testing day case', () => {
     date = IDConverter.getDateFromID('D 210602', 'day');
     expect(date.toString().includes('Wed Jun 02')).toBe(true);
-    });
+  });
   test('Testing month case', () => {
-      date = IDConverter.getDateFromID('M 2106', 'month');
-      expect(date.toString().includes('Jun')).toBe(true);
+    date = IDConverter.getDateFromID('M 2106', 'month');
+    expect(date.toString().includes('Jun')).toBe(true);
   });
   test('Testing year case', () => {
-      date = IDConverter.getDateFromID('Y 21', 'year');
-      expect(date.toString().includes('2021')).toBe(true);
-    });
+    date = IDConverter.getDateFromID('Y 21', 'year');
+    expect(date.toString().includes('2021')).toBe(true);
+  });
 });
 
 describe('Testing getDayFromDate', () => {

@@ -113,13 +113,10 @@ describe('Basic user flow for SPA ', () => {
     });
     const nextDate = new Date();
     nextDate.setDate(currDate.getDate() + 1);
-    
     const nextDay = nextDate.getDate();
-
     const nextDayOfWeek = IDConverter.getDayFromDate(nextDate);
     const nextMonth = IDConverter.getMonthFromDate(nextDate);
     const nextSuffix = IDConverter.getSuffixOfDate(nextDate);
-    
     expect(header).toBe(nextDayOfWeek + ', ' + nextMonth + ' ' + nextDay + nextSuffix);
   });
   it('Test 15: Clicking the last-entry-back button should put us on the current day', async () => {
@@ -148,23 +145,21 @@ describe('Basic user flow for SPA ', () => {
     });
     const prevDate = new Date();
     prevDate.setDate(currDate.getDate() - 1);
-    
     const prevDay = prevDate.getDate();
-
     const prevDayOfWeek = IDConverter.getDayFromDate(prevDate);
     const prevMonth = IDConverter.getMonthFromDate(prevDate);
     const prevSuffix = IDConverter.getSuffixOfDate(prevDate);
     
-    expect(header).toBe(prevDayOfWeek + ', '  + prevMonth + ' ' + prevDay + prevSuffix);
+    expect(header).toBe(prevDayOfWeek + ', ' + prevMonth + ' ' + prevDay + prevSuffix);
   });
 
   /*
   it('Test 17: First get back to current day. Then clicking on the weather icon should change the temperature type', async () => {
-    await page.$$eval('button', (buttons) => { 
+    await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'next-day') {
           buttons[i].click();
-        }        
+        }
       }
     });
     const weather = await page.$eval('daily-log', (elem) => {
@@ -174,48 +169,48 @@ describe('Basic user flow for SPA ', () => {
     expect(weather.querySelector('span').textContent).toBe('C');
   });
   it('Test 18: Clicking the menu button should open the menu', async () => {
-    await page.$$eval('button', (buttons) => { 
+    await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'menu-button') {
           buttons[i].click();
-        }        
+        }
       }
     });
-    const index = await page.$$eval('div', (divs) => { 
+    const index = await page.$$eval('div', (divs) => {
       for (let i = 0; i < divs.length; i++) {
         if (divs[i].id === 'index') {
           return divs[i];
-        }        
+        }
       }
     });
     expect(index.className.includes('active')).toBe(true);
   });
   it('Test 19: Clicking a font should change the font on the page', async () => {
-    await page.$$eval('button', (buttons) => { 
+    await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'verdana') {
           buttons[i].click();
-        }        
+        }
       }
     });
-    const body = await page.$eval('body', (elem) => { 
+    const body = await page.$eval('body', (elem) => {
       return elem;
     });
     expect(body.style.fontFamily.includes('Verdana, sans-serif')).toBe(true);
   });
   it('Test 20: Clicking the close menu button should close the menu', async () => {
-    await page.$$eval('button', (buttons) => { 
+    await page.$$eval('button', (buttons) => {
       for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].id === 'close-index') {
           buttons[i].click();
-        }        
+        }
       }
     });
-    const index = await page.$$eval('div', (divs) => { 
+    const index = await page.$$eval('div', (divs) => {
       for (let i = 0; i < divs.length; i++) {
         if (divs[i].id === 'index') {
           return divs[i];
-        }        
+        }
       }
     });
     expect(index.className.includes('active')).toBe(false);
