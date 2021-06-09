@@ -94,7 +94,7 @@ const themes = document.getElementsByClassName('theme-style');
 
 /** This loop adds an event listener for changing the theme
  * If statements are used to determine which theme to switch to
- * This for loop will also adjust the .src attribute so the weather icon 
+ * This for loop will also adjust the .src attribute so the weather icon
  * changes appropriately onclick
  */
 for (let i = 0; i < themes.length; i++) {
@@ -135,7 +135,7 @@ for (let i = 0; i < themes.length; i++) {
 
       weatherImg.src = newSrc;
       console.log('new: ' + newSrc);
-    } 
+    }
 
     if (themeId === 'high-contrast') {
       style.themeType = 'high-contrast-mode';
