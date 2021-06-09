@@ -43,6 +43,7 @@ h1 {
   z-index: -1;
 }
 
+/* animation classes for daily */
 #zoomOutTransition.zoomOut1 {
   z-index: 1;
   animation: zoomOutDaily1 .3s ease-in-out 0s 1 normal forwards;
@@ -55,9 +56,10 @@ h1 {
 #zoomOutTransition.zoomOut3 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily3 .5s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily3 .3s ease-in-out 0s 1 normal forwards;
 }
 
+/* animation keyframes from daily */
 @keyframes zoomOutDaily1 {
   from {
     opacity: 0;
@@ -86,25 +88,6 @@ h1 {
     transform: scale(.3, .36) translate(-4%, 21%);
   }
 }
-
-/* @keyframes zoomOutDaily {
-  0% {
-    opacity: 0;
-    transform: scale(1, 1) translate(0, 0);
-  }
-  25% {
-    opacity: 1;
-    transform: scale(1, 1) translate(0, 0);
-  }
-  75% {
-    opacity: 1;
-    transform: scale(.28, .36) translate(-46.8%, -31.8%);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(.28, .36) translate(-46.8%, -31.8%);
-  }
-} */
 
 /* To hide scrollbar */
 #internal-content::-webkit-scrollbar {

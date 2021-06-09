@@ -337,16 +337,12 @@ function zoomOut () {
     case 'day':
       var zoomOut = document.querySelector('#zoomOutTransition');
 
+      // timing for the daily to monthly animation
       zoomOut.classList.add('zoomOut1');
       setTimeout( function() { 
         zoomOut.classList.remove('zoomOut1');
         zoomOut.classList.add('zoomOut2');
       }, 300)
-
-      // setTimeout( function() { 
-      //   zoomOut.classList.remove('zoomOut2');
-      //   zoomOut.classList.add('zoomOut3');
-      // }, 3000)
 
       setTimeout( function() { 
         zoomOut.classList.remove('zoomOut2');
@@ -355,23 +351,14 @@ function zoomOut () {
 
       setTimeout( function() { 
         zoomOut.classList.remove('zoomOut3');
-      }, 1800)
+      }, 1600)
       
+      // pushing daily to history
       setTimeout( function() { 
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
         transitionMonthly();
       }, 290)
-      
-      // zoomOut.classList.add('zoomOut3');
-      // zoomOut.classList.add('zoomOut4');
-
-      // setInterval( function() { 
-      // zoomOut.classList.remove('zoomOut1');
-      // zoomOut.classList.remove('zoomOut2');
-      // zoomOut.classList.remove('zoomOut3');
-      // zoomOut.classList.remove('zoomOut4');
-      // }, 4000);
 
       break;
     case 'month':
