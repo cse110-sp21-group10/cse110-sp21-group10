@@ -212,11 +212,4 @@ describe('Basic user flow for SPA ', () => {
     });
     expect(sectionID).toBe('02');
   });
-  it('Test 23: Clicking the delete section button button should delete the section from the page', async () => {
-    const isEmpty = await page.$eval('daily-log', (elem) => {
-      elem.shadowRoot.querySelector('.delete-section').click();
-      return elem.shadowRoot.querySelectorAll('.log')[2] === undefined;
-    });
-    expect(isEmpty).toBe(true);
-  });
 });

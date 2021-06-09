@@ -13,7 +13,8 @@
     "babel-jest": "^27.0.2",
     "jest": "^27.0.3",
     "jest-puppeteer": "^5.0.4",
-    "puppeteer": "^9.1.1"
+    "puppeteer": "^9.1.1",
+    "ws": "^7.4.6"
   },
   "scripts": {
     "test": "jest"
