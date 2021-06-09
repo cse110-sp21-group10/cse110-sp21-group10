@@ -342,23 +342,23 @@ function zoomOut () {
       setTimeout( function() { 
         zoomOutDaily.classList.remove('zoomOut1');
         zoomOutDaily.classList.add('zoomOut2');
-      }, 300)
+      }, 150)
 
       setTimeout( function() { 
         zoomOutDaily.classList.remove('zoomOut2');
         zoomOutDaily.classList.add('zoomOut3');
-      }, 1300)
+      }, 650)
 
       setTimeout( function() { 
         zoomOutDaily.classList.remove('zoomOut3');
-      }, 1800)
+      }, 900)
       
       // pushing daily to history
       setTimeout( function() { 
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
         transitionMonthly();
-      }, 290)
+      }, 140)
 
       break;
     case 'month':
@@ -369,23 +369,23 @@ function zoomOut () {
       setTimeout( function() { 
         zoomOutMonthly.classList.remove('zoomOut4');
         zoomOutMonthly.classList.add('zoomOut5');
-      }, 300)
+      }, 150)
 
       setTimeout( function() { 
         zoomOutMonthly.classList.remove('zoomOut5');
         zoomOutMonthly.classList.add('zoomOut6');
-      }, 1300)
+      }, 650)
 
       setTimeout( function() { 
         zoomOutMonthly.classList.remove('zoomOut6');
-      }, 1800)
+      }, 900)
       
       // pushing m onthly to history
       setTimeout( function() { 
         window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
         loadYear();
         transitionYearly();
-      }, 290)
+      }, 140)
 
 
       

@@ -46,17 +46,17 @@ h1 {
 /* animation classes for daily */
 #zoomOutTransition.zoomOut1 {
   z-index: 1;
-  animation: zoomOutDaily1 .3s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily1 .15s ease-in-out 0s 1 normal forwards;
 }
 #zoomOutTransition.zoomOut2 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily2 1s ease-out 0s 1 normal forwards;
+  animation: zoomOutDaily2 .5s ease-out 0s 1 normal forwards;
 }
 #zoomOutTransition.zoomOut3 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily3 .5s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily3 .25s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
@@ -111,17 +111,17 @@ h1 {
 /* animation classes for daily */
 #zoomOutTransition2.zoomOut4 {
   z-index: 1;
-  animation: zoomOutDaily4 .3s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily4 .15s ease-in-out 0s 1 normal forwards;
 }
 #zoomOutTransition2.zoomOut5 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily5 1s ease-out 0s 1 normal forwards;
+  animation: zoomOutDaily5 .5s ease-out 0s 1 normal forwards;
 }
 #zoomOutTransition2.zoomOut6 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily6 .5s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily6 .25s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
