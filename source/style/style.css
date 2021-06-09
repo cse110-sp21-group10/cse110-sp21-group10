@@ -834,11 +834,17 @@ div.yearly section[id$="01"] {
   margin-top: 2vh;
   display: inline-block;
   font-size: 1.5vw;
+  height: 32vh;
+  overflow: auto;
 }
 
 /* Adding a scrollbar for overflow in the yearly goals section */
 
 div.yearly section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}
+
+div.yearly section[id$="01"]::-webkit-scrollbar {
   display: none;
 }
 
