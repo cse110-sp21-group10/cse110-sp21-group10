@@ -269,10 +269,9 @@ function appendWeather () {
 
     // Display weather to UI
     function displayWeather () {
-      if (document.getElementsByTagName('html')[0].className != '') {
+      if (document.getElementsByTagName('html')[0].className !== '') {
         iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}_d.png"/>`;
-      }
-      else {
+      } else {
         iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
       }
       tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
