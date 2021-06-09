@@ -184,7 +184,7 @@ function appendWeather () {
   const todayDate = new Date();
   if (currDate.getDate() === todayDate.getDate() &&
       currDate.getMonth() === todayDate.getMonth() &&
-      currDate.getFullYear() === todayDate.getFullYear()) {
+      currDate.getFullYear() === todayDate.getFullYear()) {    
     // create weather div container and append it to the daily log's header
     const weatherDiv = document.createElement('div');
     weatherDiv.className = 'container';
@@ -203,6 +203,7 @@ function appendWeather () {
     `;
 
     const temp = document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1');
+    temp.style = "margin-left: 0";
     dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, temp);
     // Select Elements
     const iconElement = weatherDiv.querySelector('.weather-icon');
@@ -295,6 +296,8 @@ function appendWeather () {
         weather.temperature.unit = 'fahrenheit';
       }
     });
+  } else {
+    document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1').style = "margin-left: 13vw";
   }
 }
 

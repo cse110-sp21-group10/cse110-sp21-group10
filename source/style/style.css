@@ -5,6 +5,7 @@
 }
 
 h1 {
+  width: 50vw;
   font-size: 3.8vw;
   position: relative;
   font-family: 'Kaushan Script', cursive;
@@ -237,16 +238,10 @@ This block may not be necessary as it's the default on the page
 
 #daily-header {
   margin-bottom: 4vh;
-  margin-left: 3vw;
   align-content: center;
-}
 
-#daily-header .container {
-  margin-right: 4.5vw;
-}
-
-#daily-header #related-sections-button {
-  margin-left: 8vw;
+  position: relative;
+  right: 2vw;
 }
 
 div.daily {
@@ -310,7 +305,7 @@ section.header {
 section.header h1 {
   position: relative;
   top: 1vh;
-  margin-right: 4%;
+  margin-left: 10.5vw;
   margin-top: 0;
   margin-bottom: 0;
   text-align: center;
@@ -650,11 +645,10 @@ button[id$='setting']:active {
   height: 5vw;
   background-color: transparent;
   display: block;
-  margin: 0;
-  margin-left: 1vw;
   padding-top: 0.2vw;
 
-  /* padding-bottom : 50px; */
+  position: relative;
+  left: 6vw;
 }
 
 .notification {
