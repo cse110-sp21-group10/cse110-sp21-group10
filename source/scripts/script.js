@@ -201,7 +201,7 @@ function appendWeather () {
         </div>  
       </div>
     `;
-    
+
     const temp = document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1');
     dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, temp);
     // Select Elements
@@ -335,9 +335,44 @@ function zoomOut () {
   // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      loadMonth();
-      transitionMonthly();
+      var zoomOut = document.querySelector('#zoomOutTransition');
+
+      zoomOut.classList.add('zoomOut1');
+      setTimeout( function() { 
+        zoomOut.classList.remove('zoomOut1');
+        zoomOut.classList.add('zoomOut2');
+      }, 300)
+
+      // setTimeout( function() { 
+      //   zoomOut.classList.remove('zoomOut2');
+      //   zoomOut.classList.add('zoomOut3');
+      // }, 3000)
+
+      setTimeout( function() { 
+        zoomOut.classList.remove('zoomOut2');
+        zoomOut.classList.add('zoomOut3');
+      }, 1300)
+
+      setTimeout( function() { 
+        zoomOut.classList.remove('zoomOut3');
+      }, 1800)
+      
+      setTimeout( function() { 
+        window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
+        loadMonth();
+        transitionMonthly();
+      }, 290)
+      
+      // zoomOut.classList.add('zoomOut3');
+      // zoomOut.classList.add('zoomOut4');
+
+      // setInterval( function() { 
+      // zoomOut.classList.remove('zoomOut1');
+      // zoomOut.classList.remove('zoomOut2');
+      // zoomOut.classList.remove('zoomOut3');
+      // zoomOut.classList.remove('zoomOut4');
+      // }, 4000);
+
       break;
     case 'month':
       window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
@@ -345,6 +380,8 @@ function zoomOut () {
       transitionYearly();
       break;
   }
+
+  
 }
 
 /**

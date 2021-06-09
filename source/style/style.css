@@ -18,11 +18,93 @@ h1 {
   min-height: 80vh;
   width: 85%;
   top: 10vh;
-  left: 7.5%;
+  left: 7.5vw;
   max-height: 80vh;
   overflow: auto;
   font-size: larger;
 }
+
+#zoomOutTransition {
+  box-sizing: border-box;
+  border: 5px solid black;
+  border-radius: 75px;
+  position: absolute;
+  min-height: 80vh;
+  width: 85%;
+  top: 10vh;
+  left: 7.5vw;
+  max-height: 80vh;
+  opacity: 0;
+
+  background-color: white;
+
+  transform-origin: 20% 20%;
+
+  z-index: -1;
+}
+
+#zoomOutTransition.zoomOut1 {
+  z-index: 1;
+  animation: zoomOutDaily1 .3s ease-in-out 0s 1 normal forwards;
+}
+#zoomOutTransition.zoomOut2 {
+  opacity: 1;
+  z-index: 1;
+  animation: zoomOutDaily2 1s ease-out 0s 1 normal forwards;
+}
+#zoomOutTransition.zoomOut3 {
+  opacity: 1;
+  z-index: 1;
+  animation: zoomOutDaily3 .5s ease-in-out 0s 1 normal forwards;
+}
+
+@keyframes zoomOutDaily1 {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOutDaily2 {
+  from {
+    transform: scale(1, 1) translate(0, 0);
+  }
+  to {
+    transform: scale(.3, .36) translate(-4%, 21%);
+  }
+}
+
+@keyframes zoomOutDaily3 {
+  from {
+    opacity: 1;
+    transform: scale(.3, .36) translate(-4%, 21%);
+  }
+  to {
+    opacity: 0;
+    transform: scale(.3, .36) translate(-4%, 21%);
+  }
+}
+
+/* @keyframes zoomOutDaily {
+  0% {
+    opacity: 0;
+    transform: scale(1, 1) translate(0, 0);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(.28, .36) translate(-46.8%, -31.8%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(.28, .36) translate(-46.8%, -31.8%);
+  }
+} */
 
 /* To hide scrollbar */
 #internal-content::-webkit-scrollbar {
