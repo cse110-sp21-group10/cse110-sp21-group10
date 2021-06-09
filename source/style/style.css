@@ -706,7 +706,7 @@ button[id$='setting']:active {
   font-family: cursive;
   cursor: pointer;
   position: relative;
-  top: 0vh;
+  bottom: 1vh;
   right: 0.2vw;
 }
 
@@ -723,7 +723,7 @@ button[id$='setting']:active {
   width: 12vw;
   height: 2vw;
   position: relative;
-  bottom: 1vw;
+  bottom: 3vh;
   right: 1vw;
 }
 
