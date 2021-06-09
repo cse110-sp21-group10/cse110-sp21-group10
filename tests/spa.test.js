@@ -21,10 +21,10 @@ describe('Basic user flow for SPA ', () => {
     expect(header).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
   });
   it('Test 2: Clicking zoom out button should change page url to /#month', async () => {
-    await page.$$eval('button', (buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id === 'zoom-out-button') {
-          buttons[i].click();
+    await page.$$eval('button', (dailyButtons) => {
+      for (let i = 0; i < dailyButtons.length; i++) {
+        if (dailyButtons[i].id === 'zoom-out-button') {
+          dailyButtons[i].click();
         }
       }
     });
@@ -37,10 +37,10 @@ describe('Basic user flow for SPA ', () => {
     expect(header).toBe(currMonth + ' ' + year);
   });
   it('Test 4: Clicking zoom out button should change page url to /#year', async () => {
-    await page.$$eval('button', (buttons) => {
-      for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id === 'zoom-out-button') {
-          buttons[i].click();
+    await page.$$eval('button', (monthlyButtons) => {
+      for (let i = 0; i < monthlyButtons.length; i++) {
+        if (monthlyButtons[i].id === 'zoom-out-button') {
+          monthlyButtons[i].click();
         }
       }
     });
@@ -95,10 +95,10 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const header = await page.$eval('daily-log', (elem) => {
+    const lastEntryForwardHeader = await page.$eval('daily-log', (elem) => {
       return elem.shadowRoot.querySelector('h1').textContent;
     });
-    expect(header).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
+    expect(lastEntryForwardHeader).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
   });
   it('Test 14: Clicking the next-day button should put us on the next day', async () => {
     await page.$$eval('button', (buttons) => {
@@ -108,7 +108,7 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const header = await page.$eval('daily-log', (elem) => {
+    const nextDayHeader = await page.$eval('daily-log', (elem) => {
       return elem.shadowRoot.querySelector('h1').textContent;
     });
     const nextDate = new Date();
@@ -117,7 +117,7 @@ describe('Basic user flow for SPA ', () => {
     const nextDayOfWeek = IDConverter.getDayFromDate(nextDate);
     const nextMonth = IDConverter.getMonthFromDate(nextDate);
     const nextSuffix = IDConverter.getSuffixOfDate(nextDate);
-    expect(header).toBe(nextDayOfWeek + ', ' + nextMonth + ' ' + nextDay + nextSuffix);
+    expect(nextDayHeader).toBe(nextDayOfWeek + ', ' + nextMonth + ' ' + nextDay + nextSuffix);
   });
   it('Test 15: Clicking the last-entry-back button should put us on the current day', async () => {
     await page.$$eval('button', (buttons) => {
@@ -127,10 +127,10 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const header = await page.$eval('daily-log', (elem) => {
+    const lastEntryBackHeader = await page.$eval('daily-log', (elem) => {
       return elem.shadowRoot.querySelector('h1').textContent;
     });
-    expect(header).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
+    expect(lastEntryBackHeader).toBe(currDay + ', ' + currMonth + ' ' + day + currSuffix);
   });
   it('Test 16: Clicking the prev-day button should put us on the prev day', async () => {
     await page.$$eval('button', (buttons) => {
@@ -140,7 +140,7 @@ describe('Basic user flow for SPA ', () => {
         }
       }
     });
-    const header = await page.$eval('daily-log', (elem) => {
+    const prevDayHeader = await page.$eval('daily-log', (elem) => {
       return elem.shadowRoot.querySelector('h1').textContent;
     });
     const prevDate = new Date();
@@ -149,7 +149,7 @@ describe('Basic user flow for SPA ', () => {
     const prevDayOfWeek = IDConverter.getDayFromDate(prevDate);
     const prevMonth = IDConverter.getMonthFromDate(prevDate);
     const prevSuffix = IDConverter.getSuffixOfDate(prevDate);
-    expect(header).toBe(prevDayOfWeek + ', ' + prevMonth + ' ' + prevDay + prevSuffix);
+    expect(prevDayHeader).toBe(prevDayOfWeek + ', ' + prevMonth + ' ' + prevDay + prevSuffix);
   });
   it('Test 17: First get back to current day. Clicking the menu button should open the menu', async () => {
     await page.$eval('#next-day', (b1) => {
