@@ -351,7 +351,7 @@ function zoomOut () {
 
       setTimeout( function() { 
         zoomOut.classList.remove('zoomOut3');
-      }, 1600)
+      }, 1800)
       
       // pushing daily to history
       setTimeout( function() { 
