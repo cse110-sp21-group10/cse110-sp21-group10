@@ -7,9 +7,6 @@ const indexEl = document.getElementById('index');
 /* Getter for the 'X' button */
 const indexCloseBtn = document.getElementById('close-index');
 
-// TODO: Figure out how to change header font
-//       Customize font sizes
-
 /* Adds functionality to the hamburger menu icon to open the index */
 indexBtn.addEventListener('click', () => {
   indexEl.classList.toggle('active');

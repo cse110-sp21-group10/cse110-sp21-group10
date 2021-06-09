@@ -49,10 +49,6 @@ h1 {
   top: 4%;
 }
 
-#zoom-out-button:hover {
-  background-color: var(--bg-button-color, lightgray);
-}
-
 #last-entry-back {
   left: 2.4%;
   bottom: 4%;
@@ -84,6 +80,10 @@ h1 {
   border-radius: 30px;
   width: 4%;
   height: 7%;
+}
+
+#zoom-out-button:hover {
+  background-color: var(--bg-button-color, lightgray);
 }
 
 nav.navigation {
@@ -609,7 +609,7 @@ body {
   color: var(--color, black);
 }
 
-.delete-section:hover{
+.delete-section:hover {
   background-color: var(--bullet-hover-bg, lightgray);
 }
 
@@ -642,7 +642,7 @@ body {
 
 /* Solarized Dark styling start */
 
-.solarized-dark-mode body { 
+.solarized-dark-mode body {
   background: #002b36;
   color: #93a1a1;
 
