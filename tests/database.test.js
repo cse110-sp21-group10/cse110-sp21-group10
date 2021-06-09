@@ -1,7 +1,3 @@
-/**
- * TODO:
- * getStoreFromID
-*/
 import { Database } from '../source/classes/database.js';
 
 let store;
