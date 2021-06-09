@@ -90,22 +90,6 @@ nav.navigation {
   display: none;
 }
 
-/* Tooltip hovering functionality */
-
-/* #last-entry-back .last-entry-tooltip {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-}
-#last-entry-back:hover .last-entry-tooltip {
-  visibility: visible;
-} */
-
 /* This will keep the daily screen open and viewable.
 This block may not be necessary as it's the default on the page
 ¯\_(ツ)_/¯ */
