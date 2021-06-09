@@ -135,6 +135,7 @@ div.yearly {
   margin-left: 7.5%;
   margin-top: 2%;
   margin-right: 7.5%;
+  margin-bottom: 2%;
 }
 
 /* This hides the yearly icons, so the proper icons are displayed */
@@ -729,8 +730,101 @@ div.daily section[id$="00"] {
   overflow: auto;
 }
 
-div.daily section[id$="00"]::-webkit-scrollbar {
+/* More styling for daily-log end */
+
+/* Styling for Yearly-Element start */
+
+/* Sets up the grid areas for the entire yearly div */
+.yearly {
+  grid-template-areas:
+
+    "header header"
+    "calendar goals"
+    "notes notes";
+  grid-template-columns: 25vw 45vw;
+  column-gap: 1vw;
+}
+
+/* assigns the #yearly-header to occupy the entire first row */
+
+#yearly-header {
+  grid-area: header;
+}
+
+/* Assigns #yearly-calendar to be in the second row, first column
+  Also sets up the grid template for the buttons in the calendar
+*/
+
+#yearly-calendar {
+  grid-area: calendar;
+  border: 2px solid black;
+  height: 20vh;
+  border-radius: 25px;
+  display: inline-grid;
+  grid-template-columns: repeat(4, 23.5% [col-start]);
+  padding-top: 1.25vh;
+  padding-left: 0.75vw;
+  padding-right: 0.75vw;
+  row-gap: 0.25vh;
+  column-gap: 0.5vw;
+  grid-template-areas:
+
+    "jan feb mar apr"
+    "may jun jul aug"
+    "sep oct nov dec";
+}
+
+/* Styling of the month buttons for the #yearly-calendar */
+
+#yearly-calendar button {
+  height: 5vh;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 1.25vw;
+  border: 0.5px solid black;
+  padding-top: 0.5px;
+  background-color: rgb(250, 248, 248);
+}
+
+/* Styling of the month buttons for the #yearly-calendar on hover
+  - color will change
+  - cursor will also change
+*/
+
+#yearly-calendar button:hover {
+  cursor: pointer;
+  background-color: rgb(219, 219, 219);
+}
+
+/* Assigns the goals section in to the first row, second column */
+
+div.yearly section[id$="00"] {
+  grid-area: goals;
+  display: inline;
+  height: 20.65vh;
+  font-size: 1.5vw;
+  overflow: auto;
+}
+
+/* Assigns the notes section to the bottom row */
+
+div.yearly section[id$="01"] {
+  grid-area: notes;
+  margin-top: 2vh;
+  display: inline-block;
+  font-size: 1.5vw;
+}
+
+/* Adding a scrollbar for overflow in the yearly goals section */
+
+div.yearly section[id$="00"]::-webkit-scrollbar {
   display: none;
 }
 
-/* More styling for daily-log end */
+/* Styling for Yearly-Element end */
+
+/* scrollbar for daily reminders is going here bc the linter is being picky */
+
+div.daily section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}

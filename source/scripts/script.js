@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
+import * as indexJs from './index.js';
 
 /*
  * Workflow (to be implemented):
@@ -79,24 +80,18 @@ window.onpopstate = function (event) {
   switch (event.state.view) {
     case 'day':
       transitionDaily();
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadDay();
-        updateIndex();
-      }
+      currDate = event.state.date;
+      loadDay();
+      updateIndex();
       break;
     case 'month':
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadMonth();
-      }
+      currDate = event.state.date;
+      loadMonth();
       transitionMonthly();
       break;
     case 'year':
-      if (event.state.date) {
-        currDate = event.state.date;
-        loadYear();
-      }
+      currDate = event.state.date;
+      loadYear();
       transitionYearly();
       break;
   }
@@ -113,18 +108,40 @@ window.onpopstate = function (event) {
  * @callback setupScript
  */
 function setupScript () {
-  window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
-
   loadVars();
   setupButtons();
 
-  loadDay();
-  loadMonth();
-  loadYear();
+  // Fetches style from database and calls on helper to apply it
+  Database.fetch('S', (data) => {
+    if (data) {
+      indexJs.style.fontType = data.fontType;
+      indexJs.style.themeType = data.themeType;
+      indexJs.loadStyle();
+    } else {
+      console.log('No style was set yet!');
+    }
+  });
 
-  dailyLog.style.display = 'block';
-  monthlyLog.style.display = 'none';
-  yearlyLog.style.display = 'none';
+  if (!history.state) {
+    window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
+  } else {
+    currDate = history.state.date;
+  }
+
+  switch (history.state.view) {
+    case 'day':
+      loadDay();
+      transitionDaily();
+      break;
+    case 'month':
+      loadMonth();
+      transitionMonthly();
+      break;
+    case 'year':
+      loadYear();
+      transitionYearly();
+      break;
+  }
 }
 
 /**
@@ -319,12 +336,12 @@ function zoomOut () {
   // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'month' }, 'Monthly Log', '#month');
+      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
       loadMonth();
       transitionMonthly();
       break;
     case 'month':
-      window.history.pushState({ view: 'year' }, 'Yearly Log', '#year');
+      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
       loadYear();
       transitionYearly();
       break;
@@ -341,6 +358,7 @@ function zoomOut () {
 function transitionDaily () {
   dailyLog.style.display = 'block';
   monthlyLog.style.display = 'none';
+  yearlyLog.style.display = 'none';
 
   btnPrevEntry.disabled = 0;
   btnNextEntry.disabled = 0;
@@ -377,6 +395,7 @@ function transitionMonthly () {
  * Zoom out icon is disabled in Yearly View
  */
 function transitionYearly () {
+  dailyLog.style.display = 'none';
   monthlyLog.style.display = 'none';
   yearlyLog.style.display = 'block';
 
@@ -460,7 +479,7 @@ function loadYear (ID = IDConverter.generateID('year', currDate)) {
     }
   });
   // append yearElem to internal content
-  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'block';
+  yearElem.shadowRoot.querySelector('div.yearly').style.display = 'grid';
   document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
   yearlyLog = yearElem;
   yearlyLog.style.display = 'block';
@@ -648,6 +667,7 @@ export function zoomIn (event) {
       break;
   }
 }
+
 /* For quick commenting out of code */
 
 // Notes and old code -------------------------------------------------------------------------------

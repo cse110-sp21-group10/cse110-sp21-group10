@@ -141,7 +141,7 @@ class YearlyLog extends HTMLElement {
       const monthButton = document.createElement('button');
       monthButton.className = 'yearly-calendar-button';
       monthButton.id = `M ${id.substring(2)}${IDConverter.stringifyNum(i + 1)}`;
-      monthButton.innerText = String(IDConverter.getMonthFromDate(new Date(year, i)));
+      monthButton.innerText = String(IDConverter.getMonthFromDate(new Date(year, i))).substring(0, 3);
       monthButton.addEventListener('click', function (event) {
         callback(event);
       });

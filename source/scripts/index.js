@@ -1,3 +1,22 @@
+import { Database } from '../classes/database.js';
+
+// Declaring fontType and themeType defaults prior to setting them onClick (export allows other scripts to set them)
+export const style = {
+  fontType: 'Times New Roman, serif',
+  themeType: ''
+};
+
+/**
+ * Helper function to apply styles loaded from database
+ *
+ * @param {string} fontType - font to apply
+ * @param {string} themeType - theme to apply
+ */
+export function loadStyle () {
+  document.body.style.fontFamily = style.fontType;
+  document.getElementsByTagName('html')[0].className = style.themeType;
+}
+
 /* Getter for the Hamburger menu button */
 const indexBtn = document.getElementById('menu-button');
 
@@ -42,29 +61,29 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    let fontType;
 
     if (idName === 'verdana') {
-      fontType = 'Verdana, sans-serif';
+      style.fontType = 'Verdana, sans-serif';
     }
 
     if (idName === 'default-font') {
-      fontType = 'Times New Roman, serif';
+      style.fontType = 'Times New Roman, serif';
     }
 
     if (idName === 'garamond') {
-      fontType = 'Garamond, serif';
+      style.fontType = 'Garamond, serif';
     }
 
     if (idName === 'courier-new') {
-      fontType = 'Courier New, serif';
+      style.fontType = 'Courier New, serif';
     }
 
     if (idName === 'helvetica') {
-      fontType = 'Helvetica, sans-serif';
+      style.fontType = 'Helvetica, sans-serif';
     }
 
-    document.body.style.fontFamily = fontType;
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
   });
 }
 
@@ -77,10 +96,9 @@ const themes = document.getElementsByClassName('theme-style');
 for (let i = 0; i < themes.length; i++) {
   themes[i].addEventListener('click', () => {
     const themeId = themes[i].id;
-    let themeType;
 
     if (themeId === 'high-contrast') {
-      themeType = 'high-contrast-mode';
+      style.themeType = 'high-contrast-mode';
     }
 
     if (themeId === 'solarized-dark') {
@@ -88,9 +106,10 @@ for (let i = 0; i < themes.length; i++) {
     }
 
     if (themeId === 'default-theme') {
-      themeType = '';
+      style.themeType = '';
     }
 
-    document.getElementsByTagName('html')[0].className = themeType;
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
   });
 }
