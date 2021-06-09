@@ -15,6 +15,7 @@ export const style = {
 export function loadStyle () {
   document.body.style.fontFamily = style.fontType;
   document.getElementsByTagName('html')[0].className = style.themeType;
+  // document.querySelector('daily-log').shadowRoot.querySelector('img').src = style.newSrc;
 }
 
 /* Getter for the Hamburger menu button */
@@ -25,9 +26,6 @@ const indexEl = document.getElementById('index');
 
 /* Getter for the 'X' button */
 const indexCloseBtn = document.getElementById('close-index');
-
-// TODO: Figure out how to change header font
-//       Customize font sizes
 
 /* Adds functionality to the hamburger menu icon to open the index */
 indexBtn.addEventListener('click', () => {
@@ -92,16 +90,59 @@ for (let i = 0; i < fonts.length; i++) {
 
 // Getting all possible theme setting
 const themes = document.getElementsByClassName('theme-style');
+// console.log(document.querySelector('daily-log').shadowRoot.querySelector('img').getAttribute('src'));
 
 /** This loop adds an event listener for changing the theme
  * If statements are used to determine which theme to switch to
+ * This for loop will also adjust the .src attribute so the weather icon
+ * changes appropriately onclick
  */
 for (let i = 0; i < themes.length; i++) {
   themes[i].addEventListener('click', () => {
     const themeId = themes[i].id;
+    const weatherImg = document.querySelector('daily-log').shadowRoot.querySelector('img');
+
+    // checking to see if we are on the daily page
+    const imgExists = weatherImg !== null;
+
+    // creating the variable to contain our new icon src
+    let newSrc;
+
+    // if we're on daily, we need to change the icon depending on the theme/mode
+    if (imgExists) {
+      const weatherImgSrc = weatherImg.getAttribute('src');
+      console.log(weatherImgSrc);
+      let subtract = 4;
+
+      // accounting for if we are currently in dark mode
+      if (weatherImgSrc.includes('_d')) {
+        subtract = 6;
+      }
+
+      // determining the length of the new substring we need
+      const total = weatherImgSrc.length - subtract;
+
+      // getting the parts of the src we need from the original src
+      newSrc = weatherImgSrc.substr(0, total);
+      console.log('original: ' + weatherImgSrc);
+
+      // checking if we need dark mode icons or normal ones
+      if (themeId !== 'default-theme') {
+        newSrc += '_d.png';
+      } else {
+        newSrc += '.png';
+      }
+
+      weatherImg.src = newSrc;
+      console.log('new: ' + newSrc);
+    }
 
     if (themeId === 'high-contrast') {
       style.themeType = 'high-contrast-mode';
+    }
+
+    if (themeId === 'solarized-dark') {
+      style.themeType = 'solarized-dark-mode';
     }
 
     if (themeId === 'default-theme') {

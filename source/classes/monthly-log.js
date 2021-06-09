@@ -182,9 +182,9 @@ class MonthlyLog extends HTMLElement {
             data: [], // data points
             borderCapStyle: 'round',
             fill: false,
-            borderColor: 'black',
+            borderColor: '#bfbfbf',
             borderWidth: 2,
-            pointBackgroundColor: 'black',
+            pointBackgroundColor: '#bfbfbf',
             pointRadius: 2,
             pointHoverRadius: 2,
             tension: 0.25
@@ -200,8 +200,13 @@ class MonthlyLog extends HTMLElement {
                 text: 'Date'
               },
               grid: {
+                borderColor: '#a3a3a3',
                 display: false
+              },
+              ticks: {
+                color: '#a3a3a3'
               }
+
             },
             y: { // y-axis contents
               axis: 'y',
@@ -211,7 +216,11 @@ class MonthlyLog extends HTMLElement {
                 text: yAxisLabel
               },
               grid: {
+                borderColor: '#a3a3a3',
                 display: false
+              },
+              ticks: {
+                color: '#a3a3a3'
               },
               min: 0 // min-value of y-axis
               // potential max-value can be added here

@@ -280,7 +280,11 @@ function appendWeather () {
 
     // Display weather to UI
     function displayWeather () {
-      iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      if (document.getElementsByTagName('html')[0].className !== '') {
+        iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}_d.png"/>`;
+      } else {
+        iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      }
       tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
       descElement.innerHTML = weather.description;
       weather.temperature.unit = 'fahrenheit';
@@ -395,14 +399,7 @@ function transitionMonthly () {
 
   btnPrevEntry.disabled = 1;
   btnNextEntry.disabled = 1;
-
-  btnZoomOut.addEventListener('mouseover', function () {
-    btnZoomOut.style.background = 'lightgrey';
-  });
-
-  btnZoomOut.addEventListener('mouseout', function () {
-    btnZoomOut.style.background = 'transparent';
-  });
+  btnZoomOut.style.backgroundColor = '';
 }
 
 /**
@@ -640,14 +637,7 @@ function toggleCheck (inBounds = false) {
   } else {
     btnPrevEntry.disabled = false;
     btnPrevEntry.style.cursor = 'pointer';
-
-    btnPrevEntry.addEventListener('mouseover', function () {
-      btnPrevEntry.style.background = 'lightgrey';
-    });
-
-    btnPrevEntry.addEventListener('mouseout', function () {
-      btnPrevEntry.style.background = 'transparent';
-    });
+    btnPrevEntry.style.backgroundColor = '';
   }
   if ((index >= entries.length - 1 && !inBounds) || history.state.view !== 'day') {
     btnNextEntry.disabled = true;
@@ -657,14 +647,7 @@ function toggleCheck (inBounds = false) {
   } else {
     btnNextEntry.disabled = false;
     btnNextEntry.style.cursor = 'pointer';
-
-    btnNextEntry.addEventListener('mouseover', function () {
-      btnNextEntry.style.background = 'lightgrey';
-    });
-
-    btnNextEntry.addEventListener('mouseout', function () {
-      btnNextEntry.style.background = 'transparent';
-    });
+    btnNextEntry.style.backgroundColor = '';
   }
 }
 

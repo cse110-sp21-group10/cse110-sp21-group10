@@ -35,7 +35,7 @@ h1 {
 
 .global-icons button {
   border: none;
-  background: none;
+  background: var(--bg-color, white);
   color: var(--color, black);
 }
 
@@ -82,25 +82,13 @@ h1 {
   height: 7%;
 }
 
+#zoom-out-button:hover {
+  background-color: var(--bg-button-color, lightgray);
+}
+
 nav.navigation {
   display: none;
 }
-
-/* Tooltip hovering functionality */
-
-/* #last-entry-back .last-entry-tooltip {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-}
-#last-entry-back:hover .last-entry-tooltip {
-  visibility: visible;
-} */
 
 /* This will keep the daily screen open and viewable.
 This block may not be necessary as it's the default on the page
@@ -184,8 +172,12 @@ section.header button {
 
 /* Add a background color on hover */
 .global-icons button:hover {
-  background-color: var(--bg-button-color, lightgray);
+  background: var(--bg-button-color);
   cursor: pointer;
+}
+
+.global-icons button:disabled {
+  color: var(--disabled-btns, #bababa);
 }
 
 section.header button:hover {
@@ -463,7 +455,7 @@ button[id$='setting']:active {
 .temperature-value p {
   padding: 0.5vw;
   margin: 0;
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   font-size: 2.5vw;
   font-family: cursive;
   cursor: pointer;
@@ -477,7 +469,7 @@ button[id$='setting']:active {
 } */
 
 .temperature-value span {
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   font-size: 1.5vw;
 }
 
@@ -491,7 +483,7 @@ button[id$='setting']:active {
 
 .temperature-description p {
   margin: 0;
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   text-align: center;
   font-size: 1.5vw;
   font-family: cursive;
@@ -593,7 +585,24 @@ div.tracker div i {
 
 /* All styling necessary for the conext menu end */
 
-/* High Contrast mode stylin start #323333 #727475 */
+body {
+  --bg-button-color: lightgray;
+}
+
+.delete-section {
+  background-color: var(--delete-bg, #ebebeb);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-color, black);
+  border-radius: 3px;
+  color: var(--color, black);
+}
+
+.delete-section:hover {
+  background-color: var(--bullet-hover-bg, lightgray);
+}
+
+/* High Contrast mode stylin start */
 
 .high-contrast-mode body {
   background: black;
@@ -601,7 +610,6 @@ div.tracker div i {
 
   --bg-color: black;
   --color: white;
-  --bg: white;
   --bullet-bg: #363636;
   --bullet-hover-bg: #363636;
   --bullet-point-color: white;
@@ -616,9 +624,44 @@ div.tracker div i {
   --content-text-color: #aaa;
   --active-color: #242424;
   --content-hover: rgba(19, 19, 19, 0.911);
+  --delete-bg: #464545;
+  --calendar-btn-bg: rgb(61, 61, 61);
+  --calendar-hover-bg: #464545;
+  --disabled-btns: #666;
+  --calendar-btn-text: white;
 }
 
 /* High Contrast styling end */
+
+/* Solarized Dark styling start */
+
+.solarized-dark-mode body {
+  background: #002b36;
+  color: #93a1a1;
+
+  --color: #657b83;
+  --border-color: #657b83;
+  --bullet-point-color: #93a1a1;
+  --bg-color: #002b36;
+  --bullet-hover-bg: #073642;
+  --label-add-bookmark: #839496;
+  --plus-label: #073642;
+  --bg-button-color: #003b4a;
+  --new-bullet-bg: #003b4a;
+  --context-menus: #073642;
+  --shadow-context: rgba(255, 255, 255, 0.05);
+  --context-bg: #003b4a;
+  --content-text-color: #93a1a1;
+  --active-color: #073642;
+  --content-hover: #003b4a;
+  --delete-bg: #073f4d;
+  --calendar-btn-bg: #93a1a1;
+  --calendar-hover-bg: #768181;
+  --disabled-btns: #0c4c5c;
+  --calendar-btn-text: #002b36;
+}
+
+/* Solarized Dark styling end */
 
 #bujo-settings {
   align-self: center;
@@ -726,7 +769,9 @@ div.daily section[id$="00"] {
 
 #yearly-calendar {
   grid-area: calendar;
-  border: 2px solid black;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   height: 20vh;
   border-radius: 25px;
   display: inline-grid;
@@ -750,9 +795,12 @@ div.daily section[id$="00"] {
   width: 100%;
   border-radius: 10px;
   font-size: 1.25vw;
-  border: 0.5px solid black;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   padding-top: 0.5px;
-  background-color: rgb(250, 248, 248);
+  background-color: var(--calendar-btn-bg, rgb(250, 248, 248));
+  color: var(--calendar-btn-text, black);
 }
 
 /* Styling of the month buttons for the #yearly-calendar on hover
@@ -762,7 +810,7 @@ div.daily section[id$="00"] {
 
 #yearly-calendar button:hover {
   cursor: pointer;
-  background-color: rgb(219, 219, 219);
+  background-color: var(--calendar-hover-bg, rgb(219, 219, 219));
 }
 
 /* Assigns the goals section in to the first row, second column */
