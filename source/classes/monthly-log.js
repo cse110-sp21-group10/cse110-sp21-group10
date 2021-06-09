@@ -204,7 +204,7 @@ class MonthlyLog extends HTMLElement {
                 display: false
               },
               ticks: {
-                color: '#a3a3a3',
+                color: '#a3a3a3'
               }
 
             },
@@ -220,7 +220,7 @@ class MonthlyLog extends HTMLElement {
                 display: false
               },
               ticks: {
-                color: '#a3a3a3',
+                color: '#a3a3a3'
               },
               min: 0 // min-value of y-axis
               // potential max-value can be added here
