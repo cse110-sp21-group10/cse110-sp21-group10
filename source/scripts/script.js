@@ -111,6 +111,17 @@ function setupScript () {
   loadVars();
   setupButtons();
 
+  // Fetches style from database and calls on helper to apply it
+  Database.fetch('S', (data) => {
+    if (data) {
+      indexJs.style.fontType = data.fontType;
+      indexJs.style.themeType = data.themeType;
+      indexJs.loadStyle();
+    } else {
+      console.log('No style was set yet!');
+    }
+  });
+
   if (!history.state) {
     window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
   } else {
@@ -437,7 +448,6 @@ function loadDay (ID = IDConverter.generateID('day', currDate)) {
   dailyLog = dayElem;
   dailyLog.style.display = 'block';
   appendWeather();
-  setupStyle();
 }
 
 /**
@@ -459,7 +469,6 @@ function loadMonth (ID = IDConverter.generateID('month', currDate)) {
   document.getElementById('internal-content').replaceChild(monthElem, monthlyLog);
   monthlyLog = monthElem;
   monthlyLog.style.display = 'block';
-  setupStyle();
 }
 
 /**
@@ -481,7 +490,6 @@ function loadYear (ID = IDConverter.generateID('year', currDate)) {
   document.getElementById('internal-content').replaceChild(yearElem, yearlyLog);
   yearlyLog = yearElem;
   yearlyLog.style.display = 'block';
-  setupStyle();
 }
 
 /**
@@ -681,20 +689,6 @@ export function zoomIn (event) {
   }
 }
 
-/**
- * Fetches style from database and calls on helper to apply it
- */
-function setupStyle () {
-  Database.fetch('S', (data) => {
-    if (data) {
-      indexJs.style.fontType = data.fontType;
-      indexJs.style.themeType = data.themeType;
-      indexJs.loadStyle();
-    } else {
-      console.log('No style was set yet!');
-    }
-  });
-}
 /* For quick commenting out of code */
 
 // Notes and old code -------------------------------------------------------------------------------
