@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
+import * as indexJs from './index.js';
 
 /*
  * Workflow (to be implemented):
@@ -109,6 +110,17 @@ window.onpopstate = function (event) {
 function setupScript () {
   loadVars();
   setupButtons();
+
+  // Fetches style from database and calls on helper to apply it
+  Database.fetch('S', (data) => {
+    if (data) {
+      indexJs.style.fontType = data.fontType;
+      indexJs.style.themeType = data.themeType;
+      indexJs.loadStyle();
+    } else {
+      console.log('No style was set yet!');
+    }
+  });
 
   if (!history.state) {
     window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
@@ -676,6 +688,7 @@ export function zoomIn (event) {
       break;
   }
 }
+
 /* For quick commenting out of code */
 
 // Notes and old code -------------------------------------------------------------------------------
