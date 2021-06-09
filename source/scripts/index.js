@@ -1,16 +1,27 @@
+import { Database } from '../classes/database.js';
+
+// Declaring fontType and themeType defaults prior to setting them onClick (export allows other scripts to set them)
+export const style = {
+  fontType: 'Times New Roman, serif',
+  themeType: ''
+};
+
+/**
+ * Helper function to apply styles loaded from database
+ *
+ * @param {string} fontType - font to apply
+ * @param {string} themeType - theme to apply
+ */
+export function loadStyle () {
+  document.body.style.fontFamily = style.fontType;
+  document.getElementsByTagName('html')[0].className = style.themeType;
+}
+
 /* Getter for the Hamburger menu button */
 const indexBtn = document.getElementById('menu-button');
 
 /* Getter for the Index div */
 const indexEl = document.getElementById('index');
-
-/* Getter for the 'Font' div */
-// eslint-disable-next-line no-unused-vars
-const fontBtn = document.getElementById('font-setting');
-
-/* Getter for the 'Theme' div */
-// eslint-disable-next-line no-unused-vars
-const themeBtn = document.getElementById('theme-setting');
 
 /* Getter for the 'X' button */
 const indexCloseBtn = document.getElementById('close-index');
@@ -53,60 +64,51 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    // console.log(i + ": " + fonts[i].id);
-    let fontType, headerType;
 
     if (idName === 'verdana') {
-      headerType = fontType = 'Verdana, sans-serif';
+      style.fontType = 'Verdana, sans-serif';
     }
 
     if (idName === 'default-font') {
-      fontType = 'Times New Roman, serif';
-      headerType = 'Kaushan Script, cursive';
+      style.fontType = 'Times New Roman, serif';
     }
 
     if (idName === 'garamond') {
-      headerType = fontType = 'Garamond, serif';
+      style.fontType = 'Garamond, serif';
     }
 
     if (idName === 'courier-new') {
-      headerType = fontType = 'Courier New, serif';
+      style.fontType = 'Courier New, serif';
     }
 
     if (idName === 'helvetica') {
-      headerType = fontType = 'Helvetica, sans-serif';
+      style.fontType = 'Helvetica, sans-serif';
     }
 
-    document.body.style.fontFamily = fontType;
-    const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-    dailyHeader.style.fontFamily = headerType;
-
-    /** eventually won't need this loop because we'll
-     * need to access the monthly and yearly elements thru
-     * their shadow roots
-     */
-
-    const headers = document.querySelectorAll('h1');
-    for (let i = 0; i < headers.length; i++) {
-      headers[i].style.fontFamily = headerType;
-      console.log(headers[i].content);
-    }
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
   });
 }
 
-/** Changing the display to be in dark mode
-  * TODO: Figure out why the header color will change, but not the contents of bullets
-  * TODO: Only change the necessary icons:
-  *       might need to add another class to the icons that will change
-  */
-// const darkModeBtn = document.getElementById('dark-mode');
-// darkModeBtn.addEventListener('click', () => {
-//   console.log("theme changing? - isn't done yet");
-//   document.body.style.color = 'white';
-//   document.body.style.backgroundColor = 'black';
+// Getting all possible theme setting
+const themes = document.getElementsByClassName('theme-style');
 
-//   const icons = document.querySelectorAll('button');
-//   for (let i = 0; i < icons.length; i++) {
-//     icons[i].style.color = 'white';
-//   }
-// });
+/** This loop adds an event listener for changing the theme
+ * If statements are used to determine which theme to switch to
+ */
+for (let i = 0; i < themes.length; i++) {
+  themes[i].addEventListener('click', () => {
+    const themeId = themes[i].id;
+
+    if (themeId === 'high-contrast') {
+      style.themeType = 'high-contrast-mode';
+    }
+
+    if (themeId === 'default-theme') {
+      style.themeType = '';
+    }
+
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
+  });
+}
