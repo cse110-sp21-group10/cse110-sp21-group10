@@ -15,6 +15,7 @@ export const style = {
 export function loadStyle () {
   document.body.style.fontFamily = style.fontType;
   document.getElementsByTagName('html')[0].className = style.themeType;
+  // document.querySelector('daily-log').shadowRoot.querySelector('img').src = style.newSrc;
 }
 
 /* Getter for the Hamburger menu button */
@@ -89,6 +90,7 @@ for (let i = 0; i < fonts.length; i++) {
 
 // Getting all possible theme setting
 const themes = document.getElementsByClassName('theme-style');
+// console.log(document.querySelector('daily-log').shadowRoot.querySelector('img').getAttribute('src'));
 
 /** This loop adds an event listener for changing the theme
  * If statements are used to determine which theme to switch to
@@ -96,19 +98,35 @@ const themes = document.getElementsByClassName('theme-style');
 for (let i = 0; i < themes.length; i++) {
   themes[i].addEventListener('click', () => {
     const themeId = themes[i].id;
+    const weatherImg = document.querySelector('daily-log').shadowRoot.querySelector('img');
+    const weatherImgSrc = weatherImg.getAttribute('src');
+    let subtract = 4;
+
+    if (weatherImgSrc.includes('_d')) {
+      subtract = 6;
+    }
+
+    const total = weatherImgSrc.length - subtract;
+    let newSrc = weatherImgSrc.substr(0, total);
+    console.log('original: ' + weatherImgSrc);
 
     if (themeId === 'high-contrast') {
       style.themeType = 'high-contrast-mode';
+      newSrc += '_d.png';
     }
 
     if (themeId === 'solarized-dark') {
       style.themeType = 'solarized-dark-mode';
+      newSrc += '_d.png';
     }
 
     if (themeId === 'default-theme') {
       style.themeType = '';
+      newSrc += '.png';
     }
 
+    weatherImg.src = newSrc;
+    console.log('new: ' + newSrc);
     Database.store('S', { fontType: style.fontType, themeType: style.themeType });
     loadStyle();
   });

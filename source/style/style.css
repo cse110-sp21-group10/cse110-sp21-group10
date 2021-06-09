@@ -451,7 +451,7 @@ button[id$='setting']:active {
 .temperature-value p {
   padding: 0.5vw;
   margin: 0;
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   font-size: 2.5vw;
   font-family: cursive;
   cursor: pointer;
@@ -465,7 +465,7 @@ button[id$='setting']:active {
 } */
 
 .temperature-value span {
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   font-size: 1.5vw;
 }
 
@@ -479,7 +479,7 @@ button[id$='setting']:active {
 
 .temperature-description p {
   margin: 0;
-  color: var(--color, black);
+  color: var(--bullet-point-color, black);
   text-align: center;
   font-size: 1.5vw;
   font-family: cursive;
