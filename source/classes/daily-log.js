@@ -272,6 +272,10 @@ class DailyLog extends HTMLElement {
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
       for (const section of jsonData.sections) {
+        // get the second section of the daily log object (the first section is always the header and should always be on the top)
+        // this element will be used to insert the daily notes at the top of the log object
+        let refElement = root.children[1];
+
         const sectionID = section.id;
 
         // update next section number
@@ -296,6 +300,9 @@ class DailyLog extends HTMLElement {
         // (reminders section always has default section ID of '00')
         // (daily notes section always has default section ID of '01')
         if (sectionID !== '00' && sectionID !== '01') {
+          // other sections should be added at the bottom of the daily log
+          refElement = null;
+
           // allow the user to change the section title
           sectionHeader.contentEditable = 'true';
 
@@ -363,7 +370,12 @@ class DailyLog extends HTMLElement {
         });
         sectionElement.appendChild(newNoteButton);
 
-        root.appendChild(sectionElement);
+        // if we have a reference element, insert the new section before it, otherwise just add the new section to the bottom
+        if (refElement) {
+          root.insertBefore(sectionElement, refElement);
+        } else {
+          root.appendChild(sectionElement);
+        }
       }
     }
 
