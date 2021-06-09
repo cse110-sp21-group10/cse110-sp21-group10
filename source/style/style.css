@@ -35,7 +35,7 @@ h1 {
 
 .global-icons button {
   border: none;
-  background: none;
+  background: var(--bg-color, white);
   color: var(--color, black);
 }
 
@@ -47,6 +47,10 @@ h1 {
 #zoom-out-button {
   right: 2.4%;
   top: 4%;
+}
+
+#zoom-out-button:hover {
+  background-color: var(--bg-button-color, lightgray);
 }
 
 #last-entry-back {
@@ -183,7 +187,7 @@ section.header button {
 
 /* Add a background color on hover */
 .global-icons button:hover {
-  background-color: var(--bg-button-color, lightgray);
+  background: var(--bg-button-color);
   cursor: pointer;
 }
 
@@ -592,7 +596,24 @@ div.tracker div i {
 
 /* All styling necessary for the conext menu end */
 
-/* High Contrast mode stylin start #323333 #727475 */
+body {
+  --bg-button-color: lightgray;
+}
+
+.delete-section {
+  background-color: var(--delete-bg, #ebebeb);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-color, black);
+  border-radius: 3px;
+  color: var(--color, black);
+}
+
+.delete-section:hover{
+  background-color: var(--bullet-hover-bg, lightgray);
+}
+
+/* High Contrast mode stylin start */
 
 .high-contrast-mode body {
   background: black;
@@ -600,7 +621,6 @@ div.tracker div i {
 
   --bg-color: black;
   --color: white;
-  --bg: white;
   --bullet-bg: #363636;
   --bullet-hover-bg: #363636;
   --bullet-point-color: white;
@@ -615,9 +635,36 @@ div.tracker div i {
   --content-text-color: #aaa;
   --active-color: #242424;
   --content-hover: rgba(19, 19, 19, 0.911);
+  --delete-bg: #464545;
 }
 
 /* High Contrast styling end */
+
+/* Solarized Dark styling start */
+
+.solarized-dark-mode body { 
+  background: #002b36;
+  color: #93a1a1;
+
+  --color: #657b83;
+  --border-color: #657b83;
+  --bullet-point-color: #93a1a1;
+  --bg-color: #002b36;
+  --bullet-hover-bg: #073642;
+  --label-add-bookmark: #839496;
+  --plus-label: #073642;
+  --bg-button-color: #003b4a;
+  --new-bullet-bg: #003b4a;
+  --context-menus: #073642;
+  --shadow-context: rgba(255, 255, 255, 0.05);
+  --context-bg: #003b4a;
+  --content-text-color: #93a1a1;
+  --active-color: #073642;
+  --content-hover: #003b4a;
+  --delete-bg: #073f4d;
+}
+
+/* Solarized Dark styling end */
 
 #bujo-settings {
   align-self: center;

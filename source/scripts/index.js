@@ -4,14 +4,6 @@ const indexBtn = document.getElementById('menu-button');
 /* Getter for the Index div */
 const indexEl = document.getElementById('index');
 
-/* Getter for the 'Font' div */
-// eslint-disable-next-line no-unused-vars
-const fontBtn = document.getElementById('font-setting');
-
-/* Getter for the 'Theme' div */
-// eslint-disable-next-line no-unused-vars
-const themeBtn = document.getElementById('theme-setting');
-
 /* Getter for the 'X' button */
 const indexCloseBtn = document.getElementById('close-index');
 
@@ -92,6 +84,10 @@ for (let i = 0; i < themes.length; i++) {
 
     if (themeId === 'high-contrast') {
       themeType = 'high-contrast-mode';
+    }
+
+    if (themeId === 'solarized-dark') {
+      themeType = 'solarized-dark-mode';
     }
 
     if (themeId === 'default-theme') {
