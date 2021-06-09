@@ -2,6 +2,17 @@ import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
 import * as indexJs from './index.js';
 
+/**
+ * Helper function to handle turning current month RED when under the current year
+ * @param {HTMLElement} root - the shador root inside the yearly element to access the calendar button from
+ */
+export function indicateMonth (root) {
+  const today = new Date();
+  if (currDate.getYear() === today.getYear()) {
+    root.querySelector('.yearly-calendar-button' + today.getMonth()).style.color = 'red';
+  }
+}
+
 /*
  * Workflow (to be implemented):
  *    When DOC loads, get id of current day and load in current day's dailyObj from database
