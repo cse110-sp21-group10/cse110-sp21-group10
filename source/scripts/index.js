@@ -102,7 +102,7 @@ for (let i = 0; i < themes.length; i++) {
     }
 
     if (themeId === 'solarized-dark') {
-      themeType = 'solarized-dark-mode';
+      style.themeType = 'solarized-dark-mode';
     }
 
     if (themeId === 'default-theme') {
