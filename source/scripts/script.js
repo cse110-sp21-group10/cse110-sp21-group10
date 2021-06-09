@@ -335,22 +335,22 @@ function zoomOut () {
   // console.log('You clicked on the zoom out button');
   switch (history.state.view) {
     case 'day':
-      var zoomOut = document.querySelector('#zoomOutTransition');
+      var zoomOutDaily = document.querySelector('#zoomOutTransition');
 
       // timing for the daily to monthly animation
-      zoomOut.classList.add('zoomOut1');
+      zoomOutDaily.classList.add('zoomOut1');
       setTimeout( function() { 
-        zoomOut.classList.remove('zoomOut1');
-        zoomOut.classList.add('zoomOut2');
+        zoomOutDaily.classList.remove('zoomOut1');
+        zoomOutDaily.classList.add('zoomOut2');
       }, 300)
 
       setTimeout( function() { 
-        zoomOut.classList.remove('zoomOut2');
-        zoomOut.classList.add('zoomOut3');
+        zoomOutDaily.classList.remove('zoomOut2');
+        zoomOutDaily.classList.add('zoomOut3');
       }, 1300)
 
       setTimeout( function() { 
-        zoomOut.classList.remove('zoomOut3');
+        zoomOutDaily.classList.remove('zoomOut3');
       }, 1800)
       
       // pushing daily to history
@@ -362,9 +362,33 @@ function zoomOut () {
 
       break;
     case 'month':
-      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
-      loadYear();
-      transitionYearly();
+      var zoomOutMonthly = document.querySelector('#zoomOutTransition2');
+      
+      // timing for the monthly to yearly animation
+      zoomOutMonthly.classList.add('zoomOut4');
+      setTimeout( function() { 
+        zoomOutMonthly.classList.remove('zoomOut4');
+        zoomOutMonthly.classList.add('zoomOut5');
+      }, 300)
+
+      setTimeout( function() { 
+        zoomOutMonthly.classList.remove('zoomOut5');
+        zoomOutMonthly.classList.add('zoomOut6');
+      }, 1300)
+
+      setTimeout( function() { 
+        zoomOutMonthly.classList.remove('zoomOut6');
+      }, 1800)
+      
+      // pushing m onthly to history
+      setTimeout( function() { 
+        window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
+        loadYear();
+        transitionYearly();
+      }, 290)
+
+
+      
       break;
   }
 
