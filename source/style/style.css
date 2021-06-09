@@ -56,7 +56,7 @@ h1 {
 #zoomOutTransition.zoomOut3 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily3 .3s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily3 .5s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
