@@ -176,6 +176,10 @@ section.header button {
   cursor: pointer;
 }
 
+.global-icons button:disabled {
+  color: var(--disabled-btns, #bababa);
+}
+
 section.header button:hover {
   background-color: var(--bg-button-color, lightgray);
   cursor: pointer; /* Pointer/hand icon */
@@ -621,6 +625,10 @@ body {
   --active-color: #242424;
   --content-hover: rgba(19, 19, 19, 0.911);
   --delete-bg: #464545;
+  --calendar-btn-bg: rgb(61, 61, 61);
+  --calendar-hover-bg: #464545;
+  --disabled-btns: #666;
+  --calendar-btn-text: white;
 }
 
 /* High Contrast styling end */
@@ -647,6 +655,10 @@ body {
   --active-color: #073642;
   --content-hover: #003b4a;
   --delete-bg: #073f4d;
+  --calendar-btn-bg: #93a1a1;
+  --calendar-hover-bg: #768181;
+  --disabled-btns: #0c4c5c;
+  --calendar-btn-text: #002b36;
 }
 
 /* Solarized Dark styling end */
@@ -757,7 +769,9 @@ div.daily section[id$="00"] {
 
 #yearly-calendar {
   grid-area: calendar;
-  border: 2px solid black;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   height: 20vh;
   border-radius: 25px;
   display: inline-grid;
@@ -781,9 +795,12 @@ div.daily section[id$="00"] {
   width: 100%;
   border-radius: 10px;
   font-size: 1.25vw;
-  border: 0.5px solid black;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   padding-top: 0.5px;
-  background-color: rgb(250, 248, 248);
+  background-color: var(--calendar-btn-bg, rgb(250, 248, 248));
+  color: var(--calendar-btn-text, black);
 }
 
 /* Styling of the month buttons for the #yearly-calendar on hover
@@ -793,7 +810,7 @@ div.daily section[id$="00"] {
 
 #yearly-calendar button:hover {
   cursor: pointer;
-  background-color: rgb(219, 219, 219);
+  background-color: var(--calendar-hover-bg, rgb(219, 219, 219));
 }
 
 /* Assigns the goals section in to the first row, second column */

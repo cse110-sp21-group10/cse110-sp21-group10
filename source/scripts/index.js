@@ -94,39 +94,61 @@ const themes = document.getElementsByClassName('theme-style');
 
 /** This loop adds an event listener for changing the theme
  * If statements are used to determine which theme to switch to
+ * This for loop will also adjust the .src attribute so the weather icon 
+ * changes appropriately onclick
  */
 for (let i = 0; i < themes.length; i++) {
   themes[i].addEventListener('click', () => {
     const themeId = themes[i].id;
     const weatherImg = document.querySelector('daily-log').shadowRoot.querySelector('img');
-    const weatherImgSrc = weatherImg.getAttribute('src');
-    let subtract = 4;
 
-    if (weatherImgSrc.includes('_d')) {
-      subtract = 6;
-    }
+    // checking to see if we are on the daily page
+    const imgExists = weatherImg !== null;
 
-    const total = weatherImgSrc.length - subtract;
-    let newSrc = weatherImgSrc.substr(0, total);
-    console.log('original: ' + weatherImgSrc);
+    // creating the variable to contain our new icon src
+    let newSrc;
+
+    // if we're on daily, we need to change the icon depending on the theme/mode
+    if (imgExists) {
+      const weatherImgSrc = weatherImg.getAttribute('src');
+      console.log(weatherImgSrc);
+      let subtract = 4;
+
+      // accounting for if we are currently in dark mode
+      if (weatherImgSrc.includes('_d')) {
+        subtract = 6;
+      }
+
+      // determining the length of the new substring we need
+      const total = weatherImgSrc.length - subtract;
+
+      // getting the parts of the src we need from the original src
+      newSrc = weatherImgSrc.substr(0, total);
+      console.log('original: ' + weatherImgSrc);
+
+      // checking if we need dark mode icons or normal ones
+      if (themeId !== 'default-theme') {
+        newSrc += '_d.png';
+      } else {
+        newSrc += '.png';
+      }
+
+      weatherImg.src = newSrc;
+      console.log('new: ' + newSrc);
+    } 
 
     if (themeId === 'high-contrast') {
       style.themeType = 'high-contrast-mode';
-      newSrc += '_d.png';
     }
 
     if (themeId === 'solarized-dark') {
       style.themeType = 'solarized-dark-mode';
-      newSrc += '_d.png';
     }
 
     if (themeId === 'default-theme') {
       style.themeType = '';
-      newSrc += '.png';
     }
 
-    weatherImg.src = newSrc;
-    console.log('new: ' + newSrc);
     Database.store('S', { fontType: style.fontType, themeType: style.themeType });
     loadStyle();
   });

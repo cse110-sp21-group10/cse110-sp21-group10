@@ -410,6 +410,7 @@ function transitionYearly () {
   btnNextEntry.disabled = 1;
 
   btnZoomOut.style.backgroundColor = 'transparent';
+  btmZoomOut.style.color = 'lightgrey';
 }
 
 // New & unprocessed code -----------------------------------------------------------------------
