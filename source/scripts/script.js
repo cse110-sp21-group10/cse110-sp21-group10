@@ -1,6 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
-import { loadStyle } from './index.js';
+import * as indexJs from './index.js';
 
 /*
  * Workflow (to be implemented):
@@ -687,7 +687,9 @@ export function zoomIn (event) {
 function setupStyle () {
   Database.fetch('S', (data) => {
     if (data) {
-      loadStyle(data.fontType);
+      indexJs.style.fontType = data.fontType;
+      indexJs.style.themeType = data.themeType;
+      indexJs.loadStyle();
     } else {
       console.log('No style was set yet!');
     }
