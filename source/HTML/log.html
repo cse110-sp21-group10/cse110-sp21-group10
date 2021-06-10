@@ -1,63 +1,56 @@
 <!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Daily Log</title>
+<html lang="en">
 
-        <!-- Main Stylesheet -->
-        <link rel="stylesheet" href="../style/style.css">
-        <link rel="stylesheet" href="../assets/css/all.css">
-        <!-- link rel="stylesheet" href="../assets/css/solarized-dark.css" -->
-        <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <header>
-            <nav class="navigation">
-                <a href="daily.html" data-link> Daily Log </a>
-                <a href="monthly.html" data-link> Monthly Log </a>
-                <a href="yearly.html" data-link> Yearly Log </a>
-                <a href="menu.html" data-link> Index </a>
-            </nav>
-            
-        </header>
-        
-            <main>
-                <div id="zoom-out-transition"></div>
-                <div id="zoom-out-transition-2"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daily Log</title>
 
-                <!--
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../assets/css/all.css">
+    <!-- link rel="stylesheet" href="../assets/css/solarized-dark.css" -->
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div id="zoom-out-transition"></div>
+        <div id="zoom-out-transition-2"></div>
+
+        <!--
                     This div element can be toggled on and off depending on what state 
                     we are in. It contains the icons being used for daily and monthly pages.
                     Buttons for Menu, Help, and Zoom-out 
                     Note: placeholder images found online used for now, 
                     preferably will replace with better icon imgs
                 -->
-                <div class="global-icons"> 
-                    <!-- Icons for menu, zoom out, help, day forward, day back, next entry, last entry -->
-                    
-                    <button class="exterior-buttons" id="zoom-out-button"><i class="fas fa-search-minus icon-size"></i></button>
-                    <!-- <button class="exterior-buttons" id="help-button"><i class="far fa-question-circle icon-size"></i></button> -->
+        <div class="global-icons">
+            <!-- Icons for menu, zoom out, help, day forward, day back, next entry, last entry -->
 
-                    <button class="exterior-buttons" id="last-entry-back"><i class="fas fa-angle-double-left icon-size"></i>
-                         <!-- <span class="last-entry-tooltip">test tooltip</span> -->
-                    </button>
-                    <button class="exterior-buttons" id="prev-day"><i class="fas fa-angle-left icon-size"></i></button>
-                    <button class="exterior-buttons" id="next-day"><i class="fas fa-angle-right icon-size"></i></button>
-                    <button class="exterior-buttons" id="last-entry-forward"><i class="fas fa-angle-double-right icon-size"></i></button>
-                </div>
-                <!-- style="position: relative; width: 25vw" style="position: relative; top:5px; width: 20px"-->
-                
+            <button class="exterior-buttons" id="zoom-out-button"><i class="fas fa-search-minus icon-size"></i></button>
+            <!-- <button class="exterior-buttons" id="help-button"><i class="far fa-question-circle icon-size"></i></button> -->
 
-                <!--
+            <button class="exterior-buttons" id="last-entry-back"><i class="fas fa-angle-double-left icon-size"></i>
+                <!-- <span class="last-entry-tooltip">test tooltip</span> -->
+            </button>
+            <button class="exterior-buttons" id="prev-day"><i class="fas fa-angle-left icon-size"></i></button>
+            <button class="exterior-buttons" id="next-day"><i class="fas fa-angle-right icon-size"></i></button>
+            <button class="exterior-buttons" id="last-entry-forward"><i
+                    class="fas fa-angle-double-right icon-size"></i></button>
+        </div>
+        <!-- style="position: relative; width: 25vw" style="position: relative; top:5px; width: 20px"-->
+
+
+        <!--
                     This div element can be toggled on and off depending on what state 
                     we are in. It contains the icons being used for the yearly page. Yearly 
                     log uses prev/next year buttons instead, which are positioned where the 
                     Zoom-out button would be (disabled for now)
                 -->
-                
-                <div id="internal-content">
-                    <!-- SPA first try (no judge plz)! : 
+
+        <div id="internal-content">
+            <!-- SPA first try (no judge plz)! : 
                     This div element encloses the daily html so we can hide/show it when we want in the css.
                     The idea was that we load all the html at one time instead of having different html pages
                     that load each time we want to switch to another page. This is know as the SPA 
@@ -69,146 +62,146 @@
                     a class the body of the html with js that will trigger the css class features of showing
                     and hiding the other log pages, along with some styling perhaps. 
                     -->
-                    <daily-log></daily-log>
+            <daily-log></daily-log>
 
-                    <!-- Monthly section
+            <!-- Monthly section
                     This is the div that encloses the monthly html page. When the 'zoom out' button
                     is clicked from the daily log the js adds a class that will trigger the css
                     monthly class to show this class and remove the other pages.
                     -->
-                    <monthly-log></monthly-log>
-                
-                    <!-- Yearly section
+            <monthly-log></monthly-log>
+
+            <!-- Yearly section
                     This is the div that encloses the yearly html page. When the 'zoom out' button
                     is clicked from the monthly log the js adds a class that will trigger the css 
                     yearly class to show this class and remove the other pages.
                     -->
-                    <yearly-log></yearly-log>
+            <yearly-log></yearly-log>
 
-                    <div id="context-menu">
-                        <div class="bullet-select">
-                            <div class="bullet-option">
-                                <i id="task-bullet" class="fas fa-circle"></i>
-                                Task  
-                            </div>
-                        </div>
-                        <div class="bullet-select">
-                            <div class="bullet-option">
-                                <i id="notes-bullet" class="fas fa-minus"></i>
-                                Note  
-                            </div>
-                        </div>
-                        <div class="bullet-select">
-                            <div class="bullet-option">
-                                <i id="events-bullet" class="far fa-circle"></i>
-                                Event
-                            </div>
-                        </div>
-                        <div class="bullet-select">
-                            <div class="bullet-option">
-                                <i id="migrate-bullet" class="fas fa-angle-right"></i>
-                                Migrate
-                            </div>
-                        </div>
-                        <div class="bullet-select">
-                            <div class="bullet-option irrelevant">
-                                <i id="irrelevant-bullet" class="fas fa-strikethrough"></i>
-                                Irrelevant
-                            </div>
-                        </div>
+            <div id="context-menu">
+                <div class="bullet-select">
+                    <div class="bullet-option">
+                        <i id="task-bullet" class="fas fa-circle"></i>
+                        Task
                     </div>
+                </div>
+                <div class="bullet-select">
+                    <div class="bullet-option">
+                        <i id="notes-bullet" class="fas fa-minus"></i>
+                        Note
+                    </div>
+                </div>
+                <div class="bullet-select">
+                    <div class="bullet-option">
+                        <i id="events-bullet" class="far fa-circle"></i>
+                        Event
+                    </div>
+                </div>
+                <div class="bullet-select">
+                    <div class="bullet-option">
+                        <i id="migrate-bullet" class="fas fa-angle-right"></i>
+                        Migrate
+                    </div>
+                </div>
+                <div class="bullet-select">
+                    <div class="bullet-option irrelevant">
+                        <i id="irrelevant-bullet" class="fas fa-strikethrough"></i>
+                        Irrelevant
+                    </div>
+                </div>
+            </div>
 
-                    <!-- Labels Context Menu
+            <!-- Labels Context Menu
                         Used to display a context menu for selecting 
                         labels to apply to bullets
                         Options have both the label icon as well as
                         the name of the label (finance, fitness, etc.)
                     -->
-                    <div id="label-menu">
-                        <div class="label-select">
-                            <div id="finance" class="label-option">
-                                <i class="fas fa-bookmark" style="color: green;"></i>
-                                Finance
-                            </div>
-                        </div>
-                        <div class="label-select">
-                            <div id="fitness" class="label-option">
-                                <i class="fas fa-bookmark" style="color: darkviolet;"></i>
-                                Fitness
-                            </div>
-                        </div>
-                        <div class="label-select">
-                            <div id="academics" class="label-option">
-                                <i class="fas fa-bookmark" style="color: grey;"></i>
-                                Academics
-                            </div>
-                        </div>
-                        <div class="label-select">
-                            <div id="household" class="label-option">
-                                <i class="fas fa-bookmark" style="color: orange;"></i>
-                                Household
-                            </div>
-                        </div>
-                        <div class="label-select">
-                            <div id="work" class="label-option">
-                                <i class="fas fa-bookmark" style="color: red;"></i>
-                                Work
-                            </div>
-                        </div>
-                        <div class="label-select">
-                            <div id="leisure" class="label-option">
-                                <i class="fas fa-bookmark" style="color: blue;"></i>
-                                Leisure
-                            </div>
-                        </div>
+            <div id="label-menu">
+                <div class="label-select">
+                    <div id="finance" class="label-option">
+                        <i class="fas fa-bookmark" style="color: green;"></i>
+                        Finance
                     </div>
-
                 </div>
+                <div class="label-select">
+                    <div id="fitness" class="label-option">
+                        <i class="fas fa-bookmark" style="color: darkviolet;"></i>
+                        Fitness
+                    </div>
+                </div>
+                <div class="label-select">
+                    <div id="academics" class="label-option">
+                        <i class="fas fa-bookmark" style="color: grey;"></i>
+                        Academics
+                    </div>
+                </div>
+                <div class="label-select">
+                    <div id="household" class="label-option">
+                        <i class="fas fa-bookmark" style="color: orange;"></i>
+                        Household
+                    </div>
+                </div>
+                <div class="label-select">
+                    <div id="work" class="label-option">
+                        <i class="fas fa-bookmark" style="color: red;"></i>
+                        Work
+                    </div>
+                </div>
+                <div class="label-select">
+                    <div id="leisure" class="label-option">
+                        <i class="fas fa-bookmark" style="color: blue;"></i>
+                        Leisure
+                    </div>
+                </div>
+            </div>
 
-                <!-- Index Section
+        </div>
+
+        <!-- Index Section
                     The index is the same for all logs. Users will be able to 
                     customize their fonts and page themeing here. They will also
                     be able to search their entries for specific tags (stretch goal?)
                 -->
 
-                <div id="index">
-                    <button class="exterior-buttons" id="menu-button"><i class="fas fa-bars icon-size"></i></button>
-                    <button id="close-index">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div id="index-content">
-                        <h2 id="bujo-settings">Settings</h2>
-                        <div id="font-setting" class="index-item setting-item collapsible">
-                            <span class="index-title">Fonts</span>
-                            <span class="index-icon"><i class="fas fa-font"></i></span>
-                        </div>
-                        <div class="content">
-                            <button id="verdana" class="font-style setting-option">Verdana</button>
-                            <button id="default-font" class="font-style setting-option">Times New Roman</button>
-                            <button id="garamond" class="font-style setting-option">Garamond</button>
-                            <button id="courier-new" class="font-style setting-option">Courier New</button>
-                            <button id="helvetica" class="font-style setting-option">Helvetica</button>
-                        </div>
-
-                        <div id="theme-setting" class="index-item setting-item collapsible">
-                            <span class="index-title">Themes</span>
-                            <span class="index-icon"><i class="fas fa-palette"></i></span>
-                        </div>
-                        <div class="content">
-                            <button id="high-contrast" class="theme-style setting-option">High Contrast</button>
-                            <button id="solarized-dark" class="theme-style setting-option">Solarized Dark</button>
-                            <button id="default-theme" class="theme-style setting-option">Default</button>
-                        </div>
-                    </div>
+        <div id="index">
+            <button class="exterior-buttons" id="menu-button"><i class="fas fa-bars icon-size"></i></button>
+            <button id="close-index">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="index-content">
+                <h2 id="bujo-settings">Settings</h2>
+                <div id="font-setting" class="index-item setting-item collapsible">
+                    <span class="index-title">Fonts</span>
+                    <span class="index-icon"><i class="fas fa-font"></i></span>
+                </div>
+                <div class="content">
+                    <button id="verdana" class="font-style setting-option">Verdana</button>
+                    <button id="default-font" class="font-style setting-option">Times New Roman</button>
+                    <button id="garamond" class="font-style setting-option">Garamond</button>
+                    <button id="courier-new" class="font-style setting-option">Courier New</button>
+                    <button id="helvetica" class="font-style setting-option">Helvetica</button>
                 </div>
 
-            </main>
-            <script src="../scripts/chart.min.js"></script>
-            <script type="module" src="../classes/daily-log.js"></script>
-            <script type="module" src="../classes/monthly-log.js"></script>
-            <script type="module" src="../classes/yearly-log.js"></script>
-            <script type="module" src="../classes/bullet.js"></script>
-            <script type="module" src="../scripts/script.js"></script>
-            <script type="module" src="../scripts/index.js"></script>
-    </body> 
+                <div id="theme-setting" class="index-item setting-item collapsible">
+                    <span class="index-title">Themes</span>
+                    <span class="index-icon"><i class="fas fa-palette"></i></span>
+                </div>
+                <div class="content">
+                    <button id="high-contrast" class="theme-style setting-option">High Contrast</button>
+                    <button id="solarized-dark" class="theme-style setting-option">Solarized Dark</button>
+                    <button id="default-theme" class="theme-style setting-option">Default</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="../scripts/chart.min.js"></script>
+    <script type="module" src="../classes/daily-log.js"></script>
+    <script type="module" src="../classes/monthly-log.js"></script>
+    <script type="module" src="../classes/yearly-log.js"></script>
+    <script type="module" src="../classes/bullet.js"></script>
+    <script type="module" src="../scripts/script.js"></script>
+    <script type="module" src="../scripts/index.js"></script>
+</body>
 </html>
