@@ -1,5 +1,7 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from '../classes/IDConverter.js';
+import * as indexJs from './index.js';
+
 /**
  * Helper function to indicate what today's date is
  * @param {string} root - the shadow root inside the monthly element to access the calendar button from
@@ -8,6 +10,17 @@ export function indicateDate (root) {
   const today = new Date();
   if (currDate.getMonth() === today.getMonth()) {
     root.querySelector('.monthly-calendar-button' + today.getDate()).style.color = 'red';
+  }
+}
+
+/**
+ * Helper function to handle turning current month RED when under the current year
+ * @param {HTMLElement} root - the shador root inside the yearly element to access the calendar button from
+ */
+export function indicateMonth (root) {
+  const today = new Date();
+  if (currDate.getYear() === today.getYear()) {
+    root.querySelector('.yearly-calendar-button' + today.getMonth()).style.color = 'red';
   }
 }
 
@@ -119,6 +132,17 @@ window.onpopstate = function (event) {
 function setupScript () {
   loadVars();
   setupButtons();
+
+  // Fetches style from database and calls on helper to apply it
+  Database.fetch('S', (data) => {
+    if (data) {
+      indexJs.style.fontType = data.fontType;
+      indexJs.style.themeType = data.themeType;
+      indexJs.loadStyle();
+    } else {
+      console.log('No style was set yet!');
+    }
+  });
 
   if (!history.state) {
     window.history.replaceState({ view: 'day', date: currDate }, 'Daily Log', '#day');
@@ -269,7 +293,11 @@ function appendWeather () {
 
     // Display weather to UI
     function displayWeather () {
-      iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      if (document.getElementsByTagName('html')[0].className !== '') {
+        iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}_d.png"/>`;
+      } else {
+        iconElement.innerHTML = `<img src="../assets/icons/${weather.iconId}.png"/>`;
+      }
       tempElement.innerHTML = `${Math.floor(celsiusToFahrenheit(weather.temperature.value))}°<span>F</span>`;
       descElement.innerHTML = weather.description;
       weather.temperature.unit = 'fahrenheit';
@@ -434,14 +462,7 @@ function transitionMonthly () {
 
   btnPrevEntry.disabled = 1;
   btnNextEntry.disabled = 1;
-
-  btnZoomOut.addEventListener('mouseover', function () {
-    btnZoomOut.style.background = 'lightgrey';
-  });
-
-  btnZoomOut.addEventListener('mouseout', function () {
-    btnZoomOut.style.background = 'transparent';
-  });
+  btnZoomOut.style.backgroundColor = '';
 }
 
 /**
@@ -679,14 +700,7 @@ function toggleCheck (inBounds = false) {
   } else {
     btnPrevEntry.disabled = false;
     btnPrevEntry.style.cursor = 'pointer';
-
-    btnPrevEntry.addEventListener('mouseover', function () {
-      btnPrevEntry.style.background = 'lightgrey';
-    });
-
-    btnPrevEntry.addEventListener('mouseout', function () {
-      btnPrevEntry.style.background = 'transparent';
-    });
+    btnPrevEntry.style.backgroundColor = '';
   }
   if ((index >= entries.length - 1 && !inBounds) || history.state.view !== 'day') {
     btnNextEntry.disabled = true;
@@ -696,14 +710,7 @@ function toggleCheck (inBounds = false) {
   } else {
     btnNextEntry.disabled = false;
     btnNextEntry.style.cursor = 'pointer';
-
-    btnNextEntry.addEventListener('mouseover', function () {
-      btnNextEntry.style.background = 'lightgrey';
-    });
-
-    btnNextEntry.addEventListener('mouseout', function () {
-      btnNextEntry.style.background = 'transparent';
-    });
+    btnNextEntry.style.backgroundColor = '';
   }
 }
 

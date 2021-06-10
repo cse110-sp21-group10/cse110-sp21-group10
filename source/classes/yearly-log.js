@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from './IDConverter.js';
+import { indicateMonth } from '../scripts/script.js';
 
 /**
  * This class contains functions to construct and edit the yearly log custom HTML element.
@@ -139,7 +140,7 @@ class YearlyLog extends HTMLElement {
     const calendar = root.querySelector('#yearly-calendar');
     for (let i = 0; i <= 11; i++) {
       const monthButton = document.createElement('button');
-      monthButton.className = 'yearly-calendar-button';
+      monthButton.className = 'yearly-calendar-button' + i;
       monthButton.id = `M ${id.substring(2)}${IDConverter.stringifyNum(i + 1)}`;
       monthButton.innerText = String(IDConverter.getMonthFromDate(new Date(year, i))).substring(0, 3);
       monthButton.addEventListener('click', function (event) {
@@ -147,6 +148,9 @@ class YearlyLog extends HTMLElement {
       });
       calendar.appendChild(monthButton);
     }
+
+    // Call on helper from script.js to (decide whether to and) indicate the current month
+    indicateMonth(root);
 
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {

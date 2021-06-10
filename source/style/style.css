@@ -1,19 +1,18 @@
 /* General Body/Default View CSS Start */
 
-* {
-  font-family: cursive;
-}
-
 h1 {
   width: 50vw;
   font-size: 3.8vw;
   position: relative;
-  font-family: 'Kaushan Script', cursive;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 #internal-content {
   box-sizing: border-box;
-  border: 5px solid black;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--color, black);
   border-radius: 75px;
   position: absolute;
   min-height: 80vh;
@@ -156,17 +155,19 @@ h1 {
 }
 
 /* To hide scrollbar */
+
 #internal-content::-webkit-scrollbar {
   display: none;
 }
 
 /* Styling for exterior buttons (menu, zoom out, help)
    Gets rid of the border and background on them.
-   Adding gey out hover feature. */
+   Adding grey out hover feature. */
 
 .global-icons button {
   border: none;
-  background: none;
+  background: var(--bg-color, white);
+  color: var(--color, black);
 }
 
 #menu-button {
@@ -212,25 +213,13 @@ h1 {
   height: 7%;
 }
 
+#zoom-out-button:hover {
+  background-color: var(--bg-button-color, lightgray);
+}
+
 nav.navigation {
   display: none;
 }
-
-/* Tooltip hovering functionality */
-
-/* #last-entry-back .last-entry-tooltip {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-}
-#last-entry-back:hover .last-entry-tooltip {
-  visibility: visible;
-} */
 
 /* This will keep the daily screen open and viewable.
 This block may not be necessary as it's the default on the page
@@ -313,8 +302,6 @@ section.header h1 {
 
 section.header button {
   position: relative;
-
-  /* right: 0; */
   margin-right: 4%;
   border: none;
   background: none;
@@ -323,6 +310,7 @@ section.header button {
   margin-top: 1.8%;
   border-radius: 30px;
   font-size: 0.8vw;
+  color: var(--color, black);
 }
 
 section h2 {
@@ -334,12 +322,16 @@ section h2 {
 
 /* Add a background color on hover */
 .global-icons button:hover {
-  background-color: lightgray;
+  background: var(--bg-button-color);
   cursor: pointer;
 }
 
+.global-icons button:disabled {
+  color: var(--disabled-btns, #bababa);
+}
+
 section.header button:hover {
-  background-color: lightgray;
+  background-color: var(--bg-button-color, lightgray);
   cursor: pointer; /* Pointer/hand icon */
 }
 
@@ -363,73 +355,12 @@ section.header button:hover {
   }
 }
 
-.bullet-point {
-  font-size: 10px;
-  border: none;
-  background: none;
-  float: left;
-  padding-top: 0.9%;
-}
-
-.bullet-point:hover {
-  font-size: 12px;
-  position: relative;
-  padding-top: 0.8%;
-  right: 1px;
-  width: 22px;
-}
-
-.bullet-text {
-  display: inline-block;
-  width: 65vw;
-  font-size: larger;
-  margin: 0;
-
-  /* border: 5px solid black; */
-
-  padding-left: 1%;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-}
-
-.bullet {
-  margin-left: 1%;
-  margin-right: 12%;
-  padding-left: 0.5%;
-  padding-right: 1%;
-}
-
-.bullet:hover {
-  background-color: rgb(241, 241, 241);
-  border-radius: 20px;
-}
-
-.bullet-delete {
-  display: none;
-  float: right;
-  padding-top: 0.9%;
-  border: none;
-  background-color: transparent;
-}
-
-.bullet-delete:hover {
-  font-size: 15px;
-  position: relative;
-  padding-top: 0.8%;
-  left: 0.75px;
-}
-
-.bullet:hover .bullet-delete {
-  display: inline-block;
-}
-
 .log {
   display: inline-block;
-  border: 2px solid black;
+  border: 2px solid;
+  border-color: var(--border-color, black);
   border-radius: 30px;
   min-height: 30%;
-
-  /* padding-top: 10px; */
   padding-left: 2%;
   padding-bottom: 1%;
   width: 96%;
@@ -442,11 +373,13 @@ section.header button:hover {
   border-radius: 25%;
   background: none;
   border: none;
+  color: var(--color, black);
 }
 
 .new-bullet:hover {
-  background-color: rgb(241, 241, 241);
+  background-color: var(--new-bullet-bg, rgb(241, 241, 241));
   color: #3c3;
+  cursor: pointer;
 }
 
 [contenteditable] {
@@ -459,7 +392,9 @@ section.header button:hover {
   position: fixed;
   width: 40vw;
   height: 100%;
-  border-right: 5px solid black;
+  border-right-width: 5px;
+  border-right-style: solid;
+  border-right-color: var(--color, black);
   border-top-right-radius: 25px;
   border-bottom-right-radius: 25px;
   left: -42vw;
@@ -490,7 +425,8 @@ section.header button:hover {
 #index.active {
   left: 0;
   opacity: 100%;
-  background: white;
+  background: var(--bg-color, white);
+  color: var(--color, black);
 }
 
 #index #menu-button {
@@ -502,6 +438,7 @@ section.header button:hover {
   left: 44vw;
   border: none;
   background: none;
+  color: var(--color, black);
 }
 
 #index.active #menu-button {
@@ -513,73 +450,42 @@ section.header button:hover {
 }
 
 #index #menu-button:hover {
-  background-color: lightgray;
-  cursor: pointer; /* Pointer/hand icon */
-}
-
-#search-bar {
-  /* position: relative;
-  top:5%;  */
-  display: inline-block;
-
-  /* font-size: 5vw; */
-  margin: 0;
-  width: 100%;
-}
-
-#search-input {
-  width: 75%;
-  padding: 5px;
-}
-
-#search-button {
-  position: relative;
-  top: 0.2vh;
-  background: none;
-  border: none;
-  font-size: 1.5vw;
-  padding: 0;
-}
-
-#search-button:hover {
-  background: none;
-  background-color: rgb(241, 241, 241);
+  background-color: var(--bg-button-color, lightgray);
   cursor: pointer;
-  border-radius: 30px;
 }
 
 div[id$='setting']:hover {
   cursor: pointer;
-  background-color: rgb(241, 241, 241);
+  background-color: var(--bg-button-color, rgb(241, 241, 241));
 }
 
 div[id$='setting']:active,
 button[id$='setting']:active {
-  background: rgb(219, 219, 219);
+  background: var(--active-color, rgb(219, 219, 219));
 }
 
 .collapsible {
   font-size: 2.5vw;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  color: black;
   cursor: pointer;
-  width: 96%;
+  width: 38vw;
   border: none;
   text-align: left;
   outline: none;
+  color: var(--color, black);
 }
 
 .active,
 .collapsible:hover {
-  background-color: rgb(219, 219, 219);
+  background-color: var(--active-color, rgb(219, 219, 219));
 }
 
 .collapsible::after {
   position: relative;
   top: 0.4vh;
   content: '\002B';
-  color: black;
+  color: var(--color, black);
   font-weight: bold;
   float: right;
   margin-left: 5px;
@@ -596,9 +502,13 @@ button[id$='setting']:active {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: white;
+  background-color: var(--bg-color, white);
   border-radius: 15px;
   width: 95%;
+}
+
+.setting-item {
+  color: var(--color, black);
 }
 
 .setting-option {
@@ -607,6 +517,7 @@ button[id$='setting']:active {
   background: none;
   border: none;
   width: inherit;
+  color: var(--color, black);
 }
 
 .setting-option:hover {
@@ -614,7 +525,7 @@ button[id$='setting']:active {
 }
 
 .content .setting-option:hover {
-  background-color: rgba(236, 236, 236, 0.911);
+  background-color: var(--content-hover, rgba(236, 236, 236, 0.911));
   border-radius: 15px;
 }
 
@@ -646,7 +557,6 @@ button[id$='setting']:active {
   background-color: transparent;
   display: block;
   padding-top: 0.2vw;
-
   position: relative;
   left: 6vw;
 }
@@ -695,7 +605,7 @@ button[id$='setting']:active {
 .temperature-value p {
   padding: 0.5vw;
   margin: 0;
-  color: black;
+  color: var(--bullet-point-color, black);
   font-size: 2.5vw;
   font-family: cursive;
   cursor: pointer;
@@ -709,7 +619,7 @@ button[id$='setting']:active {
 } */
 
 .temperature-value span {
-  color: black;
+  color: var(--bullet-point-color, black);
   font-size: 1.5vw;
 }
 
@@ -723,7 +633,7 @@ button[id$='setting']:active {
 
 .temperature-description p {
   margin: 0;
-  color: black;
+  color: var(--bullet-point-color, black);
   text-align: center;
   font-size: 1.5vw;
   font-family: cursive;
@@ -758,10 +668,10 @@ div.tracker div i {
   position: fixed;
   top: 1vh;
   left: 1.2vw;
-  background: #fdfdfd;
+  background: var(--context-menus, #fdfdfd);
   width: 7.5vw;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 5px 2px var(--shadow-context, rgba(0, 0, 0, 0.05));
   transform: scale(0);
   transform-origin: top left;
   z-index: 2;
@@ -784,7 +694,7 @@ div.tracker div i {
   padding: 0.25vw;
   padding-left: 0;
   font-size: 1vw;
-  color: #555;
+  color: var(--content-text-color, #555);
   cursor: pointer;
 }
 
@@ -809,7 +719,7 @@ div.tracker div i {
   left: 0;
   width: 0%;
   height: 100%;
-  background: #eee;
+  background: var(--context-bg, #eee);
   z-index: -1;
   transition: all 150ms ease-in-out;
 }
@@ -948,6 +858,88 @@ section#monthly-checks::-webkit-scrollbar {
 
 /* All styling necessary for the conext menu end */
 
+body {
+  --bg-button-color: lightgray;
+}
+
+.delete-section {
+  background-color: var(--delete-bg, #ebebeb);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border-color, black);
+  border-radius: 3px;
+  color: var(--color, black);
+}
+
+.delete-section:hover {
+  background-color: var(--bullet-hover-bg, lightgray);
+}
+
+/* High Contrast mode stylin start */
+
+.high-contrast-mode body {
+  background: black;
+  color: white;
+
+  --bg-color: black;
+  --color: white;
+  --bullet-bg: #363636;
+  --bullet-hover-bg: #363636;
+  --bullet-point-color: white;
+  --border-color: white;
+  --label-add-bookmark: white;
+  --plus-label: black;
+  --bg-button-color: #2c2c2c;
+  --new-bullet-bg: #2c2c2c;
+  --context-menus: #242424;
+  --shadow-context: rgba(255, 255, 255, 0.05);
+  --context-bg: #2b2b2b;
+  --content-text-color: #aaa;
+  --active-color: #242424;
+  --content-hover: rgba(19, 19, 19, 0.911);
+  --delete-bg: #464545;
+  --calendar-btn-bg: rgb(61, 61, 61);
+  --calendar-hover-bg: #464545;
+  --disabled-btns: #666;
+  --calendar-btn-text: white;
+}
+
+/* High Contrast styling end */
+
+/* Solarized Dark styling start */
+
+.solarized-dark-mode body {
+  background: #002b36;
+  color: #93a1a1;
+
+  --color: #657b83;
+  --border-color: #657b83;
+  --bullet-point-color: #93a1a1;
+  --bg-color: #002b36;
+  --bullet-hover-bg: #073642;
+  --label-add-bookmark: #839496;
+  --plus-label: #073642;
+  --bg-button-color: #003b4a;
+  --new-bullet-bg: #003b4a;
+  --context-menus: #073642;
+  --shadow-context: rgba(255, 255, 255, 0.05);
+  --context-bg: #003b4a;
+  --content-text-color: #93a1a1;
+  --active-color: #073642;
+  --content-hover: #003b4a;
+  --delete-bg: #073f4d;
+  --calendar-btn-bg: #93a1a1;
+  --calendar-hover-bg: #768181;
+  --disabled-btns: #0c4c5c;
+  --calendar-btn-text: #002b36;
+}
+
+/* Solarized Dark styling end */
+
+#bujo-settings {
+  align-self: center;
+}
+
 /* More styling for daily-log start */
 
 section.trackers::-webkit-scrollbar {
@@ -955,7 +947,9 @@ section.trackers::-webkit-scrollbar {
 }
 
 div.daily section.trackers {
-  border: 2px solid black;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--color, black);
   display: flex;
   flex-wrap: wrap;
   border-radius: 30px;
@@ -1051,7 +1045,9 @@ div.daily section[id$="00"] {
 
 #yearly-calendar {
   grid-area: calendar;
-  border: 2px solid black;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   height: 20vh;
   border-radius: 25px;
   display: inline-grid;
@@ -1075,9 +1071,12 @@ div.daily section[id$="00"] {
   width: 100%;
   border-radius: 10px;
   font-size: 1.25vw;
-  border: 0.5px solid black;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: var(--border-color, black);
   padding-top: 0.5px;
-  background-color: rgb(250, 248, 248);
+  background-color: var(--calendar-btn-bg, rgb(250, 248, 248));
+  color: var(--calendar-btn-text, black);
 }
 
 /* Styling of the month buttons for the #yearly-calendar on hover
@@ -1087,7 +1086,7 @@ div.daily section[id$="00"] {
 
 #yearly-calendar button:hover {
   cursor: pointer;
-  background-color: rgb(219, 219, 219);
+  background-color: var(--calendar-hover-bg, rgb(219, 219, 219));
 }
 
 /* Assigns the goals section in to the first row, second column */

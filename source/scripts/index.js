@@ -1,22 +1,31 @@
+import { Database } from '../classes/database.js';
+
+// Declaring fontType and themeType defaults prior to setting them onClick (export allows other scripts to set them)
+export const style = {
+  fontType: 'Times New Roman, serif',
+  themeType: ''
+};
+
+/**
+ * Helper function to apply styles loaded from database
+ *
+ * @param {string} fontType - font to apply
+ * @param {string} themeType - theme to apply
+ */
+export function loadStyle () {
+  document.body.style.fontFamily = style.fontType;
+  document.getElementsByTagName('html')[0].className = style.themeType;
+  // document.querySelector('daily-log').shadowRoot.querySelector('img').src = style.newSrc;
+}
+
 /* Getter for the Hamburger menu button */
 const indexBtn = document.getElementById('menu-button');
 
 /* Getter for the Index div */
 const indexEl = document.getElementById('index');
 
-/* Getter for the 'Font' div */
-// eslint-disable-next-line no-unused-vars
-const fontBtn = document.getElementById('font-setting');
-
-/* Getter for the 'Theme' div */
-// eslint-disable-next-line no-unused-vars
-const themeBtn = document.getElementById('theme-setting');
-
 /* Getter for the 'X' button */
 const indexCloseBtn = document.getElementById('close-index');
-
-// TODO: Figure out how to change header font
-//       Customize font sizes
 
 /* Adds functionality to the hamburger menu icon to open the index */
 indexBtn.addEventListener('click', () => {
@@ -53,60 +62,94 @@ const fonts = document.getElementsByClassName('font-style');
 for (let i = 0; i < fonts.length; i++) {
   fonts[i].addEventListener('click', () => {
     const idName = fonts[i].id;
-    // console.log(i + ": " + fonts[i].id);
-    let fontType, headerType;
 
     if (idName === 'verdana') {
-      headerType = fontType = 'Verdana, sans-serif';
+      style.fontType = 'Verdana, sans-serif';
     }
 
     if (idName === 'default-font') {
-      fontType = 'Times New Roman, serif';
-      headerType = 'Kaushan Script, cursive';
+      style.fontType = 'Times New Roman, serif';
     }
 
     if (idName === 'garamond') {
-      headerType = fontType = 'Garamond, serif';
+      style.fontType = 'Garamond, serif';
     }
 
     if (idName === 'courier-new') {
-      headerType = fontType = 'Courier New, serif';
+      style.fontType = 'Courier New, serif';
     }
 
     if (idName === 'helvetica') {
-      headerType = fontType = 'Helvetica, sans-serif';
+      style.fontType = 'Helvetica, sans-serif';
     }
 
-    document.body.style.fontFamily = fontType;
-    const dailyHeader = document.querySelector('daily-log').shadowRoot.querySelector('#daily-header > h1');
-    dailyHeader.style.fontFamily = headerType;
-
-    /** eventually won't need this loop because we'll
-     * need to access the monthly and yearly elements thru
-     * their shadow roots
-     */
-
-    const headers = document.querySelectorAll('h1');
-    for (let i = 0; i < headers.length; i++) {
-      headers[i].style.fontFamily = headerType;
-      console.log(headers[i].content);
-    }
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
   });
 }
 
-/** Changing the display to be in dark mode
-  * TODO: Figure out why the header color will change, but not the contents of bullets
-  * TODO: Only change the necessary icons:
-  *       might need to add another class to the icons that will change
-  */
-// const darkModeBtn = document.getElementById('dark-mode');
-// darkModeBtn.addEventListener('click', () => {
-//   console.log("theme changing? - isn't done yet");
-//   document.body.style.color = 'white';
-//   document.body.style.backgroundColor = 'black';
+// Getting all possible theme setting
+const themes = document.getElementsByClassName('theme-style');
+// console.log(document.querySelector('daily-log').shadowRoot.querySelector('img').getAttribute('src'));
 
-//   const icons = document.querySelectorAll('button');
-//   for (let i = 0; i < icons.length; i++) {
-//     icons[i].style.color = 'white';
-//   }
-// });
+/** This loop adds an event listener for changing the theme
+ * If statements are used to determine which theme to switch to
+ * This for loop will also adjust the .src attribute so the weather icon
+ * changes appropriately onclick
+ */
+for (let i = 0; i < themes.length; i++) {
+  themes[i].addEventListener('click', () => {
+    const themeId = themes[i].id;
+    const weatherImg = document.querySelector('daily-log').shadowRoot.querySelector('img');
+
+    // checking to see if we are on the daily page
+    const imgExists = weatherImg !== null;
+
+    // creating the variable to contain our new icon src
+    let newSrc;
+
+    // if we're on daily, we need to change the icon depending on the theme/mode
+    if (imgExists) {
+      const weatherImgSrc = weatherImg.getAttribute('src');
+      console.log(weatherImgSrc);
+      let subtract = 4;
+
+      // accounting for if we are currently in dark mode
+      if (weatherImgSrc.includes('_d')) {
+        subtract = 6;
+      }
+
+      // determining the length of the new substring we need
+      const total = weatherImgSrc.length - subtract;
+
+      // getting the parts of the src we need from the original src
+      newSrc = weatherImgSrc.substr(0, total);
+      console.log('original: ' + weatherImgSrc);
+
+      // checking if we need dark mode icons or normal ones
+      if (themeId !== 'default-theme') {
+        newSrc += '_d.png';
+      } else {
+        newSrc += '.png';
+      }
+
+      weatherImg.src = newSrc;
+      console.log('new: ' + newSrc);
+    }
+
+    if (themeId === 'high-contrast') {
+      style.themeType = 'high-contrast-mode';
+    }
+
+    if (themeId === 'solarized-dark') {
+      style.themeType = 'solarized-dark-mode';
+    }
+
+    if (themeId === 'default-theme') {
+      style.themeType = '';
+    }
+
+    Database.store('S', { fontType: style.fontType, themeType: style.themeType });
+    loadStyle();
+  });
+}
