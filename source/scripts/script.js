@@ -371,22 +371,12 @@ function zoomOut () {
       zoomOutDaily = document.querySelector('#zoom-out-transition');
 
       // timing for the daily to monthly animation
-      zoomOutDaily.classList.add('zoomOut1');
+      zoomOutDaily.classList.add('zoomOutDaily');
       setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut1');
-        zoomOutDaily.classList.add('zoomOut2');
-      }, 150);
-
-      setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut2');
-        zoomOutDaily.classList.add('zoomOut3');
-      }, 650);
-
-      setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut3');
+        zoomOutDaily.classList.remove('zoomOutDaily');
       }, 900);
 
-      // pushing daily to history
+      // pushing daily to monthly
       setTimeout(function () {
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
@@ -398,22 +388,12 @@ function zoomOut () {
       zoomOutMonthly = document.querySelector('#zoom-out-transition-2');
 
       // timing for the monthly to yearly animation
-      zoomOutMonthly.classList.add('zoomOut4');
+      zoomOutMonthly.classList.add('zoomOutMonthly');
       setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut4');
-        zoomOutMonthly.classList.add('zoomOut5');
-      }, 150);
-
-      setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut5');
-        zoomOutMonthly.classList.add('zoomOut6');
-      }, 650);
-
-      setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut6');
+        zoomOutMonthly.classList.remove('zoomOutMonthly');
       }, 900);
 
-      // pushing m onthly to history
+      // pushing monthly to history
       setTimeout(function () {
         window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
         loadYear();
@@ -727,19 +707,45 @@ function toggleCheck (inBounds = false) {
  * @param {OnClickEvent} event - that triggered this function, provides access to target ID
  */
 export function zoomIn (event) {
+  let zoomOutDailyRev;
+  let zoomOutMonthlyRev;
   switch (history.state.view) {
     case 'month':
       currDate = IDConverter.getDateFromID(event.target.id, 'day');
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
-      loadDay();
-      transitionDaily();
-      updateIndex();
+
+      // timing for the daily to monthly animation
+      zoomOutDailyRev = document.querySelector('#zoom-out-transition');
+      zoomOutDailyRev.classList.add('zoomOutDailyRev');
+      setTimeout(function () {
+        zoomOutDailyRev.classList.remove('zoomOutDailyRev');
+      }, 700);
+
+      // pushing daily to monthly
+      setTimeout(function () {
+        loadDay();
+        transitionDaily();
+        updateIndex();
+      }, 520);
+
       break;
     case 'year':
       currDate = IDConverter.getDateFromID(event.target.id, 'month');
       window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      loadMonth();
-      transitionMonthly();
+
+      // timing for the daily to monthly animation
+      zoomOutMonthlyRev = document.querySelector('#zoom-out-transition-2');
+      zoomOutMonthlyRev.classList.add('zoomOutMonthlyRev');
+      setTimeout(function () {
+        zoomOutMonthlyRev.classList.remove('zoomOutMonthlyRev');
+      }, 700);
+
+      // pushing daily to monthly
+      setTimeout(function () {
+        loadMonth();
+        transitionMonthly();
+      }, 520);
+
       break;
   }
 }

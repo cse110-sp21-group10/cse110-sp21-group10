@@ -41,53 +41,65 @@ h1 {
 }
 
 /* animation classes for daily */
-#zoom-out-transition.zoomOut1 {
+#zoom-out-transition.zoomOutDaily {
   z-index: 1;
-  animation: zoomOutDaily1 0.15s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily 0.9s ease-in-out 0s 1 normal forwards;
 }
 
-#zoom-out-transition.zoomOut2 {
-  opacity: 1;
+#zoom-out-transition.zoomOutDailyRev {
   z-index: 1;
-  animation: zoomOutDaily2 0.5s ease-out 0s 1 normal forwards;
-}
-
-#zoom-out-transition.zoomOut3 {
-  opacity: 1;
-  z-index: 1;
-  animation: zoomOutDaily3 0.25s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDailyRev 0.7s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
-@keyframes zoomOutDaily1 {
-  from {
+@keyframes zoomOutDaily {
+  0% {
+    z-index: 1;
     opacity: 0;
   }
 
-  to {
+  16.667% {
+    z-index: 1;
     opacity: 1;
-  }
-}
-
-@keyframes zoomOutDaily2 {
-  from {
     transform: scale(1, 1) translate(0, 0);
   }
 
-  to {
+  72.222% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
+  }
+
+  100% {
+    z-index: 1;
+    opacity: 0;
     transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 }
 
-@keyframes zoomOutDaily3 {
-  from {
+@keyframes zoomOutDailyRev {
+  0% {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
+  }
+
+  27.778% {
+    z-index: 1;
     opacity: 1;
     transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 
-  to {
+  83.333% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+  }
+
+  100% {
+    z-index: 1;
     opacity: 0;
-    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 }
 
@@ -108,53 +120,65 @@ h1 {
 }
 
 /* animation classes for daily */
-#zoom-out-transition-2.zoomOut4 {
+#zoom-out-transition-2.zoomOutMonthly {
   z-index: 1;
-  animation: zoomOutDaily4 0.15s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutMonthly 0.9s ease-in-out 0s 1 normal forwards;
 }
 
-#zoom-out-transition-2.zoomOut5 {
+#zoom-out-transition-2.zoomOutMonthlyRev {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily5 0.5s ease-out 0s 1 normal forwards;
-}
-
-#zoom-out-transition-2.zoomOut6 {
-  opacity: 1;
-  z-index: 1;
-  animation: zoomOutDaily6 0.25s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutMonthlyRev 0.7s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
-@keyframes zoomOutDaily4 {
-  from {
+@keyframes zoomOutMonthly {
+  0% {
+    z-index: 1;
     opacity: 0;
   }
 
-  to {
+  16.667% {
+    z-index: 1;
     opacity: 1;
-  }
-}
-
-@keyframes zoomOutDaily5 {
-  from {
     transform: scale(1, 1) translate(0, 0);
   }
 
-  to {
-    transform: scale(0.294, 0.268) translate(2.5%, 32.5%);
+  72.222% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
+  }
+
+  100% {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
 }
 
-@keyframes zoomOutDaily6 {
-  from {
-    opacity: 1;
-    transform: scale(0.294, 0.269) translate(2.5%, 32.5%);
+@keyframes zoomOutMonthlyRev {
+  0% {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
 
-  to {
+  27.778% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
+  }
+
+  83.333% {
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1, 1) translate(0, 0);
+  }
+
+  100% {
+    z-index: 1;
     opacity: 0;
-    transform: scale(0.294, 0.269) translate(2.5%, 32.5%);
   }
 }
 
@@ -1077,6 +1101,7 @@ div.daily section[id$="00"] {
 #yearly-header {
   grid-area: header;
   margin-bottom: 4vh;
+  height: 9vh;
 }
 
 /* Assigns #yearly-calendar to be in the second row, first column
