@@ -292,8 +292,11 @@ class DailyLog extends HTMLElement {
         sectionElement.style = 'margin-bottom: 1vw';
 
         // construct section header element
-        const sectionHeader = document.createElement('h2');
-        sectionHeader.innerText = section.name;
+        const sectionHeader = document.createElement('div');
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.innerText = section.name;
+        sectionTitle.style.paddingLeft = '2vw';
+        sectionHeader.appendChild(sectionTitle);
         sectionElement.appendChild(sectionHeader);
 
         // check if we are creating a custom section
@@ -304,16 +307,16 @@ class DailyLog extends HTMLElement {
           refElement = null;
 
           // allow the user to change the section title
-          sectionHeader.contentEditable = 'true';
+          sectionTitle.contentEditable = 'true';
 
           // add event listener to the header to update the daily log element when the header text is updated
-          sectionHeader.addEventListener('blur', (event) => {
+          sectionTitle.addEventListener('blur', (event) => {
             const sectionName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
-            if (sectionHeader.innerText !== sectionName) {
+            if (sectionTitle.innerText !== sectionName) {
               const dailyData = dailyLog.data;
               for (const sec of dailyData.sections) {
                 if (sec.id === sectionID) {
-                  sec.name = sectionHeader.innerText;
+                  sec.name = sectionTitle.innerText;
                 }
               }
               this.setAttribute('data', JSON.stringify(dailyData));
@@ -322,20 +325,24 @@ class DailyLog extends HTMLElement {
           });
 
           // add event listener to the header to prevent newlines in headers
-          sectionHeader.addEventListener('keypress', (event) => {
+          sectionTitle.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-              sectionHeader.blur();
+              sectionTitle.blur();
             }
           });
 
           // create a button to delete the section and add the delete section event listener to it
           const deleteSectionButton = document.createElement('button');
           deleteSectionButton.className = 'delete-section';
-          deleteSectionButton.innerText = 'Delete Section';
+          deleteSectionButton.innerHTML = `
+            <i class="fas fa-times"></i>
+          `;
+          deleteSectionButton.style.float = 'right';
+          deleteSectionButton.style.marginRight = '2vw';
           deleteSectionButton.addEventListener('click', function (event) {
             dailyLog.deleteSectionHandler(sectionElement);
           });
-          sectionElement.appendChild(deleteSectionButton);
+          sectionHeader.insertBefore(deleteSectionButton, sectionTitle);
         }
 
         // construct bullet elements
@@ -888,18 +895,21 @@ class DailyLog extends HTMLElement {
     section.style = 'margin-bottom: 1vw';
 
     // create the editable section title element
-    const sectionTitle = document.createElement('h2');
-    sectionTitle.contentEditable = 'true';
-    section.appendChild(sectionTitle);
+    const sectionHead = document.createElement('div');
+    const sectionName = document.createElement('h2');
+    sectionName.contentEditable = 'true';
+    sectionName.style.paddingLeft = '2vw';
+    sectionHead.appendChild(sectionName);
+    section.appendChild(sectionHead);
 
     // add event listener to the title to update the daily log element when the title text is updated
-    sectionTitle.addEventListener('blur', (event) => {
-      const sectionName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
-      if (sectionTitle.innerText !== sectionName) {
+    sectionName.addEventListener('blur', (event) => {
+      const secName = dailyLog.data.sections.filter((section) => section.id === sectionID)[0].name;
+      if (sectionName.innerText !== secName) {
         const dailyData = dailyLog.data;
         for (const sec of dailyData.sections) {
           if (sec.id === sectionID) {
-            sec.name = sectionTitle.innerText;
+            sec.name = sectionName.innerText;
           }
         }
         this.setAttribute('data', JSON.stringify(dailyData));
@@ -908,20 +918,24 @@ class DailyLog extends HTMLElement {
     });
 
     // add event listener to the title to prevent newlines
-    sectionTitle.addEventListener('keypress', (event) => {
+    sectionName.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
-        sectionTitle.blur();
+        sectionName.blur();
       }
     });
 
     // create a button to delete the section and add the delete section event listener to it
     const deleteSection = document.createElement('button');
     deleteSection.className = 'delete-section';
-    deleteSection.innerText = 'Delete Section';
+    deleteSection.innerHTML = `
+      <i class="fas fa-times"></i>
+    `;
+    deleteSection.style.float = 'right';
+    deleteSection.style.marginRight = '2vw';
     deleteSection.addEventListener('click', function (event) {
       dailyLog.deleteSectionHandler(event.target.closest('section'));
     });
-    section.appendChild(deleteSection);
+    sectionHead.insertBefore(deleteSection, sectionName);
 
     // create a button to add new notes to the section and add the add new bullet event listener to it
     const newNote = document.createElement('button');
@@ -937,7 +951,7 @@ class DailyLog extends HTMLElement {
     divElement.appendChild(section);
 
     // prompt user to start typing section name
-    sectionTitle.focus();
+    sectionName.focus();
   }
 
   /**
