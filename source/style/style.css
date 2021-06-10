@@ -807,7 +807,6 @@ div.tracker div i {
 
 #monthly-calendar button:hover {
   background-color: var(--bg-button-color, rgb(236, 236, 236));
-  /* cursor: pointer; */
 }
 
 .dates {
