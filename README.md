@@ -1,13 +1,15 @@
 # cse110-sp21-group10
 We'll be creating a Bullet Journal--a place for you to track your thoughts and daily life--through adherence to Agile development.
 
-## BuJo site link
+## Bullet Journal Site Link
 [Click here to go to our BuJo app!](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html)
 
 ## Quick Links
 [Group Intro Video!](https://youtu.be/TEGurr5URH4)
 
-[Team Page](admin/team.md)
+[Onboarding Document](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Onboarding)
+
+[Team Page](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Team-Page)
 
 [Rules](admin/misc/rules.md)
 
