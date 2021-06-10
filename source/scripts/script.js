@@ -208,7 +208,7 @@ function appendWeather () {
   const todayDate = new Date();
   if (currDate.getDate() === todayDate.getDate() &&
       currDate.getMonth() === todayDate.getMonth() &&
-      currDate.getFullYear() === todayDate.getFullYear()) {    
+      currDate.getFullYear() === todayDate.getFullYear()) {
     // create weather div container and append it to the daily log's header
     const weatherDiv = document.createElement('div');
     weatherDiv.className = 'container';
@@ -227,7 +227,7 @@ function appendWeather () {
     `;
 
     const temp = document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1');
-    temp.style = "margin-left: 0";
+    temp.style = 'margin-left: 0';
     dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, temp);
     // Select Elements
     const iconElement = weatherDiv.querySelector('.weather-icon');
@@ -325,7 +325,7 @@ function appendWeather () {
       }
     });
   } else {
-    document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1').style = "margin-left: 13vw";
+    document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1').style = 'margin-left: 13vw';
   }
 }
 
@@ -364,66 +364,64 @@ function setupButtons () {
  */
 function zoomOut () {
   // console.log('You clicked on the zoom out button');
+  let zoomOutDaily;
+  let zoomOutMonthly;
   switch (history.state.view) {
     case 'day':
-      var zoomOutDaily = document.querySelector('#zoomOutTransition');
+      zoomOutDaily = document.querySelector('#zoom-out-transition');
 
       // timing for the daily to monthly animation
       zoomOutDaily.classList.add('zoomOut1');
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutDaily.classList.remove('zoomOut1');
         zoomOutDaily.classList.add('zoomOut2');
-      }, 150)
+      }, 150);
 
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutDaily.classList.remove('zoomOut2');
         zoomOutDaily.classList.add('zoomOut3');
-      }, 650)
+      }, 650);
 
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutDaily.classList.remove('zoomOut3');
-      }, 900)
-      
+      }, 900);
+
       // pushing daily to history
-      setTimeout( function() { 
+      setTimeout(function () {
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
         transitionMonthly();
-      }, 140)
+      }, 140);
 
       break;
     case 'month':
-      var zoomOutMonthly = document.querySelector('#zoomOutTransition2');
-      
+      zoomOutMonthly = document.querySelector('#zoom-out-transition-2');
+
       // timing for the monthly to yearly animation
       zoomOutMonthly.classList.add('zoomOut4');
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutMonthly.classList.remove('zoomOut4');
         zoomOutMonthly.classList.add('zoomOut5');
-      }, 150)
+      }, 150);
 
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutMonthly.classList.remove('zoomOut5');
         zoomOutMonthly.classList.add('zoomOut6');
-      }, 650)
+      }, 650);
 
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutMonthly.classList.remove('zoomOut6');
-      }, 900)
-      
+      }, 900);
+
       // pushing m onthly to history
-      setTimeout( function() { 
+      setTimeout(function () {
         window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
         loadYear();
         transitionYearly();
-      }, 140)
+      }, 140);
 
-
-      
       break;
   }
-
-  
 }
 
 /**

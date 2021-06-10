@@ -24,7 +24,7 @@ h1 {
   font-size: larger;
 }
 
-#zoomOutTransition {
+#zoom-out-transition {
   box-sizing: border-box;
   border: 5px solid black;
   border-radius: 75px;
@@ -35,28 +35,27 @@ h1 {
   left: 7.5vw;
   max-height: 80vh;
   opacity: 0;
-
   background-color: white;
-
   transform-origin: 20% 20%;
-
   z-index: -1;
 }
 
 /* animation classes for daily */
-#zoomOutTransition.zoomOut1 {
+#zoom-out-transition.zoomOut1 {
   z-index: 1;
-  animation: zoomOutDaily1 .15s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily1 0.15s ease-in-out 0s 1 normal forwards;
 }
-#zoomOutTransition.zoomOut2 {
+
+#zoom-out-transition.zoomOut2 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily2 .5s ease-out 0s 1 normal forwards;
+  animation: zoomOutDaily2 0.5s ease-out 0s 1 normal forwards;
 }
-#zoomOutTransition.zoomOut3 {
+
+#zoom-out-transition.zoomOut3 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily3 .25s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily3 0.25s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
@@ -64,6 +63,7 @@ h1 {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -73,23 +73,25 @@ h1 {
   from {
     transform: scale(1, 1) translate(0, 0);
   }
+
   to {
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 }
 
 @keyframes zoomOutDaily3 {
   from {
     opacity: 1;
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
+
   to {
     opacity: 0;
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 }
 
-#zoomOutTransition2 {
+#zoom-out-transition-2 {
   box-sizing: border-box;
   border: 5px solid black;
   border-radius: 75px;
@@ -100,28 +102,27 @@ h1 {
   left: 7.5vw;
   max-height: 80vh;
   opacity: 0;
-
   background-color: white;
-
   transform-origin: 10% 20%;
-
   z-index: -1;
 }
 
 /* animation classes for daily */
-#zoomOutTransition2.zoomOut4 {
+#zoom-out-transition-2.zoomOut4 {
   z-index: 1;
-  animation: zoomOutDaily4 .15s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily4 0.15s ease-in-out 0s 1 normal forwards;
 }
-#zoomOutTransition2.zoomOut5 {
+
+#zoom-out-transition-2.zoomOut5 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily5 .5s ease-out 0s 1 normal forwards;
+  animation: zoomOutDaily5 0.5s ease-out 0s 1 normal forwards;
 }
-#zoomOutTransition2.zoomOut6 {
+
+#zoom-out-transition-2.zoomOut6 {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutDaily6 .25s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily6 0.25s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
@@ -129,6 +130,7 @@ h1 {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -138,19 +140,21 @@ h1 {
   from {
     transform: scale(1, 1) translate(0, 0);
   }
+
   to {
-    transform: scale(.294, .268) translate(2.5%, 32.5%);
+    transform: scale(0.294, 0.268) translate(2.5%, 32.5%);
   }
 }
 
 @keyframes zoomOutDaily6 {
   from {
     opacity: 1;
-    transform: scale(.294, .269) translate(2.5%, 32.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 32.5%);
   }
+
   to {
     opacity: 0;
-    transform: scale(.294, .269) translate(2.5%, 32.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 32.5%);
   }
 }
 
@@ -228,7 +232,6 @@ This block may not be necessary as it's the default on the page
 #daily-header {
   margin-bottom: 4vh;
   align-content: center;
-
   position: relative;
   right: 2vw;
 }
@@ -762,6 +765,31 @@ div.tracker div i {
   border: none;
 }
 
+/* Styling of the month buttons for the #yearly-calendar */
+
+#yearly-calendar button {
+  height: 5vh;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 1.25vw;
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: var(--border-color, black);
+  padding-top: 0.5px;
+  background-color: var(--calendar-btn-bg, rgb(250, 248, 248));
+  color: var(--calendar-btn-text, black);
+}
+
+/* Styling of the month buttons for the #yearly-calendar on hover
+  - color will change
+  - cursor will also change
+*/
+
+#yearly-calendar button:hover {
+  cursor: pointer;
+  background-color: var(--calendar-hover-bg, rgb(219, 219, 219));
+}
+
 #monthly-calendar button:hover {
   background-color: rgb(236, 236, 236);
 }
@@ -972,12 +1000,6 @@ div.tracker {
   align-content: center;
 }
 
-div.tracker h3 {
-  margin-left: 2.5vw;
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-}
-
 .numInput {
   height: 2.5vh;
   width: 14.5vw;
@@ -994,6 +1016,9 @@ div.tracker h3 {
 
 div.tracker h3 {
   font-size: 1.5vw;
+  margin-left: 2.5vw;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
   display: inline-block;
   width: 15vw;
 }
@@ -1062,31 +1087,6 @@ div.daily section[id$="00"] {
     "jan feb mar apr"
     "may jun jul aug"
     "sep oct nov dec";
-}
-
-/* Styling of the month buttons for the #yearly-calendar */
-
-#yearly-calendar button {
-  height: 5vh;
-  width: 100%;
-  border-radius: 10px;
-  font-size: 1.25vw;
-  border-width: 0.5px;
-  border-style: solid;
-  border-color: var(--border-color, black);
-  padding-top: 0.5px;
-  background-color: var(--calendar-btn-bg, rgb(250, 248, 248));
-  color: var(--calendar-btn-text, black);
-}
-
-/* Styling of the month buttons for the #yearly-calendar on hover
-  - color will change
-  - cursor will also change
-*/
-
-#yearly-calendar button:hover {
-  cursor: pointer;
-  background-color: var(--calendar-hover-bg, rgb(219, 219, 219));
 }
 
 /* Assigns the goals section in to the first row, second column */
