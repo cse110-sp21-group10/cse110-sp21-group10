@@ -232,6 +232,20 @@ section.header button:hover {
   cursor: pointer;
 }
 
+.delete-section {
+  size: 10px;
+  border-radius: 25%;
+  background: none;
+  border: none;
+  color: var(--color, black);
+}
+
+.delete-section:hover {
+  background-color: var(--new-bullet-bg, rgb(241, 241, 241));
+  color: rgb(185, 29, 29);
+  cursor: pointer;
+}
+
 [contenteditable] {
   outline: 0 solid transparent;
 }
@@ -589,6 +603,7 @@ body {
   --bg-button-color: lightgray;
 }
 
+/*
 .delete-section {
   background-color: var(--delete-bg, #ebebeb);
   border-width: 1px;
