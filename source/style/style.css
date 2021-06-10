@@ -119,7 +119,7 @@ h1 {
   z-index: -1;
 }
 
-/* animation classes for daily */
+/* animation classes for monthly */
 #zoom-out-transition-2.zoomOutMonthly {
   z-index: 1;
   animation: zoomOutMonthly 0.9s ease-in-out 0s 1 normal forwards;
@@ -131,7 +131,7 @@ h1 {
   animation: zoomOutMonthlyRev 0.7s ease-in-out 0s 1 normal forwards;
 }
 
-/* animation keyframes from daily */
+/* animation keyframes from monthly */
 @keyframes zoomOutMonthly {
   0% {
     z-index: 1;
@@ -1148,11 +1148,17 @@ div.yearly section[id$="01"] {
   margin-top: 2vh;
   display: inline-block;
   font-size: 1.5vw;
+  height: 30vh;
+  overflow: auto;
 }
 
 /* Adding a scrollbar for overflow in the yearly goals section */
 
 div.yearly section[id$="00"]::-webkit-scrollbar {
+  display: none;
+}
+
+div.yearly section[id$="01"]::-webkit-scrollbar {
   display: none;
 }
 
