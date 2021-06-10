@@ -6,7 +6,7 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 
 ## Tours of The Project
 
-[Final Private Video]
+[Final Private Video](https://youtu.be/jhNIVRSKZSo)
 
 [Final Public Video]
 
