@@ -315,7 +315,6 @@ class MonthlyLog extends HTMLElement {
       dateButton.className = 'monthly-calendar-button' + i;
       dateButton.id = dateID;
       dateButton.innerText = String(i);
-      dateButton.style.color = 'black';
       dateButton.addEventListener('click', function (event) {
         callback(event);
       });
