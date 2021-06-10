@@ -58,9 +58,9 @@ Models of how we decided to store objects in the database are found in [/data mo
 The **/source** folder, which can be found [here](source/), contains all the source code that implements the bullet journal. This includes 
 
 - [/HTML](source/HTML/), which contains the HTML file where journal is displayed
-- [/style](source/style/), which contains the central style sheet for the whole journal
-- [/classes](source/classes/), which contains the javascript classes for custom html elements and other helper classes
-- [/scripts](source/scripts/), that contain the javascript scripts for interacting with the program
+- [/style](source/style/), which contains the central CSS style sheet for the whole journal
+- [/classes](source/classes/), which contains the JavaScript classes for custom html elements and other helper classes
+- [/scripts](source/scripts/), which contains the JavaScript scripts that load the app and allow for interaction with the program
 - [/assets](source/assets/), which contains the media for the program
   
 The **/testing** folder, which can be found [here](testing/), contains the End to End and Unit Tests that test the functions of our program.
@@ -117,4 +117,4 @@ git push -u origin <your-branch-name>
 10. Check the [`main` branch](https://github.com/cse110-sp21-group10/cse110-sp21-group10) and the [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html) to make sure your changes are reflected. When your pull request gets merged into `main`, you will see the commit message for your branch being merged, and the JSDoc for your changes (if you edited a JavaScript file) will be automatically generated and published on our [documentation site](https://cse110-sp21-group10.github.io/), so make sure all of that is there. Additionally, if the merge included any new code, our app deployment on GitHub Pages will automatically be updated, so after a few minutes you should can go to our [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html) and you should see your changes reflected there. If there are any issues with what you see on the [`main` branch](https://github.com/cse110-sp21-group10/cse110-sp21-group10) or the [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html), make sure to reach out to a fellow team member to help you.
 
 ## Thank You
-Thank you for checking out Bullet Journal Project. We hope the documentation repository reflects the all the work and the dedication of the process of making this BuJo!
+Thank you for checking out our Bullet Journal Project. We hope all the documentation on the repository reflects the work and dedication that went into the process of making this BuJo!
