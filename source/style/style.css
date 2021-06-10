@@ -43,11 +43,12 @@ h1 {
 /* animation classes for daily */
 #zoom-out-transition.zoomOutDaily {
   z-index: 1;
-  animation: zoomOutDaily .9s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDaily 0.9s ease-in-out 0s 1 normal forwards;
 }
+
 #zoom-out-transition.zoomOutDailyRev {
   z-index: 1;
-  animation: zoomOutDailyRev .7s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutDailyRev 0.7s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
@@ -56,39 +57,46 @@ h1 {
     z-index: 1;
     opacity: 0;
   }
+
   16.667% {
     z-index: 1;
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
   }
+
   72.222% {
     z-index: 1;
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
+
   100% {
     z-index: 1;
     opacity: 0;
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
 }
+
 @keyframes zoomOutDailyRev {
   0% {
     z-index: 1;
     opacity: 0;
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
+
   27.778% {
     z-index: 1;
     opacity: 1;
-    transform: scale(.3, .36) translate(-4%, 21%);
+    transform: scale(0.3, 0.36) translate(-4%, 21%);
   }
+
   83.333% {
     z-index: 1;
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
   }
+
   100% {
     z-index: 1;
     opacity: 0;
@@ -114,12 +122,13 @@ h1 {
 /* animation classes for daily */
 #zoom-out-transition-2.zoomOutMonthly {
   z-index: 1;
-  animation: zoomOutMonthly .9s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutMonthly 0.9s ease-in-out 0s 1 normal forwards;
 }
+
 #zoom-out-transition-2.zoomOutMonthlyRev {
   opacity: 1;
   z-index: 1;
-  animation: zoomOutMonthlyRev .7s ease-in-out 0s 1 normal forwards;
+  animation: zoomOutMonthlyRev 0.7s ease-in-out 0s 1 normal forwards;
 }
 
 /* animation keyframes from daily */
@@ -128,38 +137,45 @@ h1 {
     z-index: 1;
     opacity: 0;
   }
+
   16.667% {
     z-index: 1;
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
   }
+
   72.222% {
     z-index: 1;
     opacity: 1;
-    transform: scale(.294, .269) translate(2.5%, 22.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
+
   100% {
     z-index: 1;
     opacity: 0;
-    transform: scale(.294, .269) translate(2.5%, 22.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
 }
+
 @keyframes zoomOutMonthlyRev {
   0% {
     z-index: 1;
     opacity: 0;
-    transform: scale(.294, .269) translate(2.5%, 22.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
+
   27.778% {
     z-index: 1;
     opacity: 1;
-    transform: scale(.294, .269) translate(2.5%, 22.5%);
+    transform: scale(0.294, 0.269) translate(2.5%, 22.5%);
   }
+
   83.333% {
     z-index: 1;
     opacity: 1;
     transform: scale(1, 1) translate(0, 0);
   }
+
   100% {
     z-index: 1;
     opacity: 0;
