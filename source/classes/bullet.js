@@ -68,7 +68,7 @@ class BulletEntry extends HTMLElement {
         
         .bullet-text {
           display: inline-block;
-          width: 70%;
+          max-width: 75%;
           font-size: larger;
           margin: 0;
           /* border: 5px solid black; */
@@ -129,6 +129,8 @@ class BulletEntry extends HTMLElement {
           font-size: 0.9em;
           position: relative;
           padding-top: .5vh;
+          width: 2.5vw;
+          right: .1vw;
         }
 
         .fa-stack { 

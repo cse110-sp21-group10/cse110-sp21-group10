@@ -3,6 +3,17 @@ import { IDConverter } from '../classes/IDConverter.js';
 import * as indexJs from './index.js';
 
 /**
+ * Helper function to indicate what today's date is
+ * @param {string} root - the shadow root inside the monthly element to access the calendar button from
+ */
+export function indicateDate (root) {
+  const today = new Date();
+  if (currDate.getMonth() === today.getMonth()) {
+    root.querySelector('.monthly-calendar-button' + today.getDate()).style.color = 'red';
+  }
+}
+
+/**
  * Helper function to handle turning current month RED when under the current year
  * @param {HTMLElement} root - the shador root inside the yearly element to access the calendar button from
  */
@@ -214,8 +225,10 @@ function appendWeather () {
         </div>  
       </div>
     `;
-    const newSectionButton = dailyLog.shadowRoot.querySelector('#related-sections-button');
-    dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, newSectionButton);
+
+    const temp = document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1');
+    temp.style = 'margin-left: 0';
+    dailyLog.shadowRoot.querySelector('#daily-header').insertBefore(weatherDiv, temp);
     // Select Elements
     const iconElement = weatherDiv.querySelector('.weather-icon');
     const tempElement = weatherDiv.querySelector('.temperature-value p');
@@ -311,6 +324,8 @@ function appendWeather () {
         weather.temperature.unit = 'fahrenheit';
       }
     });
+  } else {
+    document.querySelector('daily-log').shadowRoot.querySelector('.header').querySelector('h1').style = 'margin-left: 13vw';
   }
 }
 
@@ -349,16 +364,62 @@ function setupButtons () {
  */
 function zoomOut () {
   // console.log('You clicked on the zoom out button');
+  let zoomOutDaily;
+  let zoomOutMonthly;
   switch (history.state.view) {
     case 'day':
-      window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      loadMonth();
-      transitionMonthly();
+      zoomOutDaily = document.querySelector('#zoom-out-transition');
+
+      // timing for the daily to monthly animation
+      zoomOutDaily.classList.add('zoomOut1');
+      setTimeout(function () {
+        zoomOutDaily.classList.remove('zoomOut1');
+        zoomOutDaily.classList.add('zoomOut2');
+      }, 150);
+
+      setTimeout(function () {
+        zoomOutDaily.classList.remove('zoomOut2');
+        zoomOutDaily.classList.add('zoomOut3');
+      }, 650);
+
+      setTimeout(function () {
+        zoomOutDaily.classList.remove('zoomOut3');
+      }, 900);
+
+      // pushing daily to history
+      setTimeout(function () {
+        window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
+        loadMonth();
+        transitionMonthly();
+      }, 140);
+
       break;
     case 'month':
-      window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
-      loadYear();
-      transitionYearly();
+      zoomOutMonthly = document.querySelector('#zoom-out-transition-2');
+
+      // timing for the monthly to yearly animation
+      zoomOutMonthly.classList.add('zoomOut4');
+      setTimeout(function () {
+        zoomOutMonthly.classList.remove('zoomOut4');
+        zoomOutMonthly.classList.add('zoomOut5');
+      }, 150);
+
+      setTimeout(function () {
+        zoomOutMonthly.classList.remove('zoomOut5');
+        zoomOutMonthly.classList.add('zoomOut6');
+      }, 650);
+
+      setTimeout(function () {
+        zoomOutMonthly.classList.remove('zoomOut6');
+      }, 900);
+
+      // pushing m onthly to history
+      setTimeout(function () {
+        window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
+        loadYear();
+        transitionYearly();
+      }, 140);
+
       break;
   }
 }

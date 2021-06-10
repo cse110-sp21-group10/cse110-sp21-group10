@@ -1,5 +1,6 @@
 import { Database } from '../classes/database.js';
 import { IDConverter } from './IDConverter.js';
+import { indicateDate } from '../scripts/script.js';
 
 // tell the linter that Chart is defined by a previous script
 /* global Chart */
@@ -60,6 +61,7 @@ class MonthlyLog extends HTMLElement {
           <h1></h1>
         </section>
         <section id="monthly-calendar"></section>
+        <section id="monthly-checks"></section>
         <section id="monthly-charts"></section>
       </div>
     `;
@@ -139,6 +141,11 @@ class MonthlyLog extends HTMLElement {
     // get the header text of this custom HTML element and set its contents to the constructed date string
     const headerText = root.querySelector('#monthly-header > h1');
     headerText.innerText = dateString;
+
+    const trackerHeader = document.createElement('h2');
+    trackerHeader.className = 'tracker-header';
+    trackerHeader.innerHTML = 'Trackers';
+    root.appendChild(trackerHeader);
 
     // IDs to use for the charts
     const canvasIDs = ['mood-tracker', 'sleepq-tracker', 'calorie-tracker', 'money-tracker'];
@@ -241,14 +248,74 @@ class MonthlyLog extends HTMLElement {
     // 2: fetch the daily object for each date, and add its data to the tracker charts
     const calendar = root.querySelector('#monthly-calendar');
     const numDays = dateObj.getDate();
-    let numExerciseDays = 0;
+    const dates = document.createElement('div');
+    dates.className = 'dates';
+
+    for (let i = 1; i <= 7; i++) {
+      const dateName = document.createElement('h3');
+      dateName.className = 'date-name';
+
+      switch (i) {
+        case 1:
+          dateName.innerHTML = 'Sun';
+          break;
+        case 2:
+          dateName.innerHTML = 'Mon';
+          break;
+        case 3:
+          dateName.innerHTML = 'Tue';
+          break;
+        case 4:
+          dateName.innerHTML = 'Wed';
+          break;
+        case 5:
+          dateName.innerHTML = 'Thu';
+          break;
+        case 6:
+          dateName.innerHTML = 'Fri';
+          break;
+        case 7:
+          dateName.innerHTML = 'Sat';
+          break;
+        default:
+          dateName.innerHTML = 'oops';
+      }
+
+      dates.appendChild(dateName);
+    }
+
+    calendar.appendChild(dates);
+
+    // create the section for exercise checkboxes
+    const exerciseTracker = document.createElement('div');
+    root.querySelector('#monthly-checks').appendChild(exerciseTracker);
+    exerciseTracker.style.display = 'flex';
+    exerciseTracker.style.flexDirection = 'row';
+    const exerciseTrackerHeading = document.createElement('div');
+    exerciseTrackerHeading.innerText = 'Exercise:';
+    exerciseTracker.appendChild(exerciseTrackerHeading);
+    const exerciseTrackerBoxes = document.createElement('div');
+    exerciseTrackerBoxes.className = 'tracking-boxes';
+    exerciseTrackerBoxes.style.display = 'flex';
+    exerciseTrackerBoxes.style.flexDirection = 'row';
+    exerciseTracker.appendChild(exerciseTrackerBoxes);
+
+    dateObj.setDate(1);
+    for (let i = 0; i < dateObj.getDay(); i++) {
+      // add fake buttons
+      const blankButton = document.createElement('button');
+      blankButton.className = 'blank-button';
+      calendar.appendChild(blankButton);
+    }
+
     for (let i = 1; i <= numDays; i++) {
       // date button creation
       const dateID = `D ${id.substring(2)}${IDConverter.stringifyNum(i)}`;
       const dateButton = document.createElement('button');
-      dateButton.className = 'monthly-calendar-button';
+      dateButton.className = 'monthly-calendar-button' + i;
       dateButton.id = dateID;
       dateButton.innerText = String(i);
+      dateButton.style.color = 'black';
       dateButton.addEventListener('click', function (event) {
         callback(event);
       });
@@ -259,6 +326,30 @@ class MonthlyLog extends HTMLElement {
       for (const chart of charts) {
         chart.data.labels.push(i);
       }
+
+      const exerciseTrackerBox = document.createElement('div');
+      exerciseTrackerBox.style.display = 'flex';
+      exerciseTrackerBox.style.flexDirection = 'column';
+      exerciseTrackerBox.style.textAlign = 'center';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.disabled = 'true';
+      checkbox.checked = false;
+      checkbox.className = 'check';
+      exerciseTrackerBox.appendChild(checkbox);
+      const datePar1 = document.createElement('p');
+      datePar1.style.margin = '0';
+      datePar1.style.lineHeight = '0.9';
+      datePar1.innerText = String(i).charAt(0);
+      const datePar2 = document.createElement('p');
+      datePar2.style.margin = '0';
+      datePar2.style.lineHeight = '0.9';
+      if (String(i).length > 1) {
+        datePar2.innerText = String(i).charAt(1);
+      }
+      exerciseTrackerBox.appendChild(datePar1);
+      exerciseTrackerBox.appendChild(datePar2);
+      exerciseTrackerBoxes.appendChild(exerciseTrackerBox);
 
       // get the data for the chart
       Database.fetch(dateID, function (data, date) {
@@ -281,7 +372,7 @@ class MonthlyLog extends HTMLElement {
                 trackerChart = charts[3];
                 break;
               case 'Exercise':
-                numExerciseDays = numExerciseDays + tracker.value;
+                checkbox.checked = tracker.value === 1;
                 break;
             }
 
@@ -301,12 +392,16 @@ class MonthlyLog extends HTMLElement {
           for (const chart of charts) {
             chart.update();
           }
-          const exerciseTracker = document.createElement('p');
-          exerciseTracker.innerText = `Exercise: ${numExerciseDays}/${numDays} days (${Math.round(numExerciseDays / numDays * 100)}%)`;
-          root.querySelector('#monthly-charts').appendChild(exerciseTracker);
         }
       }, i);
     }
+
+    indicateDate(this.shadowRoot);
+
+    const divElement = document.createElement('div');
+    divElement.className = 'notes';
+
+    root.appendChild(divElement);
 
     // loop through all sections in JSON data and construct and populate them
     if (jsonData.sections) {
@@ -359,7 +454,7 @@ class MonthlyLog extends HTMLElement {
         });
         sectionElement.appendChild(newNoteButton);
 
-        root.appendChild(sectionElement);
+        divElement.appendChild(sectionElement);
       }
     }
 
