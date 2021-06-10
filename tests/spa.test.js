@@ -83,7 +83,7 @@ describe('Basic user flow for SPA ', () => {
   });
   it('Test 12: Clicking the 1 button should change page url to /#day', async () => {
     await page.$eval('monthly-log', (elem) => {
-      elem.shadowRoot.querySelectorAll('button')[0].click();
+      elem.shadowRoot.querySelector('.monthly-calendar-button1').click();
     });
     expect(page.url().includes('#day')).toBe(true);
   });
