@@ -801,6 +801,7 @@ div.tracker div i {
   border-radius: 10px;
   background-color: transparent;
   border: none;
+  color: var(--color, black);
 }
 
 /* Styling of the month buttons for the #yearly-calendar */
@@ -829,14 +830,14 @@ div.tracker div i {
 }
 
 #monthly-calendar button:hover {
-  background-color: rgb(236, 236, 236);
+  background-color: var(--bg-button-color, rgb(236, 236, 236));
 }
 
 .dates {
   display: flex;
   flex-direction: row;
   height: 4vh;
-  background-color: rgb(236, 236, 236);
+  background-color: var(--bg-button-color, rgb(236, 236, 236));
   border-radius: 20px;
 }
 
@@ -854,6 +855,7 @@ h3.date-name {
   margin-right: 0.15vw;
   position: relative;
   left: 1vw;
+  color: var(--color, black);
 }
 
 #monthly-charts {
