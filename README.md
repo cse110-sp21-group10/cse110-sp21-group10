@@ -59,8 +59,8 @@ The **/source** folder, which can be found [here](source/), contains all the sou
 
 - [/HTML](source/HTML/), which contains the HTML file where journal is displayed
 - [/style](source/style/), which contains the central style sheet for the whole journal
-- [/classes](source/classes/), which contains the custom html elements and their implementations
-- [/scripts](source/scripts/), that contain the javascript for interacting with the program
+- [/classes](source/classes/), which contains the javascript classes for custom html elements and other helper classes
+- [/scripts](source/scripts/), that contain the javascript scripts for interacting with the program
 - [/assets](source/assets/), which contains the media for the program
   
 The **/testing** folder, which can be found [here](testing/), contains the End to End and Unit Tests that test the functions of our program.
@@ -73,7 +73,7 @@ Welcome to the PowellPuff Coders team! The first thing you should do is get to k
 ### Read the Documentation
 Before getting to work on the code for this project, you should read over the documentation we have compiled.
 
-First up is our internal documentation, which most importantly includes meeting notes, brainstorming artifacts, and design records/notes. Our meeting notes can be found in the [`admin/meetings`](https://github.com/cse110-sp21-group10/cse110-sp21-group10/tree/main/admin/meetings) folder, and a quick scan over these meeting notes can help you get up to date on where the team is at currently and what was discussed in the past. The other internal documentation files are in the [`specs`](https://github.com/cse110-sp21-group10/cse110-sp21-group10/tree/main/specs) folder, and these are important to check out because they describe how our app is designed and both in terms of user interface, as shown in our wireframes in our project pitch, and in terms of code, like the JSON formats for our various custom elements.
+First up is our internal documentation, which most importantly includes our team rules, meeting notes, brainstorming artifacts, and design records/notes. Our team rules can be found in [this](https://github.com/cse110-sp21-group10/cse110-sp21-group10/blob/main/admin/misc/rules.md) document. Read over these rules and add your own signed copy in the [`admin/misc`](https://github.com/cse110-sp21-group10/cse110-sp21-group10/blob/main/admin/misc) folder. Our meeting notes can be found in the [`admin/meetings`](https://github.com/cse110-sp21-group10/cse110-sp21-group10/tree/main/admin/meetings) folder, and a quick scan over these meeting notes can help you get up to date on where the team is at currently and what was discussed in the past. The other internal documentation files are in the [`specs`](https://github.com/cse110-sp21-group10/cse110-sp21-group10/tree/main/specs) folder, and these are important to check out because they describe how our app is designed and both in terms of user interface, as shown in our wireframes in our project pitch, and in terms of code, like the JSON formats for our various custom elements.
 
 Next we have our code documentation, which is probably just as you would expect. Our code documentation is automatically generated using JSDoc, and the documentation is published [here](https://cse110-sp21-group10.github.io/), so you can take a look at that to get an idea of how our code works and how the different functions and objects interact with each other.
 
