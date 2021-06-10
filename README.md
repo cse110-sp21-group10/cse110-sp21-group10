@@ -4,29 +4,66 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 ## Bullet Journal Site Link
 [Click here to go to our BuJo app!](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html)
 
-## Quick Links
-[Group Intro Video!](https://youtu.be/TEGurr5URH4)
-
-[Onboarding Document](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Onboarding)
-
-[Team Page](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Team-Page)
-
-[Rules](admin/misc/rules.md)
-
-[Meetings](admin/meetings)
-
-[Code Documentation](https://cse110-sp21-group10.github.io/)
+## Tours of The Project
 
 [Final Private Video]
 
 [Final Public Video]
 
+## Meet the Team!
 
-## Linter Status
+To meet the PowellPuff coders, check out our [Group Intro Video!](https://youtu.be/TEGurr5URH4)
+
+A more detailed introduction can be found at our [Team Page](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Team-Page).
+
+## Admin
+
+The rules that define our team culture and the ethics of our team can be found [here](admin/misc/rules.md).
+
+Meeting Notes can be found [here](admin/meetings).
+
+The status videos and final project videos can be found [here](admin/videos/).
+
+For people who want to contribute to the project, the full Onboarding Document can be found [here](https://github.com/cse110-sp21-group10/cse110-sp21-group10/wiki/Onboarding).
+
+## CI/CD Pipeline
+
+The JSDocs documentation for our code can be found [here](https://cse110-sp21-group10.github.io/).
+
+The documentation for the testing in our pipeline can be found [here](specs/testing/testing.md)
+
+Here is documentation for the [First Phase](admin/cipipeline/phase1.md) and the [Second Phase](admin/cipipeline/phase1.md) of the developement of the CI/CD Pipeline.
+
+### Linter Status
 [![GitHub Super-Linter](https://github.com/cse110-sp21-group10/cse110-sp21-group10/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
-## CodeFactor Code Quality Status
+### CodeFactor Code Quality Status
 [![CodeFactor](https://www.codefactor.io/repository/github/cse110-sp21-group10/cse110-sp21-group10/badge?s=82cdcb24bda34ada6b80cc659332725ca7fdfdca)](https://www.codefactor.io/repository/github/cse110-sp21-group10/cse110-sp21-group10)
+
+
+## Design
+
+Our design process is documented in the **/specs** folder, which can be found [here](specs/).
+
+All **architectural decision records (ADRs)** can be found in [/adrs](specs/adrs/).
+
+The process by which we documented our design can be found in [/brainstorm](specs/brainstorm/).
+
+This process resulted in the final pitch, which can be found in [/pitch](specs/pitch/).
+
+Models of how we decided to store objects in the database are found in [/data models](specs/data%20models/).
+
+## Code
+
+The **/source** folder, which can be found [here](source/), contains all the source code that implements the bullet journal. This includes 
+
+- [/HTML](source/HTML/), which contains the HTML file where journal is displayed
+- [/style](source/style/), which contains the central style sheet for the whole journal
+- [/classes](source/classes/), which contains the custom html elements and their implementations
+- [/scripts](source/scripts/), that contain the javascript for interacting with the program
+- [/assets](source/assets/), which contains the media for the program
+  
+The **/testing** folder, which can be found [here](testing/), contains the End to End and Unit Tests that test the functions of our program.
 
 ## Onboarding
 
@@ -79,5 +116,5 @@ git push -u origin <your-branch-name>
 9. Wait for reviews on your pull request. Members of our team will review pull requests when it is indicated on GitHub that they have passed all the checks. Reviewers may leave comments on your pull request, ask for changes on your pull request, in which case you can discuss those changes and potentially implement them, or approve your pull request. When someone requests changes on your pull request, it gets placed in the "Under Review" column on our [Project Board](https://github.com/cse110-sp21-group10/cse110-sp21-group10/projects/1). When someone approves your pull request, it will be labeled with the team label corresponding to the reviewer's subteam (so you can see which subteams have approved your pull request) and the pull request will be moved to the "Reviewer Approved" column on our [Project Board](https://github.com/cse110-sp21-group10/cse110-sp21-group10/projects/1). Once your pull request gets 3 approvals (preferably one person from each other subteam, since we currently have 4 subteams total), it will automatically get merged. The pull request will then get placed in the "Done" column on our [Project Board](https://github.com/cse110-sp21-group10/cse110-sp21-group10/projects/1). Additionally, the corresponding issue that you linked to the pull request will be automatically closed and moved to the "Done" column on our [Project Board](https://github.com/cse110-sp21-group10/cse110-sp21-group10/projects/1) as well.
 10. Check the [`main` branch](https://github.com/cse110-sp21-group10/cse110-sp21-group10) and the [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html) to make sure your changes are reflected. When your pull request gets merged into `main`, you will see the commit message for your branch being merged, and the JSDoc for your changes (if you edited a JavaScript file) will be automatically generated and published on our [documentation site](https://cse110-sp21-group10.github.io/), so make sure all of that is there. Additionally, if the merge included any new code, our app deployment on GitHub Pages will automatically be updated, so after a few minutes you should can go to our [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html) and you should see your changes reflected there. If there are any issues with what you see on the [`main` branch](https://github.com/cse110-sp21-group10/cse110-sp21-group10) or the [deployed application](https://cse110-sp21-group10.github.io/cse110-sp21-group10/source/HTML/log.html), make sure to reach out to a fellow team member to help you.
 
-### Thank You
-Thank you for reading through all of that information! It will help you make a positive impact on our project right away!
+## Thank You
+Thank you for checking out Bullet Journal Project. We hope the documentation repository reflects the all the work and the dedication of the process of making this BuJo!
