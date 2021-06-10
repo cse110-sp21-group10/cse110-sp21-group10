@@ -372,16 +372,16 @@ function zoomOut () {
 
       // timing for the daily to monthly animation
       zoomOutDaily.classList.add('zoomOutDaily');
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutDaily.classList.remove('zoomOutDaily');
-      }, 900)
+      }, 900);
 
       // pushing daily to monthly
-      setTimeout( function() {
+      setTimeout(function () {
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
         transitionMonthly();
-      }, 140)
+      }, 140);
 
       break;
     case 'month':
@@ -389,16 +389,16 @@ function zoomOut () {
 
       // timing for the monthly to yearly animation
       zoomOutMonthly.classList.add('zoomOutMonthly');
-      setTimeout( function() { 
+      setTimeout(function () {
         zoomOutMonthly.classList.remove('zoomOutMonthly');
-      }, 900)
+      }, 900);
 
       // pushing monthly to history
-      setTimeout( function() {
+      setTimeout(function () {
         window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
         loadYear();
         transitionYearly();
-      }, 140)
+      }, 140);
 
       break;
   }
@@ -707,19 +707,45 @@ function toggleCheck (inBounds = false) {
  * @param {OnClickEvent} event - that triggered this function, provides access to target ID
  */
 export function zoomIn (event) {
+  let zoomOutDailyRev;
+  let zoomOutMonthlyRev;
   switch (history.state.view) {
     case 'month':
       currDate = IDConverter.getDateFromID(event.target.id, 'day');
       window.history.pushState({ view: 'day', date: currDate }, 'Daily Log', '#day');
-      loadDay();
-      transitionDaily();
-      updateIndex();
+
+      // timing for the daily to monthly animation
+      zoomOutDailyRev = document.querySelector('#zoom-out-transition');
+      zoomOutDailyRev.classList.add('zoomOutDailyRev');
+      setTimeout(function () {
+        zoomOutDailyRev.classList.remove('zoomOutDailyRev');
+      }, 700);
+
+      // pushing daily to monthly
+      setTimeout(function () {
+        loadDay();
+        transitionDaily();
+        updateIndex();
+      }, 520);
+
       break;
     case 'year':
       currDate = IDConverter.getDateFromID(event.target.id, 'month');
       window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
-      loadMonth();
-      transitionMonthly();
+
+      // timing for the daily to monthly animation
+      zoomOutMonthlyRev = document.querySelector('#zoom-out-transition-2');
+      zoomOutMonthlyRev.classList.add('zoomOutMonthlyRev');
+      setTimeout(function () {
+        zoomOutMonthlyRev.classList.remove('zoomOutMonthlyRev');
+      }, 700);
+
+      // pushing daily to monthly
+      setTimeout(function () {
+        loadMonth();
+        transitionMonthly();
+      }, 520);
+
       break;
   }
 }

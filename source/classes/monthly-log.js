@@ -317,17 +317,7 @@ class MonthlyLog extends HTMLElement {
       dateButton.innerText = String(i);
       dateButton.style.color = 'black';
       dateButton.addEventListener('click', function (event) {
-        // var zoomOutDailyRev = document.querySelector('#zoom-out-transition');
-        // // call reverse animation on monthly button click
-        // zoomOutDailyRev.classList.add('zoomOutDailyRev');
-        // setTimeout( function() { 
-        //   zoomOutDailyRev.classList.remove('zoomOutDailyRev');
-        // }, 900)
-
-        // // call callback
-        // setTimeout( function() {
-          callback(event);
-        // }, 740)
+        callback(event);
       });
       calendar.appendChild(dateButton);
 
