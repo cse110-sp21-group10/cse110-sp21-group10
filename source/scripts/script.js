@@ -371,54 +371,34 @@ function zoomOut () {
       zoomOutDaily = document.querySelector('#zoom-out-transition');
 
       // timing for the daily to monthly animation
-      zoomOutDaily.classList.add('zoomOut1');
-      setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut1');
-        zoomOutDaily.classList.add('zoomOut2');
-      }, 150);
+      zoomOutDaily.classList.add('zoomOutDaily');
+      setTimeout( function() { 
+        zoomOutDaily.classList.remove('zoomOutDaily');
+      }, 900)
 
-      setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut2');
-        zoomOutDaily.classList.add('zoomOut3');
-      }, 650);
-
-      setTimeout(function () {
-        zoomOutDaily.classList.remove('zoomOut3');
-      }, 900);
-
-      // pushing daily to history
-      setTimeout(function () {
+      // pushing daily to monthly
+      setTimeout( function() {
         window.history.pushState({ view: 'month', date: currDate }, 'Monthly Log', '#month');
         loadMonth();
         transitionMonthly();
-      }, 140);
+      }, 140)
 
       break;
     case 'month':
       zoomOutMonthly = document.querySelector('#zoom-out-transition-2');
 
       // timing for the monthly to yearly animation
-      zoomOutMonthly.classList.add('zoomOut4');
-      setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut4');
-        zoomOutMonthly.classList.add('zoomOut5');
-      }, 150);
+      zoomOutMonthly.classList.add('zoomOutMonthly');
+      setTimeout( function() { 
+        zoomOutMonthly.classList.remove('zoomOutMonthly');
+      }, 900)
 
-      setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut5');
-        zoomOutMonthly.classList.add('zoomOut6');
-      }, 650);
-
-      setTimeout(function () {
-        zoomOutMonthly.classList.remove('zoomOut6');
-      }, 900);
-
-      // pushing m onthly to history
-      setTimeout(function () {
+      // pushing monthly to history
+      setTimeout( function() {
         window.history.pushState({ view: 'year', date: currDate }, 'Yearly Log', '#year');
         loadYear();
         transitionYearly();
-      }, 140);
+      }, 140)
 
       break;
   }
