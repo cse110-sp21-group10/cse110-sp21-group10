@@ -8,7 +8,7 @@ We'll be creating a Bullet Journal--a place for you to track your thoughts and d
 
 [Final Private Video](https://youtu.be/jhNIVRSKZSo)
 
-[Final Public Video]
+[Final Public Video](https://youtu.be/vKG24SghsZk)
 
 ## Meet the Team!
 
