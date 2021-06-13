@@ -759,6 +759,7 @@ $(document).click(function(event) {
   if(!$target.closest('#menucontainer').length &&
   $('#menucontainer').is(":visible")) {
     $('#menucontainer').hide();
+    console.log('This is a build test');
   }
 });
 */
